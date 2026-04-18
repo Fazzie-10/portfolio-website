@@ -5,8 +5,23 @@ import { useState } from "react";
 const projects = [
   {
     title: "SupplyChain360 Unified Data Platform",
-    category: "Engineering",
-    description: "End-to-end data platform for supply chain visibility, integrating disparate data sources into a unified cloud environment.",
+    category: "Data Engineering",
+    context: "Supply chain operations were generating massive amounts of fragmented data across different legacy systems, causing significant delays in reporting and creating operational bottlenecks.",
+    problem: "How can we centralize and automate the data flow so stakeholders have a single, reliable source of truth for inventory and logistics without relying on slow, manual data extracts?",
+    approach: [
+      "Designed and implemented a scalable ELT pipeline to extract raw operational data from multiple disparate databases.",
+      "Built automated transformation workflows to clean, standardize, and model the data specifically for business intelligence consumption.",
+      "Configured cloud infrastructure to ensure high availability, secure storage, and seamless daily data refreshes."
+    ],
+    outcome: [
+      "Slashed data processing times, delivering fresh, reliable data to executive dashboards automatically every morning.",
+      "Eliminated manual reporting errors and engineering bottlenecks, allowing leadership to make faster, more confident logistics decisions."
+    ],
+    techStack: [
+      { name: "Python", description: "Scripted automated data extraction and preliminary cleaning workflows." },
+      { name: "SQL", description: "Executed complex data transformations and modeling." },
+      { name: "AWS", description: "Hosted the centralized data architecture and pipeline infrastructure." }
+    ],
     tags: ["AWS", "Airflow", "Python", "PowerBI"],
     image: "/capstone project.png",
     year: "2026",
@@ -15,8 +30,22 @@ const projects = [
   {
     title: "Fintech Customer Support",
     category: "Analytics",
-    description: "Operational monitoring of ticket volume, response lag, and agent resolution rates.",
-    tags: ["Power BI"],
+    context: "Fintech customer support operations were struggling to keep track of high volumes of tickets, leading to delayed responses and customer dissatisfaction.",
+    problem: "How can we monitor ticket volume and agent performance in real-time to reduce response lag and improve operational efficiency?",
+    approach: [
+      "Connected to support platform APIs to stream ticket data into a unified reporting layer.",
+      "Developed real-time DAX measures to calculate response lag and resolution rates dynamically.",
+      "Designed interactive drill-down reports for managers to identify bottlenecks in specific support tiers."
+    ],
+    outcome: [
+      "Enabled operational teams to reduce response times by identifying peak load periods.",
+      "Improved agent productivity tracking, leading to higher resolution rates across the department."
+    ],
+    techStack: [
+      { name: "Power BI", description: "Built the operational dashboard and visualization layers." },
+      { name: "Microsoft Fabric", description: "Managed the cloud-native data integration and storage." }
+    ],
+    tags: ["Power BI", "Fabric"],
     image: "/support.png",
     year: "2025",
     link: "https://app.fabric.microsoft.com/view?r=eyJrIjoiNzgzMmUwMzEtMjhiZi00MGE0LTk0NTQtOGY2MzM0YjYzYmZhIiwidCI6ImE1NTQ1NDcyLWY5ODEtNDc2Mi1iNTVhLTQ3OTQzZDIzY2I0NCIsImMiOjh9",
@@ -24,7 +53,21 @@ const projects = [
   {
     title: "Presidential Travel Tracker",
     category: "Analytics",
-    description: "Interactive visualization and analysis of presidential travel patterns, providing transparency and public insight.",
+    context: "Lack of transparency in high-level government spending and travel patterns made it difficult for the public to hold leadership accountable.",
+    problem: "How can we translate complex travel logs into an accessible, interactive format that provides clear public insight and transparency?",
+    approach: [
+      "Scraped and aggregated travel data from official government records and journalistic investigations.",
+      "Cleaned and structured fragmented location and cost data using Excel and Power Query.",
+      "Built an interactive geospatial visualization that tracks travel frequency and patterns over time."
+    ],
+    outcome: [
+      "Provided the public and media with a verified tool for tracking presidential movement and transparency.",
+      "Reached millions through journalistic partnerships, sparking public discourse on accountability."
+    ],
+    techStack: [
+      { name: "Power BI", description: "Created the interactive travel tracking maps and dashboards." },
+      { name: "Excel", description: "Handled initial data cleaning and preparation." }
+    ],
     tags: ["Power BI", "Excel"],
     image: "/tinubu tracker.png",
     year: "2025",
@@ -33,7 +76,21 @@ const projects = [
   {
     title: "Flexcube Ads Cost Dashboard",
     category: "Analytics",
-    description: "Comprehensive dashboard for tracking and analyzing Flexcube advertising costs and performance metrics.",
+    context: "Advertising spend across various digital channels was being tracked manually, leading to inconsistent ROI analysis and budget overruns.",
+    problem: "How can we consolidate advertising cost data into a single view that allows for real-time ROI optimization and budget management?",
+    approach: [
+      "Automated the ingestion of marketing spend data from multiple ad platforms and Google Analytics.",
+      "Built a consolidated view of 'Cost per Acquisition' (CPA) across all active campaigns.",
+      "Implemented threshold alerts to notify the marketing team of budget overruns."
+    ],
+    outcome: [
+      "Reduced marketing waste by providing immediate visibility into underperforming ad sets.",
+      "Streamlined the monthly reporting process from days to minutes."
+    ],
+    techStack: [
+      { name: "Looker Studio", description: "Visualized the advertising performance and cost metrics." },
+      { name: "Google Analytics", description: "Tracked user conversion and campaign attribution." }
+    ],
     tags: ["Looker Studio", "Google Analytics"],
     image: "/flexcube.png",
     year: "2024",
@@ -56,7 +113,7 @@ export default function Projects() {
 
   const filteredProjects = activeCategory === "All" 
     ? projects 
-    : projects.filter(p => p.category === activeCategory);
+    : projects.filter(p => p.category.includes(activeCategory));
 
   return (
     <div className="w-full">
@@ -92,79 +149,115 @@ export default function Projects() {
             </div>
           </div>
 
-          <div className="space-y-32">
+          <div className="space-y-48">
             <AnimatePresence mode="wait">
               {filteredProjects.map((project, i) => (
                 <motion.div
                   key={project.title}
                   initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.6 }}
-                  className="group grid grid-cols-1 md:grid-cols-12 gap-12 items-start"
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                  className="group flex flex-col gap-16"
                 >
-                  <div className="md:col-span-7 relative overflow-hidden aspect-[16/10] bg-foreground/10">
-                    <motion.div
-                      initial={{ scale: 1.1 }}
-                      whileInView={{ scale: 1 }}
-                      transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] }}
-                      className="w-full h-full"
-                    >
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="object-cover w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 opacity-95 group-hover:opacity-100"
-                        referrerPolicy="no-referrer"
-                      />
-                    </motion.div>
-                    <div className="absolute top-6 right-6 flex gap-2">
-                      {project.github && (
-                        <a 
-                          href={project.github} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 bg-background flex items-center justify-center text-foreground hover:bg-primary hover:text-background transition-colors cursor-pointer border border-foreground/20"
-                        >
-                          <Github className="w-4 h-4" />
-                        </a>
-                      )}
-                      {project.link && (
-                        <a 
-                          href={project.link} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 bg-background flex items-center justify-center text-foreground hover:bg-primary hover:text-background transition-colors cursor-pointer border border-foreground/20"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      )}
+                  {/* Header & Image */}
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+                    <div className="lg:col-span-12 font-black flex justify-between items-baseline border-b border-foreground/10 pb-4">
+                      <div className="flex gap-4 items-baseline">
+                        <span className="text-primary text-xl lg:text-2xl">{i + 1}.</span>
+                        <h3 className="text-2xl sm:text-4xl lg:text-5xl tracking-tighter uppercase leading-none text-foreground">
+                          <span className="text-muted">{project.category}:</span> {project.title}
+                        </h3>
+                      </div>
+                      <span className="text-xs uppercase tracking-widest text-muted">{project.year}</span>
+                    </div>
+
+                    <div className="lg:col-span-8 relative overflow-hidden aspect-[16/9] bg-foreground/10 border border-foreground/5">
+                      <motion.div
+                        initial={{ scale: 1.1 }}
+                        whileInView={{ scale: 1 }}
+                        transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] }}
+                        className="w-full h-full"
+                      >
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="object-cover w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 opacity-95 group-hover:opacity-100"
+                          referrerPolicy="no-referrer"
+                        />
+                      </motion.div>
+                      <div className="absolute top-6 right-6 flex gap-2">
+                        {project.github && (
+                          <a 
+                            href={project.github} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 bg-background flex items-center justify-center text-foreground hover:bg-primary hover:text-background transition-colors cursor-pointer border border-foreground/20"
+                          >
+                            <Github className="w-4 h-4" />
+                          </a>
+                        )}
+                        {project.link && (
+                          <a 
+                            href={project.link} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 bg-background flex items-center justify-center text-foreground hover:bg-primary hover:text-background transition-colors cursor-pointer border border-foreground/20"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="lg:col-span-4 flex flex-col gap-8 h-full">
+                       <div>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-2 block">Context</span>
+                        <p className="text-sm font-bold leading-relaxed text-foreground">{project.context}</p>
+                       </div>
+                       <div>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-2 block">Core Business Problem</span>
+                        <p className="text-sm font-bold leading-relaxed text-foreground">{project.problem}</p>
+                       </div>
                     </div>
                   </div>
 
-                  <div className="md:col-span-5 flex flex-col pt-4 text-center md:text-left">
-                    <div className="flex justify-between items-center mb-8">
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">
-                        {project.category}
-                      </span>
-                      <span className="text-[10px] font-black text-foreground uppercase tracking-widest">
-                        {project.year}
-                      </span>
+                  {/* Detailed Approach, Outcome & Tech */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                    <div className="space-y-6">
+                      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary block">Approach</span>
+                      <ul className="space-y-4">
+                        {project.approach.map((step, idx) => (
+                          <li key={idx} className="text-sm font-bold leading-snug text-foreground flex gap-3">
+                            <span className="text-primary mt-1 shrink-0">•</span>
+                            {step}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                    
-                    <h3 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter uppercase mb-6 leading-none text-foreground text-balance">
-                      {project.title}
-                    </h3>
-                    
-                    <p className="text-lg text-foreground mb-10 leading-snug font-bold text-balance">
-                      {project.description}
-                    </p>
 
-                    <div className="flex flex-wrap justify-center md:justify-start gap-3">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="text-[9px] font-black uppercase tracking-widest px-3 py-1 border border-foreground/20 text-foreground">
-                          {tag}
-                        </span>
-                      ))}
+                    <div className="space-y-6">
+                      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary block">Outcome</span>
+                      <ul className="space-y-4">
+                        {project.outcome.map((res, idx) => (
+                          <li key={idx} className="text-sm font-bold leading-snug text-foreground flex gap-3">
+                            <span className="text-primary mt-1 shrink-0">•</span>
+                            {res}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="space-y-6">
+                      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary block">Tech Stack</span>
+                      <div className="space-y-4">
+                        {project.techStack.map((tech, idx) => (
+                          <div key={idx} className="flex flex-col">
+                            <span className="text-xs font-black uppercase tracking-widest text-foreground">{tech.name}</span>
+                            <span className="text-[11px] font-bold text-muted leading-tight">{tech.description}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
