@@ -43,7 +43,7 @@ export default function Contact() {
                 {[
                   { icon: <Linkedin className="w-3.5 h-3.5 sm:w-5 h-5" />, href: "https://www.linkedin.com/in/joshua-akintayo/" },
                   { icon: <XIcon />, href: "https://x.com/_joshuafemi?s=21" },
-                  { icon: <Github className="w-3.5 h-3.5 sm:w-5 h-5" />, href: "https://github.com/Pajo00" },
+                  { icon: <Github className="w-3.5 h-3.5 sm:w-5 h-5" />, href: "https://github.com/AnalystFemi" },
                   { icon: <TikTokIcon />, href: "https://www.tiktok.com/@analystfemi" },
                   { icon: <Instagram className="w-3.5 h-3.5 sm:w-5 h-5" />, href: "https://www.instagram.com/_joshua.femi/" },
                   { icon: <Facebook className="w-3.5 h-3.5 sm:w-5 h-5" />, href: "https://web.facebook.com/profile.php?id=100087293221410" },
