@@ -1,0 +1,95 @@
+---
+// Illustrative sample with made-up data. The statistics are computed correctly from the counts below:
+// χ²(3) = 10.280, p = .016; LR = 10.527, p = .015; linear-by-linear = 10.204, p = .001; Cramér's V = .239.
+const rows = [
+  { level: "100 level", yes: 22, no: 23 },
+  { level: "200 level", yes: 27, no: 18 },
+  { level: "300 level", yes: 31, no: 14 },
+  { level: "400 level", yes: 36, no: 9 },
+];
+const pct = (n: number) => ((n / 45) * 100).toFixed(1);
+---
+
+<div class="grid gap-5 lg:grid-cols-2">
+  <!-- Before -->
+  <figure class="flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-line">
+    <figcaption class="flex items-center justify-between border-b border-line bg-surface px-5 py-3">
+      <span class="eyebrow">Before · what SPSS gives you</span>
+      <span class="rounded-full bg-bg px-2.5 py-1 font-mono text-[10px] uppercase text-muted">Output1.spv</span>
+    </figcaption>
+    <div class="overflow-x-auto bg-[#f7f7f7] p-5 font-[Arial,sans-serif] text-[12px] text-[#111]">
+      <p class="mb-2 font-bold">Chi-Square Tests</p>
+      <table class="w-full min-w-[420px] border-collapse">
+        <thead>
+          <tr class="border-y border-[#999]">
+            <th class="py-1 text-left font-normal"></th>
+            <th class="py-1 text-right font-normal">Value</th>
+            <th class="py-1 text-right font-normal">df</th>
+            <th class="py-1 text-right font-normal">Asymptotic Significance (2-sided)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="py-0.5">Pearson Chi-Square</td><td class="text-right">10.280<sup>a</sup></td><td class="text-right">3</td><td class="text-right">.016</td></tr>
+          <tr><td class="py-0.5">Likelihood Ratio</td><td class="text-right">10.527</td><td class="text-right">3</td><td class="text-right">.015</td></tr>
+          <tr><td class="py-0.5">Linear-by-Linear Association</td><td class="text-right">10.204</td><td class="text-right">1</td><td class="text-right">.001</td></tr>
+          <tr class="border-b border-[#999]"><td class="py-0.5">N of Valid Cases</td><td class="text-right">180</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <p class="mt-2 text-[11px]">a. 0 cells (0.0%) have expected count less than 5. The minimum expected count is 16.00.</p>
+      <p class="mb-2 mt-5 font-bold">Symmetric Measures</p>
+      <table class="w-full min-w-[420px] border-collapse">
+        <tbody>
+          <tr class="border-y border-[#999]"><td class="py-0.5">Nominal by Nominal</td><td>Phi</td><td class="text-right">.239</td><td class="text-right">.016</td></tr>
+          <tr class="border-b border-[#999]"><td></td><td>Cramer's V</td><td class="text-right">.239</td><td class="text-right">.016</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-auto border-t border-line px-5 py-4 text-sm text-muted">Correct, but what does it mean? Which numbers go in your chapter?</p>
+  </figure>
+
+  <!-- After -->
+  <figure class="flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-accent">
+    <figcaption class="flex items-center justify-between border-b border-line bg-accent-soft px-5 py-3">
+      <span class="eyebrow text-fg">After · what you get from me</span>
+      <span class="rounded-full bg-bg px-2.5 py-1 font-mono text-[10px] uppercase text-muted">APA 7</span>
+    </figcaption>
+    <div class="p-5">
+      <p class="text-sm font-semibold">Table 4.6</p>
+      <p class="text-sm italic">Use of AI Writing Tools by Level of Study (N = 180)</p>
+      <div class="overflow-x-auto">
+        <table class="mt-3 w-full min-w-[380px] border-collapse text-sm">
+          <thead>
+            <tr class="border-y border-fg/60">
+              <th class="py-1.5 text-left font-medium">Level</th>
+              <th class="py-1.5 text-right font-medium">Uses AI, n (%)</th>
+              <th class="py-1.5 text-right font-medium">Does not, n (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr class={i === rows.length - 1 ? "border-b border-fg/60" : ""}>
+                <td class="py-1">{r.level}</td>
+                <td class="py-1 text-right font-mono">{r.yes} ({pct(r.yes)})</td>
+                <td class="py-1 text-right font-mono">{r.no} ({pct(r.no)})</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-2 text-xs text-muted"><em>Note.</em> χ²(3, <em>N</em> = 180) = 10.28, <em>p</em> = .016, Cramér's <em>V</em> = .24.</p>
+
+      <div class="mt-5 space-y-3 text-[15px]">
+        <p>
+          <span class="font-semibold">In plain words:</span> use of AI writing tools rose steadily with level of study, from
+          48.9% of 100 level students to 80.0% of 400 level students. This association was statistically significant
+          but small to moderate in size.
+        </p>
+        <p class="rounded-xl bg-surface p-3 text-sm">
+          <span class="font-semibold">Assumption check ✓</span> All expected counts were 16 or more, so the chi-square test was valid.
+          If any had been below 5, I would have used Fisher's exact test, and told you why.
+        </p>
+      </div>
+    </div>
+  </figure>
+</div>
+<p class="mt-3 text-center text-xs text-muted">Illustrative sample with made-up data. Your data stays confidential.</p>

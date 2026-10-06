@@ -1,0 +1,57 @@
+---
+import type { SiteId } from "@ja/ui/sites";
+
+interface Props {
+  site: SiteId;
+  theme: "light" | "dark";
+  eyebrow: string;
+  before: string;
+  accent: string;
+  after: string;
+  body: string;
+  cta: string;
+  stats: { value: string; label: string }[];
+  bars: number[];
+}
+
+const { site, theme, eyebrow, before, accent, after, body, cta, stats, bars } = Astro.props;
+---
+
+<div data-site={site} data-theme={theme} class="flex flex-col gap-6 rounded-[var(--radius-card)] border border-line bg-bg p-6 text-fg sm:p-8">
+  <div class="flex items-center justify-between">
+    <span class="eyebrow">{eyebrow}</span>
+    <span class="rounded-full border border-line px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-muted">{theme}</span>
+  </div>
+
+  <h3 class="text-3xl font-semibold sm:text-4xl">
+    {before} <span class="accent-word">{accent}</span>{after}
+  </h3>
+
+  <p class="max-w-prose text-[15px] text-muted">{body}</p>
+
+  <div class="flex flex-wrap gap-3">
+    <span class="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-fg">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 .9c.3.1.5.2.5.4.1.1.1.7-.1 1.4Z"/></svg>
+      {cta}
+    </span>
+    <span class="inline-flex items-center rounded-full border border-line px-5 py-2.5 text-sm font-medium">See work</span>
+  </div>
+
+  <div class="grid grid-cols-3 gap-3 border-t border-line pt-5">
+    {stats.map((s) => (
+      <div>
+        <p class="font-mono text-lg font-medium text-fg sm:text-xl">{s.value}</p>
+        <p class="text-xs text-muted">{s.label}</p>
+      </div>
+    ))}
+  </div>
+
+  <div class="flex h-24 items-end gap-2 rounded-2xl bg-surface p-4" aria-hidden="true">
+    {bars.map((h, i) => (
+      <div
+        class="flex-1 rounded-t-md"
+        style={`height:${h}%; background:${i === bars.length - 1 ? "var(--accent)" : "color-mix(in oklab, var(--accent) 30%, transparent)"}`}
+      />
+    ))}
+  </div>
+</div>

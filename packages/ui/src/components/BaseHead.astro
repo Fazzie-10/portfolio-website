@@ -1,0 +1,52 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: "website" | "article";
+  favicon?: string;
+}
+
+// Every site has a 1200×630 preview image at /media/og.jpg (made by scripts/make-og.sh)
+const { title, description, image = "/media/og.jpg", type = "website", favicon } = Astro.props;
+import displayFont from "@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-opsz-normal.woff2?url";
+import bodyFont from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const ogImage = image && Astro.site ? new URL(image, Astro.site).href : undefined;
+---
+
+<meta charset="utf-8" />
+<link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+{canonical && <link rel="canonical" href={canonical} />}
+
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+{canonical && <meta property="og:url" content={canonical} />}
+{ogImage && <meta property="og:image" content={ogImage} />}
+{ogImage && image.endsWith("og.jpg") && <meta property="og:image:width" content="1200" />}
+{ogImage && image.endsWith("og.jpg") && <meta property="og:image:height" content="630" />}
+<meta name="twitter:card" content="summary_large_image" />
+{ogImage && <meta name="twitter:image" content={ogImage} />}
+{favicon && <link rel="icon" type="image/svg+xml" href={favicon} />}
+
+<!-- Runs before paint so there is no light/dark flash. Preference is a cookie
+     shared across *.joshuaakintayo.me so it follows visitors between sites. -->
+<script is:inline>
+  (function () {
+    var m = document.cookie.match(/(?:^|; )ja-theme=(light|dark|system)/);
+    var pref = m ? m[1] : "system";
+    // A site can open in dark mode until the visitor picks a theme themselves
+    var fallbackDark = !m && document.documentElement.dataset.defaultTheme === "dark";
+    var dark = fallbackDark || pref === "dark" || (pref === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+    document.documentElement.dataset.themePref = fallbackDark ? "dark" : pref;
+    document.documentElement.classList.add("js");
+  })();
+</script>
+
+

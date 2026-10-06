@@ -1,0 +1,21 @@
+---
+import BlogIndex from "@ja/ui/components/blog/BlogIndex.astro";
+import { whatsappLink } from "@ja/ui/sites";
+import { getPosts } from "../../data/blog";
+import "../../styles/global.css";
+
+const posts = await getPosts();
+---
+
+<BlogIndex
+  site="insightshub"
+  posts={posts}
+  title="Blog · InsightsHub"
+  heading="Research made"
+  accent="simple."
+  intro="Plain-English guides to SPSS, statistical tests and writing Chapter 4, for BSc, HND and Masters students."
+  description="Guides to SPSS, statistical tests, Chapter 4 and qualitative analysis for Nigerian BSc, HND and Masters students, by InsightsHub."
+  links={[{ label: "Home", href: "/" }, { label: "Blog", href: "/blog/" }]}
+>
+  <a slot="cta" href={whatsappLink("Hi Joshua, I read the InsightsHub blog and I need help with my analysis.")} class="hidden rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg sm:inline-flex">WhatsApp me</a>
+</BlogIndex>

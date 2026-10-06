@@ -1,0 +1,21 @@
+---
+import BlogIndex from "@ja/ui/components/blog/BlogIndex.astro";
+import { whatsappLink } from "@ja/ui/sites";
+import { getPosts } from "../../data/blog";
+import "../../styles/global.css";
+
+const posts = await getPosts();
+---
+
+<BlogIndex
+  site="analystfemi"
+  posts={posts}
+  title="Blog · AnalystFemi"
+  heading="Learn data analysis,"
+  accent="one skill at a time."
+  intro="Step-by-step Excel, Power Query and dashboard tutorials from my live classes, using real Nigerian business data."
+  description="Excel, Power Query and data analysis tutorials for beginners by Joshua Akintayo (AnalystFemi), with real Nigerian business examples."
+  links={[{ label: "Home", href: "/" }, { label: "Blog", href: "/blog/" }]}
+>
+  <a slot="cta" href={whatsappLink("Hi Joshua, I read your blog and I would like to join the Zero to Data Analyst mentorship.")} class="hidden rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg sm:inline-flex">Reserve a seat</a>
+</BlogIndex>

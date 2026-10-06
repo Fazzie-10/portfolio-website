@@ -1,0 +1,200 @@
+---
+// Step 1 of the build: the moodboard. This page becomes the real hub homepage in step 2.
+import Layout from "@ja/ui/components/Layout.astro";
+import { siteUrl, whatsappLink } from "@ja/ui/sites";
+import SitePreview from "../components/SitePreview.astro";
+import "../styles/global.css";
+
+const previews = [
+  {
+    site: "hub",
+    label: "joshuaakintayo.me",
+    role: "The hub. Tells the story and routes visitors.",
+    eyebrow: "Data journalist · Engineer · Builder",
+    before: "I find the",
+    accent: "story",
+    after: " in data, then build the systems that act on it.",
+    body: "From investigations at ICIR read by millions, to pipelines, AI tools and the students I teach.",
+    cta: "Say hello",
+    stats: [
+      { value: "3+", label: "years in data" },
+      { value: "8", label: "products built" },
+      { value: "10+", label: "researchers helped" },
+    ],
+    bars: [35, 55, 42, 70, 60, 88],
+  },
+  {
+    site: "analystfemi",
+    label: "analystfemi.joshuaakintayo.me",
+    role: "Teaching first. Live classes on Google Meet.",
+    eyebrow: "12-week live mentorship",
+    before: "Go from zero to",
+    accent: "data analyst",
+    after: " in 12 weeks.",
+    body: "Excel, PostgreSQL and Power BI, taught live three times a week, with four portfolio projects you can show employers.",
+    cta: "Reserve a seat",
+    stats: [
+      { value: "₦50k", label: "per month" },
+      { value: "3×", label: "live sessions / week" },
+      { value: "4", label: "portfolio projects" },
+    ],
+    bars: [20, 32, 45, 58, 72, 90],
+  },
+  {
+    site: "automation",
+    label: "automation.joshuaakintayo.me",
+    role: "AI-assisted coding and automation. Dark by default.",
+    eyebrow: "AI tools & automation",
+    before: "I build AI tools that do the",
+    accent: "boring",
+    after: " work.",
+    body: "WhatsApp business assistants, transcription tools, content pipelines. Built with FastAPI, Supabase, Gemini and Claude.",
+    cta: "Discuss a build",
+    stats: [
+      { value: "8", label: "products shipped" },
+      { value: "∞", label: "minutes transcribed" },
+      { value: "9:16", label: "clips, no editing" },
+    ],
+    bars: [80, 62, 48, 40, 30, 22],
+  },
+  {
+    site: "insightshub",
+    label: "insightshub.joshuaakintayo.me",
+    role: "Research and Chapter 4 help, plus research-methods classes.",
+    eyebrow: "For BSc, HND & Masters students",
+    before: "Stuck at",
+    accent: "Chapter 4",
+    after: "? Let's make your results make sense.",
+    body: "SPSS, thematic analysis and APA tables, explained in plain English so you can defend every number.",
+    cta: "Get a quote",
+    stats: [
+      { value: "10+", label: "students supported" },
+      { value: "2", label: "published papers" },
+      { value: "₦30k", label: "starting price" },
+    ],
+    bars: [45, 45, 60, 52, 75, 82],
+  },
+] as const;
+
+const prices = {
+  quant: [
+    { item: "Descriptive statistics only", detail: "Frequencies, percentages, mean & SD, clean tables and charts", bsc: "₦30,000", msc: "₦45,000" },
+    { item: "Analysis + hypothesis testing", detail: "t-test, chi-square, correlation, ANOVA, regression, APA tables", bsc: "₦50,000", msc: "₦80,000" },
+    { item: "Full Chapter 4", detail: "All of the above, plain-English interpretation, discussion guidance, 1 defence-prep call", bsc: "₦75,000", msc: "₦120,000" },
+    { item: "Advanced models", detail: "Factor analysis, SEM, mediation/moderation, panel data", bsc: "—", msc: "From ₦150,000" },
+  ],
+  qual: [
+    { item: "Thematic analysis, up to 10 interviews/FGDs", detail: "Coding, themes, quotes table, write-up guidance", bsc: "₦50,000", msc: "₦70,000" },
+    { item: "Thematic analysis, 11–25 interviews/FGDs", detail: "As above, at larger scale", bsc: "₦80,000", msc: "₦110,000" },
+  ],
+  addons: [
+    "Mixed methods (quant + qual): 15% off the combined price",
+    "Transcription: ₦5,000 per hour of audio",
+    "Express delivery (under 5 days): +30%",
+    "Research Methods & SPSS live class: ₦30,000 for 4 weeks (proposal)",
+  ],
+};
+---
+
+<Layout
+  site="hub"
+  title="Design system v0.1 · Joshua Akintayo"
+  description="Moodboard for the Joshua Akintayo sites: palettes, type and hero copy in light and dark."
+>
+  <meta name="robots" content="noindex" slot="head" />
+  <a slot="cta" href={whatsappLink("Hi Joshua, I saw your website.")} class="hidden rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg sm:inline-flex">WhatsApp</a>
+
+  <section class="mx-auto max-w-6xl px-4 pb-12 pt-16 sm:px-6 sm:pt-24">
+    <p class="eyebrow">Step 1 · Design system v0.1 · for review</p>
+    <h1 class="mt-4 max-w-4xl text-5xl font-semibold sm:text-7xl">
+      One person, <span class="accent-word">four</span> doors.
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-muted">
+      Every site shares the same type and structure. Each gets its own accent colour, designed for light and dark.
+      Use the theme button at the top to see the whole page switch. Your choice is remembered across all four sites.
+    </p>
+  </section>
+
+  <!-- Typography -->
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <h2 class="text-2xl font-semibold">Typography</h2>
+    <div class="mt-6 grid gap-4 md:grid-cols-2">
+      <div class="rounded-[var(--radius-card)] border border-line p-6">
+        <p class="eyebrow">Headlines · Bricolage Grotesque</p>
+        <p class="mt-3 font-display text-5xl font-semibold tracking-tight">Data with a pulse</p>
+      </div>
+      <div class="rounded-[var(--radius-card)] border border-line p-6">
+        <p class="eyebrow">One highlighted word · Instrument Serif italic</p>
+        <p class="mt-3 font-serif text-5xl italic text-accent">the story</p>
+      </div>
+      <div class="rounded-[var(--radius-card)] border border-line p-6">
+        <p class="eyebrow">Body · Geist</p>
+        <p class="mt-3 text-[17px]">Clean and easy to read on a phone at any size. Used for paragraphs, buttons and navigation across all four sites.</p>
+      </div>
+      <div class="rounded-[var(--radius-card)] border border-line p-6">
+        <p class="eyebrow">Numbers & stats · JetBrains Mono</p>
+        <p class="mt-3 font-mono text-4xl">₦30,000 · 400% · 9:16</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Site palettes -->
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <h2 class="text-2xl font-semibold">The four sites, light and dark</h2>
+    <div class="mt-8 space-y-14">
+      {previews.map((p) => (
+        <div>
+          <div class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+            <a href={siteUrl(p.site)} class="font-mono text-sm underline decoration-line underline-offset-4 hover:decoration-accent">{p.label}</a>
+            <p class="text-sm text-muted">{p.role}</p>
+          </div>
+          <div class="grid gap-4 lg:grid-cols-2">
+            <SitePreview {...p} theme="light" stats={[...p.stats]} bars={[...p.bars]} />
+            <SitePreview {...p} theme="dark" stats={[...p.stats]} bars={[...p.bars]} />
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- InsightsHub pricing draft -->
+  <section data-site="insightshub" class="mx-auto my-12 max-w-6xl rounded-[var(--radius-card)] border border-line bg-bg px-4 py-10 text-fg sm:px-8">
+    <p class="eyebrow">InsightsHub · pricing draft</p>
+    <h2 class="mt-3 text-3xl font-semibold">Clear prices, in <span class="accent-word">naira</span>.</h2>
+    <p class="mt-3 max-w-2xl text-muted">Starting point for the price estimator. Change any number before we build it in.</p>
+
+    {[
+      { title: "Quantitative (SPSS, Excel, R, Stata)", rows: prices.quant },
+      { title: "Qualitative", rows: prices.qual },
+    ].map((group) => (
+      <div class="mt-8 overflow-x-auto">
+        <h3 class="mb-3 text-lg font-semibold">{group.title}</h3>
+        <table class="w-full min-w-[560px] text-left text-sm">
+          <thead>
+            <tr class="border-b border-line text-muted">
+              <th class="py-2 pr-4 font-medium">Package</th>
+              <th class="py-2 pr-4 text-right font-medium">BSc / HND</th>
+              <th class="py-2 text-right font-medium">MSc / PGD</th>
+            </tr>
+          </thead>
+          <tbody>
+            {group.rows.map((r) => (
+              <tr class="border-b border-line align-top">
+                <td class="py-3 pr-4">
+                  <p class="font-medium">{r.item}</p>
+                  <p class="text-muted">{r.detail}</p>
+                </td>
+                <td class="py-3 pr-4 text-right font-mono">{r.bsc}</td>
+                <td class="py-3 text-right font-mono">{r.msc}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ))}
+
+    <ul class="mt-8 grid gap-2 text-sm sm:grid-cols-2">
+      {prices.addons.map((a) => <li class="rounded-xl bg-surface px-4 py-3">{a}</li>)}
+    </ul>
+  </section>
+</Layout>

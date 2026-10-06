@@ -1,0 +1,30 @@
+---
+import { SITES, siteUrl, type SiteId } from "../sites";
+
+interface Props {
+  site: SiteId;
+}
+
+const { site } = Astro.props;
+const year = new Date().getFullYear();
+const isHub = site === "hub";
+---
+
+<footer class="border-t border-line">
+  <div class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 sm:px-6 md:flex-row md:items-end md:justify-between">
+    <div>
+      <p class="font-display text-lg font-semibold">Joshua Akintayo</p>
+      <p class="mt-1 max-w-sm text-sm text-muted">Data analyst and data engineer, based in Abuja.</p>
+    </div>
+    {isHub ? (
+      <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        {SITES.filter((s) => s.id !== "hub").map((s) => (
+          <li><a href={siteUrl(s.id)} class="inline-block py-2 text-muted hover:text-fg">{s.name}</a></li>
+        ))}
+      </ul>
+    ) : (
+      <a href={siteUrl("hub")} class="inline-block py-2 text-sm text-muted hover:text-fg">By Joshua Akintayo →</a>
+    )}
+    <p class="font-mono text-xs text-muted">© {year} Joshua Akintayo</p>
+  </div>
+</footer>

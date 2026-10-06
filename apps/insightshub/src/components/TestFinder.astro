@@ -1,0 +1,85 @@
+---
+import { STEPS, RESULTS } from "../data/tests";
+import { whatsappLink } from "@ja/ui/sites";
+---
+
+<div class="ih-finder rounded-[var(--radius-card)] border border-line bg-bg p-6 sm:p-8" data-steps={JSON.stringify(STEPS)} data-results={JSON.stringify(RESULTS)}>
+  <div class="flex items-center justify-between gap-4">
+    <ol class="ih-trail flex flex-wrap gap-2 font-mono text-[11px] uppercase tracking-wider text-muted" aria-label="Your answers so far"></ol>
+    <button type="button" class="ih-restart hidden shrink-0 rounded-full border border-line px-3 py-1.5 text-xs text-muted hover:text-fg">Start over</button>
+  </div>
+
+  <div class="ih-step mt-6" aria-live="polite">
+    <h3 class="ih-question text-2xl font-semibold"></h3>
+    <div class="ih-choices mt-5 grid gap-3 sm:grid-cols-2"></div>
+  </div>
+
+  <div class="ih-result mt-6 hidden" aria-live="polite">
+    <p class="eyebrow">Your test</p>
+    <h3 class="ih-test mt-2 text-3xl font-semibold text-accent"></h3>
+    <p class="ih-when mt-3 text-lg"></p>
+    <div class="mt-5 rounded-2xl bg-surface p-5">
+      <p class="eyebrow">Example research question</p>
+      <p class="ih-example mt-2 italic"></p>
+    </div>
+    <p class="ih-alt mt-4 text-sm text-muted"></p>
+    <a class="ih-cta mt-6 inline-flex rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg" href={whatsappLink("Hi Joshua, I need help with my analysis.")}>
+      Get help running it
+    </a>
+  </div>
+</div>
+
+<script>
+  import { whatsappLink } from "@ja/ui/sites";
+  import type { Step, Result } from "../data/tests";
+
+  document.querySelectorAll<HTMLElement>(".ih-finder").forEach((root) => {
+    const steps: Step[] = JSON.parse(root.dataset.steps!);
+    const results: Result[] = JSON.parse(root.dataset.results!);
+    const $ = <T extends HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+    const trail: string[] = [];
+
+    function render(id: string) {
+      const step = steps.find((s) => s.id === id);
+      const result = results.find((r) => r.id === id);
+      $(".ih-restart").classList.toggle("hidden", trail.length === 0);
+      $(".ih-trail").innerHTML = trail.map((t) => `<li class="rounded-full bg-surface px-2.5 py-1">${t}</li>`).join("");
+
+      $(".ih-step").classList.toggle("hidden", !step);
+      $(".ih-result").classList.toggle("hidden", !result);
+
+      if (step) {
+        $(".ih-question").textContent = step.question;
+        const box = $(".ih-choices");
+        box.innerHTML = "";
+        for (const c of step.choices) {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "flex flex-col items-start gap-1 rounded-2xl border border-line p-4 text-left transition-colors hover:border-accent hover:bg-surface";
+          b.innerHTML = `<span class="font-medium">${c.label}</span>${c.hint ? `<span class="text-sm text-muted">${c.hint}</span>` : ""}`;
+          b.addEventListener("click", () => {
+            trail.push(c.label);
+            render(c.next);
+          });
+          box.appendChild(b);
+        }
+      }
+
+      if (result) {
+        $(".ih-test").textContent = result.test;
+        $(".ih-when").textContent = result.when;
+        $(".ih-example").textContent = result.example;
+        $(".ih-alt").textContent = result.alternative ?? "";
+        $<HTMLAnchorElement>(".ih-cta").href = whatsappLink(
+          `Hi Joshua, the InsightsHub test finder suggested ${result.test} for my research. Can you help me run and interpret it?`,
+        );
+      }
+    }
+
+    $(".ih-restart").addEventListener("click", () => {
+      trail.length = 0;
+      render("start");
+    });
+    render("start");
+  });
+</script>

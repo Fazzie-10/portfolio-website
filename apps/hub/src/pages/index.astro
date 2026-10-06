@@ -1,0 +1,275 @@
+---
+import Layout from "@ja/ui/components/Layout.astro";
+import { siteUrl, whatsappLink } from "@ja/ui/sites";
+import HeroPlayer from "../remotion/HeroPlayer";
+import { CV_URL, EMAIL, infographics, journey, proof, socials, stories } from "../data/content";
+import "../styles/global.css";
+
+const doors = [
+  {
+    site: "analystfemi",
+    eyebrow: "AnalystFemi",
+    title: "Learn data analysis",
+    body: "The 12-week Zero to Data Analyst mentorship. Excel, PostgreSQL and Power BI, live on Google Meet.",
+    meta: "₦50,000 / month",
+  },
+  {
+    site: "automation",
+    eyebrow: "Automation",
+    title: "Automate my work",
+    body: "AI tools and automations that take repetitive work off your plate, from WhatsApp bots to video pipelines.",
+    meta: "5 tools built",
+  },
+  {
+    site: "insightshub",
+    eyebrow: "InsightsHub",
+    title: "Help with my research",
+    body: "Chapter 4 analysis for BSc, HND and Masters students, explained so you can defend every number.",
+    meta: "From ₦30,000",
+  },
+] as const;
+
+// Shape of the food-price story's index (2015 = 100), drawn as bars on its card
+const FOOD_INDEX = [100, 108, 121, 132, 146, 170, 205, 248, 330, 455, 500];
+
+const hello =whatsappLink("Hi Joshua, I found you through joshuaakintayo.me and I'd like to talk.");
+---
+
+<Layout
+  site="hub"
+  title="Joshua Akintayo | AnalystFemi"
+  description="Joshua Akintayo is a data analyst and data engineer in Abuja: data journalism, analysis, AI automation, teaching and research support for students."
+  image="/media/og.jpg"
+  links={[
+    { label: "Story", href: "#story" },
+    { label: "Journalism", href: "#journalism" },
+    { label: "Work with me", href: "#doors" },
+    { label: "Contact", href: "#contact" },
+  ]}
+>
+  <a slot="cta" href={hello} class="hidden rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90 sm:inline-flex">
+    WhatsApp me
+  </a>
+
+  <!-- Hero -->
+  <section class="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-12 sm:px-6 sm:pt-20 lg:grid-cols-[1.15fr_1fr]">
+    <div>
+      <div class="flex items-center gap-3">
+        <img src="/media/joshua-cutout.webp" alt="" width="56" height="70" class="h-14 w-14 rounded-full border border-line bg-accent-soft object-cover object-top" />
+        <div class="leading-tight">
+          <p class="font-display font-semibold">Joshua Akintayo</p>
+          <p class="eyebrow mt-1">Data Analyst and Data Engineer</p>
+        </div>
+      </div>
+      <h1 class="mt-7 text-[2.75rem] font-semibold leading-[0.98] sm:text-6xl lg:text-7xl">
+        I find the <span class="accent-word">story</span> in data, then build the systems that act on it.
+      </h1>
+      <p class="mt-6 max-w-xl text-lg text-muted">
+        I'm Joshua Akintayo, a data analyst and data engineer based in Abuja. I've told data stories in an investigative newsroom, built pipelines and AI tools, and I teach.
+        Whatever you need from data, there's a door for it below.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#doors" class="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90">Find your door</a>
+        <a href={CV_URL} target="_blank" rel="noopener noreferrer" class="rounded-full border border-line px-6 py-3 text-sm font-medium transition-colors hover:bg-surface">Download CV</a>
+      </div>
+    </div>
+
+    <div class="mx-auto w-full max-w-md lg:max-w-none">
+      <HeroPlayer client:visible />
+    </div>
+  </section>
+
+  <!-- Proof strip -->
+  <section class="border-y border-line bg-surface">
+    <dl class="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-8 px-4 py-10 sm:px-6 lg:grid-cols-4">
+      {proof.map((p) => (
+        <div>
+          <dt class="font-mono text-2xl font-medium text-fg sm:text-3xl">{p.value}</dt>
+          <dd class="mt-1 text-sm text-muted">{p.label}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <!-- Three doors -->
+  <section id="doors" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+    <p class="eyebrow">Work with me</p>
+    <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">
+      One person, <span class="accent-word">three</span> ways to help.
+    </h2>
+
+    <div class="mt-12 grid gap-5 lg:grid-cols-3">
+      {doors.map((d) => (
+        <a
+          href={siteUrl(d.site)}
+          data-site={d.site}
+          class="group flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg text-fg transition-transform duration-300 hover:-translate-y-1"
+        >
+          <div class="relative aspect-[4/3] overflow-hidden bg-surface">
+            {d.site === "analystfemi" && (
+              <img src="/media/brightpark-executive.webp" alt="BrightPark Power BI dashboard built in Joshua's class" loading="lazy" class="h-full w-full object-cover object-left-top transition-transform duration-500 group-hover:scale-105" />
+            )}
+            {d.site === "automation" && (
+              <div class="flex h-full items-end justify-center pt-6">
+                <video
+                  data-src="/media/vendoriq-chat.mp4"
+                  poster="/media/vendoriq-chat.webp"
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                  aria-label="VendorIQ answering a vendor on WhatsApp"
+                  class="h-full w-auto rounded-t-[22px] border-x-[6px] border-t-[6px] border-fg/80 object-cover object-top"
+                />
+              </div>
+            )}
+            {d.site === "insightshub" && (
+              <div class="flex h-full flex-col justify-center gap-3 p-6 font-mono text-[12px]">
+                <p class="text-muted">Table 4.3 · Education × Knowledge level (sample data)</p>
+                <div class="overflow-hidden rounded-xl border border-line bg-bg">
+                  <div class="flex justify-between border-b border-line px-3 py-2 text-muted"><span>Education</span><span>% adequate</span></div>
+                  <div class="flex justify-between px-3 py-1.5"><span>Primary</span><span>68.3</span></div>
+                  <div class="flex justify-between px-3 py-1.5"><span>Secondary</span><span>74.0</span></div>
+                  <div class="flex justify-between px-3 py-1.5"><span>Higher</span><span>79.2</span></div>
+                  <div class="flex justify-between border-t border-line px-3 py-2"><span class="text-muted">χ² test</span><span class="text-accent">p = .218</span></div>
+                </div>
+                <p class="font-sans text-[13px] text-fg">"Education was not linked to knowledge in this sample."</p>
+              </div>
+            )}
+          </div>
+          <div class="flex flex-1 flex-col gap-3 p-6">
+            <p class="eyebrow">{d.eyebrow}</p>
+            <h3 class="text-2xl font-semibold">{d.title}</h3>
+            <p class="text-[15px] text-muted">{d.body}</p>
+            <div class="mt-auto flex items-center justify-between pt-4">
+              <span class="font-mono text-sm text-accent">{d.meta}</span>
+              <span class="grid h-10 w-10 place-items-center rounded-full bg-accent text-accent-fg transition-transform group-hover:translate-x-1" aria-hidden="true">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Story / journey -->
+  <section id="story" class="scroll-mt-20 border-t border-line bg-surface">
+    <div class="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1fr_1.4fr]">
+      <div class="lg:sticky lg:top-28 lg:self-start">
+        <p class="eyebrow">The story</p>
+        <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">From the lab bench to the <span class="accent-word">newsroom</span>.</h2>
+        <p class="mt-6 text-lg text-muted">
+          Different hats, one habit: take messy information, find what's true in it, and make it useful to someone.
+        </p>
+        <img
+          src="/media/joshua-cutout.webp"
+          alt="Joshua Akintayo"
+          width="720"
+          height="900"
+          loading="lazy"
+          class="mt-10 w-full max-w-xs rounded-[var(--radius-card)] border border-line bg-accent-soft"
+        />
+      </div>
+      <ol class="relative space-y-10 border-l border-line pl-8">
+        {journey.map((j) => (
+          <li class="relative">
+            <span class="absolute -left-[37px] top-1.5 h-3 w-3 rounded-full border-2 border-accent bg-surface"></span>
+            <p class="font-mono text-sm text-accent">{j.year}</p>
+            <h3 class="mt-1 text-xl font-semibold">{j.title}</h3>
+            <p class="mt-2 text-muted">{j.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Journalism -->
+  <section id="journalism" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+    <p class="eyebrow">Data journalism</p>
+    <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Public data, made <span class="accent-word">accountable</span>.</h2>
+    <p class="mt-5 max-w-2xl text-lg text-muted">Trackers, investigations and infographics I produced for public-interest reporting at The ICIR.</p>
+
+    <div class="mt-12 grid gap-6 md:grid-cols-2">
+      {stories.map((s) => {
+        const Tag = s.href ? "a" : "div";
+        return (
+          <Tag
+            {...(s.href ? { href: s.href, target: "_blank", rel: "noopener noreferrer" } : {})}
+            class="group overflow-hidden rounded-[var(--radius-card)] border border-line"
+          >
+            <div class="aspect-[16/10] overflow-hidden bg-surface">
+              {s.image ? (
+                <img src={s.image} alt={s.title} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              ) : (
+                <div class="flex h-full items-end gap-2 p-8" aria-hidden="true">
+                  {FOOD_INDEX.map((v, i) => (
+                    <div
+                      class="flex-1 rounded-t-md"
+                      style={`height:${(v / 500) * 100}%; background:${i === FOOD_INDEX.length - 1 ? "var(--accent)" : "color-mix(in oklab, var(--accent) 30%, transparent)"}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+            <div class="p-6">
+              <p class="eyebrow">{s.kicker}</p>
+              <h3 class="mt-2 text-2xl font-semibold">{s.title}</h3>
+              <p class="mt-2 text-muted">{s.body}</p>
+              {s.href && <p class="mt-4 text-sm font-medium text-accent">Read on The ICIR →</p>}
+            </div>
+          </Tag>
+        );
+      })}
+    </div>
+
+    <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+      {infographics.map((g) => (
+        <a href={g.image} target="_blank" rel="noopener" class="group relative block aspect-[4/5] overflow-hidden rounded-2xl bg-surface">
+          <img src={g.image} alt={`Infographic: ${g.title}`} loading="lazy" class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
+          <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 pt-10 text-sm font-medium text-white">{g.title}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="scroll-mt-20 border-t border-line bg-surface">
+    <div class="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-2 lg:items-end">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h2 class="mt-4 text-5xl font-semibold sm:text-6xl">Let's <span class="accent-word">talk</span>.</h2>
+        <p class="mt-6 max-w-md text-lg text-muted">WhatsApp is the fastest way to reach me. Tell me what you're working on and I'll point you to the right door.</p>
+      </div>
+      <div class="flex flex-col gap-4">
+        <a href={hello} class="flex items-center justify-between rounded-[var(--radius-card)] bg-accent px-6 py-5 text-accent-fg transition-opacity hover:opacity-90">
+          <span>
+            <span class="block text-sm">WhatsApp</span>
+            <span class="font-mono text-lg">+234 901 350 6218</span>
+          </span>
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+        <a href={`mailto:${EMAIL}`} class="flex items-center justify-between rounded-[var(--radius-card)] border border-line bg-bg px-6 py-5 transition-colors hover:border-accent">
+          <span>
+            <span class="block text-sm text-muted">Email</span>
+            <span class="font-mono text-[15px] sm:text-lg">{EMAIL}</span>
+          </span>
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+        <ul class="flex flex-wrap gap-2 pt-2">
+          {socials.map((s) => (
+            <li><a href={s.href} target="_blank" rel="noopener noreferrer" class="inline-flex rounded-full border border-line px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent">{s.label}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- On phones the header has no room for the WhatsApp button, so it floats instead -->
+  <a
+    href={hello}
+    class="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg shadow-lg sm:hidden"
+  >
+    WhatsApp me
+  </a>
+</Layout>

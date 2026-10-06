@@ -1,0 +1,165 @@
+---
+import { QUANT, QUAL, MIXED_DISCOUNT, EXPRESS_MARKUP, TRANSCRIPTION_PER_HOUR } from "../data/pricing";
+
+const config = { QUANT, QUAL, MIXED_DISCOUNT, EXPRESS_MARKUP, TRANSCRIPTION_PER_HOUR };
+const field = "rounded-xl border border-line bg-bg px-4 py-3 text-[15px] text-fg";
+---
+
+<form class="ih-estimator grid gap-8 rounded-[var(--radius-card)] border border-line bg-bg p-6 sm:p-8 lg:grid-cols-[1.3fr_1fr]" data-config={JSON.stringify(config)} onsubmit="return false">
+  <div class="grid gap-6">
+    <fieldset>
+      <legend class="eyebrow">1 · Your level</legend>
+      <div class="mt-3 grid grid-cols-2 gap-3">
+        <label class="ih-pill"><input type="radio" name="level" value="bsc" checked class="sr-only" /><span>BSc / HND</span></label>
+        <label class="ih-pill"><input type="radio" name="level" value="msc" class="sr-only" /><span>MSc / PGD</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend class="eyebrow">2 · Type of research</legend>
+      <div class="mt-3 grid grid-cols-3 gap-3">
+        <label class="ih-pill"><input type="radio" name="kind" value="quant" checked class="sr-only" /><span>Quantitative</span></label>
+        <label class="ih-pill"><input type="radio" name="kind" value="qual" class="sr-only" /><span>Qualitative</span></label>
+        <label class="ih-pill"><input type="radio" name="kind" value="mixed" class="sr-only" /><span>Mixed</span></label>
+      </div>
+    </fieldset>
+
+    <label class="ih-quant grid gap-2">
+      <span class="eyebrow">3 · Questionnaire / numbers</span>
+      <select name="quant" class={field}>
+        {QUANT.map((p) => <option value={p.id}>{p.name}</option>)}
+      </select>
+    </label>
+
+    <label class="ih-qual hidden gap-2">
+      <span class="eyebrow">3 · Interviews / focus groups</span>
+      <select name="qual" class={field}>
+        {QUAL.map((p) => <option value={p.id}>{p.name}</option>)}
+      </select>
+    </label>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <label class="ih-hours hidden gap-2">
+        <span class="eyebrow">Audio to transcribe (hours)</span>
+        <input type="number" name="hours" min="0" max="100" step="1" value="0" class={field} />
+      </label>
+      <label class="flex items-center gap-3 self-end rounded-xl border border-line px-4 py-3">
+        <input type="checkbox" name="express" class="h-4 w-4 accent-[var(--accent)]" />
+        <span class="text-[15px]">Express, under 5 days (+30%)</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-between gap-6 rounded-2xl bg-surface p-6">
+    <div>
+      <p class="eyebrow">Estimated price</p>
+      <p class="ih-total mt-3 font-mono text-4xl font-medium text-fg sm:text-5xl">₦30,000</p>
+      <ul class="ih-lines mt-4 space-y-1 text-sm text-muted"></ul>
+      <p class="mt-4 text-sm text-muted">I confirm the final price after seeing your questionnaire and objectives.</p>
+    </div>
+    <a class="ih-send inline-flex justify-center rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg" href="#">Send this to WhatsApp</a>
+  </div>
+</form>
+
+<style>
+  .ih-pill {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    border: 1px solid var(--line);
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    font-size: 14px;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+  .ih-pill:has(input:checked) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 500;
+  }
+  .ih-pill:has(input:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  import { whatsappLink } from "@ja/ui/sites";
+  import { naira, type Package } from "../data/pricing";
+
+  document.querySelectorAll<HTMLFormElement>(".ih-estimator").forEach((form) => {
+    const cfg = JSON.parse(form.dataset.config!) as {
+      QUANT: Package[]; QUAL: Package[]; MIXED_DISCOUNT: number; EXPRESS_MARKUP: number; TRANSCRIPTION_PER_HOUR: number;
+    };
+    const $ = <T extends HTMLElement>(sel: string) => form.querySelector<T>(sel)!;
+
+    function update() {
+      const data = new FormData(form);
+      const level = data.get("level") as "bsc" | "msc";
+      const kind = data.get("kind") as "quant" | "qual" | "mixed";
+      const hours = Math.max(0, Number(data.get("hours")) || 0);
+      const express = data.get("express") === "on";
+
+      const showQuant = kind !== "qual";
+      const showQual = kind !== "quant";
+      $(".ih-quant").classList.toggle("hidden", !showQuant);
+      $(".ih-quant").classList.toggle("grid", showQuant);
+      $(".ih-qual").classList.toggle("hidden", !showQual);
+      $(".ih-qual").classList.toggle("grid", showQual);
+      $(".ih-hours").classList.toggle("hidden", !showQual);
+      $(".ih-hours").classList.toggle("grid", showQual);
+
+      const lines: [string, number][] = [];
+      let quote = false;
+      const price = (p: Package) => {
+        if (p.quoteOnly) quote = true;
+        return p[level] ?? p.msc;
+      };
+
+      if (showQuant) {
+        const p = cfg.QUANT.find((x) => x.id === data.get("quant"))!;
+        lines.push([p.name, price(p)]);
+      }
+      if (showQual) {
+        const p = cfg.QUAL.find((x) => x.id === data.get("qual"))!;
+        lines.push([p.name, price(p)]);
+      }
+      let total = lines.reduce((s, [, v]) => s + v, 0);
+      if (kind === "mixed") {
+        const off = Math.round(total * cfg.MIXED_DISCOUNT);
+        lines.push(["Mixed methods discount (15%)", -off]);
+        total -= off;
+      }
+      if (showQual && hours > 0) {
+        const t = hours * cfg.TRANSCRIPTION_PER_HOUR;
+        lines.push([`Transcription, ${hours} hr`, t]);
+        total += t;
+      }
+      if (express) {
+        const e = Math.round(total * cfg.EXPRESS_MARKUP);
+        lines.push(["Express delivery (+30%)", e]);
+        total += e;
+      }
+
+      $(".ih-total").textContent = (quote ? "From " : "") + naira(total);
+      $(".ih-lines").innerHTML = lines
+        .map(([k, v]) => `<li class="flex justify-between gap-4"><span>${k}</span><span class="font-mono">${v < 0 ? "−" : ""}${naira(Math.abs(v))}</span></li>`)
+        .join("");
+
+      const levelLabel = level === "bsc" ? "BSc/HND" : "MSc/PGD";
+      const kindLabel = { quant: "quantitative", qual: "qualitative", mixed: "mixed methods" }[kind];
+      const msg = [
+        `Hi Joshua, I'm a ${levelLabel} student and I need help with ${kindLabel} analysis.`,
+        ...lines.map(([k, v]) => `• ${k}: ${v < 0 ? "−" : ""}${naira(Math.abs(v))}`),
+        `Estimate on InsightsHub: ${quote ? "from " : ""}${naira(total)}`,
+      ].join("\n");
+      $<HTMLAnchorElement>(".ih-send").href = whatsappLink(msg);
+    }
+
+    form.addEventListener("input", update);
+    form.addEventListener("change", update);
+    update();
+  });
+</script>

@@ -1,0 +1,129 @@
+---
+import Layout from "../Layout.astro";
+import PostCard from "./PostCard.astro";
+import { SITES, siteUrl, whatsappLink, type SiteId } from "../../sites";
+import { formatDate, readingMinutes, type BlogFrontmatter } from "../../blog/schema";
+
+interface Related {
+  id: string;
+  body?: string;
+  data: BlogFrontmatter;
+}
+
+interface Props {
+  site: SiteId;
+  data: BlogFrontmatter;
+  body?: string;
+  related?: Related[];
+  links?: { label: string; href: string }[];
+  defaultTheme?: "dark";
+}
+
+const { site, data, body, related = [], links, defaultTheme } = Astro.props;
+const siteName = SITES.find((s) => s.id === site)!.name;
+const minutes = readingMinutes(body);
+const url = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      headline: data.title,
+      description: data.description,
+      datePublished: data.pubDate.toISOString(),
+      dateModified: (data.updatedDate ?? data.pubDate).toISOString(),
+      mainEntityOfPage: url,
+      ...(data.cover && Astro.site ? { image: new URL(data.cover, Astro.site).href } : {}),
+      keywords: data.tags.join(", "),
+      author: { "@type": "Person", name: "Joshua Akintayo", url: "https://joshuaakintayo.me" },
+      publisher: { "@type": "Person", name: "Joshua Akintayo", url: "https://joshuaakintayo.me" },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: siteName, item: Astro.site?.href },
+        { "@type": "ListItem", position: 2, name: "Blog", item: Astro.site ? new URL("/blog/", Astro.site).href : undefined },
+        { "@type": "ListItem", position: 3, name: data.title, item: url },
+      ],
+    },
+  ],
+};
+---
+
+<Layout site={site} title={data.title.length <= 46 ? `${data.title} · ${siteName}` : data.title} description={data.description} image={data.cover} links={links} defaultTheme={defaultTheme} ogType="article">
+  <slot name="cta" slot="cta" />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
+  <meta property="article:published_time" content={data.pubDate.toISOString()} slot="head" />
+
+  <article>
+    <header class="relative overflow-hidden border-b border-line">
+      <div class="graph-paper pointer-events-none absolute inset-0" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-3xl px-4 pb-12 pt-12 sm:px-6 sm:pt-16">
+        <nav class="flex items-center gap-2 text-sm text-muted" aria-label="Breadcrumb">
+          <a href="/blog/" class="inline-block py-2 hover:text-fg">Blog</a>
+          <span aria-hidden="true">/</span>
+          <span>{data.tags[0] ?? "Guide"}</span>
+          {data.draft && <span class="ml-2 rounded-full bg-accent px-2.5 py-0.5 font-mono text-[11px] text-accent-fg">Draft · not published</span>}
+        </nav>
+        <h1 class="mt-5 text-4xl font-semibold leading-[1.05] sm:text-5xl">{data.title}</h1>
+        <p class="mt-5 text-lg text-muted">{data.description}</p>
+        <div class="mt-8 flex flex-wrap items-center gap-4 text-sm">
+          <a href={siteUrl("hub")} class="flex items-center gap-3">
+            <img src="/media/joshua-cutout.webp" alt="" width="40" height="50" class="h-10 w-10 rounded-full border border-line bg-accent-soft object-cover object-top" />
+            <span class="leading-tight"><span class="block font-medium">Joshua Akintayo</span><span class="text-muted">Data analyst & teacher</span></span>
+          </a>
+          <span class="h-8 w-px bg-line"></span>
+          <span class="font-mono text-xs text-muted">
+            {formatDate(data.pubDate)} · {minutes} min read
+            {data.updatedDate && <> · updated {formatDate(data.updatedDate)}</>}
+          </span>
+        </div>
+      </div>
+    </header>
+
+    {/* Posts that embed a video use the cover only for cards and link previews */}
+    {data.cover && !body?.includes("<video") && (
+      <div class="mx-auto -mb-4 mt-10 max-w-4xl px-4 sm:px-6">
+        <img src={data.cover} alt={data.coverAlt ?? ""} class="w-full rounded-[var(--radius-card)] border border-line" />
+      </div>
+    )}
+
+    <div class="prose mx-auto max-w-3xl px-4 py-12 sm:px-6">
+      <slot />
+    </div>
+
+    {data.cta && (
+      <aside class="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+        <div class="relative overflow-hidden rounded-[28px] bg-accent px-6 py-10 text-accent-fg sm:px-10">
+          <div class="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full border-[24px] border-accent-fg/10" aria-hidden="true"></div>
+          <p class="relative font-display text-2xl font-semibold text-accent-fg sm:text-3xl">{data.cta.title}</p>
+          <p class="relative mt-3 max-w-xl">{data.cta.body}</p>
+          <a href={whatsappLink(data.cta.message)} class="relative mt-6 inline-flex rounded-full bg-accent-fg px-6 py-3 text-sm font-medium text-accent">{data.cta.label}</a>
+        </div>
+      </aside>
+    )}
+  </article>
+
+  {related.length > 0 && (
+    <section class="border-t border-line bg-surface">
+      <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <p class="eyebrow">Keep reading</p>
+        <div class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {related.map((p) => (
+            <PostCard
+              href={`/blog/${p.id}/`}
+              title={p.data.title}
+              description={p.data.description}
+              date={p.data.pubDate}
+              minutes={readingMinutes(p.body)}
+              tags={p.data.tags}
+              cover={p.data.cover}
+              coverAlt={p.data.coverAlt}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>

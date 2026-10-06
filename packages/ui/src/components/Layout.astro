@@ -1,0 +1,78 @@
+---
+import type { SiteId } from "../sites";
+import BaseHead from "./BaseHead.astro";
+import SiteNav from "./SiteNav.astro";
+import SiteFooter from "./SiteFooter.astro";
+
+interface Props {
+  site: SiteId;
+  title: string;
+  description: string;
+  image?: string;
+  links?: { label: string; href: string }[];
+  defaultTheme?: "dark";
+  ogType?: "website" | "article";
+}
+
+const { site, title, description, image, links, defaultTheme, ogType } = Astro.props;
+
+// "JA" monogram in each site's accent colour
+const ACCENTS: Record<SiteId, [string, string]> = {
+  hub: ["#c05800", "#ffffff"],
+  analystfemi: ["#0f766e", "#ffffff"],
+  automation: ["#a3e635", "#0a0a0b"],
+  insightshub: ["#1e3a8a", "#ffffff"],
+};
+const [bgColor, fgColor] = ACCENTS[site];
+const favicon =
+  "data:image/svg+xml," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="${bgColor}"/><text x="32" y="41" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="26" fill="${fgColor}">JA</text></svg>`,
+  );
+---
+
+<!doctype html>
+<html lang="en" data-site={site} data-default-theme={defaultTheme}>
+  <head>
+    <BaseHead title={title} description={description} image={image} type={ogType} favicon={favicon} />
+    <slot name="head" />
+  </head>
+  <body class="min-h-screen">
+    <SiteNav site={site} links={links}>
+      <slot name="cta" slot="cta" />
+    </SiteNav>
+    <main>
+      <slot />
+    </main>
+    <SiteFooter site={site} />
+    <script>
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-visible");
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: "0px 0px -10% 0px" },
+      );
+      document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+
+      // Background videos marked data-src only download when near the screen, and pause when off it
+      const vio = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            const v = e.target as HTMLVideoElement;
+            if (e.isIntersecting) {
+              if (!v.src && v.dataset.src) v.src = v.dataset.src;
+              if (!matchMedia("(prefers-reduced-motion: reduce)").matches) v.play().catch(() => {});
+            } else if (v.src) v.pause();
+          }
+        },
+        { rootMargin: "200px 0px" },
+      );
+      document.querySelectorAll<HTMLVideoElement>("video[data-src]").forEach((v) => vio.observe(v));
+    </script>
+  </body>
+</html>

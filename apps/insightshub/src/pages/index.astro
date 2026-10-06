@@ -1,0 +1,384 @@
+---
+import Layout from "@ja/ui/components/Layout.astro";
+import Icon from "@ja/ui/components/Icon.astro";
+import { siteUrl, whatsappLink } from "@ja/ui/sites";
+import BeforeAfter from "../components/BeforeAfter.astro";
+import Estimator from "../components/Estimator.astro";
+import TestFinder from "../components/TestFinder.astro";
+import HeroPlayer from "../remotion/HeroPlayer";
+import { CLASS, QUAL, QUANT, naira } from "../data/pricing";
+import "../styles/global.css";
+
+const hello = whatsappLink("Hi Joshua, I found InsightsHub and I need help with my project analysis.");
+const joinClass = whatsappLink(`Hi Joshua, I'd like to join the next ${CLASS.name} class.`);
+
+const pains = [
+  { icon: "file", title: "SPSS output makes no sense", note: "Tables full of numbers, none explained" },
+  { icon: "split", title: "Not sure which test", note: "Chi-square? t-test? ANOVA?" },
+  { icon: "message", title: "Transcripts, no themes", note: "15 interviews and a blank page" },
+  { icon: "clock", title: "Defence is coming", note: "And you can't explain your tables yet" },
+] as const;
+
+const steps = [
+  { title: "Send your work", body: "Objectives, questionnaire and data, on WhatsApp." },
+  { title: "Get a fixed price", body: "Price and delivery date agreed before I start." },
+  { title: "I analyse it", body: "Right tests, APA tables, plain-English results." },
+  { title: "We go through it", body: "A call on every table, so you can defend it." },
+];
+
+// Phases of Joshua's "Chapter 4 Made Simple" course (Course_Materials/Product_B_Chapter4)
+const classWeeks = [
+  { week: "Phases 0–1", topics: ["Orientation", "Get your data ready: clean, code, reverse-code"] },
+  { week: "Phases 2–3", topics: ["Describe your data", "Test your hypotheses"] },
+  { week: "Phase 4–5", topics: ["Write it up in APA style", "Interviews & qualitative data"] },
+  { week: "Phase 6", topics: ["Defend your Chapter 4"] },
+];
+
+const faqs = [
+  {
+    q: "Will you write my project for me?",
+    a: "No. I run and explain the analysis, and you stay the author of your project. You get the tables, the results and a plain-English explanation of each one, and we go through them together so you can write your chapter and defend it yourself.",
+  },
+  {
+    q: "What do I need to send?",
+    a: "Your objectives or hypotheses, your questionnaire or interview guide, and your data (Excel, Google Forms export, SPSS file or transcripts). Chapter 3 helps too, if you have it.",
+  },
+  {
+    q: "How do I pay?",
+    a: "Everything happens on WhatsApp. Once we agree the price and the scope, I share payment details in our chat.",
+  },
+  {
+    q: "How long does it take?",
+    a: "It depends on the size of the work, and I confirm a delivery date before we start. If your deadline is close, express delivery (under 5 days) is available for 30% extra.",
+  },
+  {
+    q: "What software do you use?",
+    a: "SPSS for most quantitative work and Excel for charts. Qualitative work is coded thematically, with a clear trail from quotes to themes.",
+  },
+  {
+    q: "Is my data confidential?",
+    a: "Yes. Your data and your project are never shared or reused. The samples on this page use made-up data for that reason.",
+  },
+];
+---
+
+<Layout
+  site="insightshub"
+  title="InsightsHub · Chapter 4 data analysis for students"
+  description="Stuck at Chapter 4? InsightsHub helps BSc, HND and Masters students with SPSS and qualitative analysis, explained so you can defend it. From ₦30,000."
+  links={[
+    { label: "How it works", href: "#how" },
+    { label: "Prices", href: "#prices" },
+    { label: "Test finder", href: "#finder" },
+    { label: "Class", href: "#class" },
+    { label: "FAQ", href: "#faq" },
+    { label: "Blog", href: "/blog/" },
+  ]}
+>
+  <a slot="cta" href={hello} class="hidden rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90 sm:inline-flex">
+    WhatsApp me
+  </a>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="graph-paper pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pb-20 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[1.1fr_1fr]">
+      <div>
+        <span class="inline-flex items-center gap-2 rounded-full border border-line bg-bg px-3 py-1.5 text-sm">
+          <Icon name="book" class="h-4 w-4 text-accent" />
+          For BSc, HND & Masters students
+        </span>
+        <h1 class="mt-6 text-[2.75rem] font-semibold leading-[0.98] sm:text-6xl lg:text-7xl">
+          Stuck at <span class="accent-word whitespace-nowrap">Chapter 4?</span> Let's make your results make sense.
+        </h1>
+        <p class="mt-6 max-w-lg text-lg text-muted">
+          Your data, analysed and explained in plain English, so you can defend every number.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#prices" class="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90">See your price</a>
+          <a href={hello} class="rounded-full border border-line bg-bg px-6 py-3 text-sm font-medium transition-colors hover:bg-surface">Chat on WhatsApp</a>
+        </div>
+        <div class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-line pt-6">
+          <a href={siteUrl("hub")} class="flex items-center gap-3 text-sm">
+            <img src="/media/joshua-cutout.webp" alt="" width="40" height="50" class="h-10 w-10 rounded-full border border-line bg-accent-soft object-cover object-top" />
+            <span class="leading-tight"><span class="block font-medium">Joshua Akintayo</span><span class="text-muted">Founder, data analyst</span></span>
+          </a>
+          <span class="hidden h-8 w-px bg-line sm:block"></span>
+          <span class="font-mono text-sm"><span class="text-accent">10+</span> students</span>
+          <span class="font-mono text-sm"><span class="text-accent">2</span> published</span>
+          <span class="font-mono text-sm">from <span class="text-accent">₦30k</span></span>
+        </div>
+      </div>
+
+      <div class="relative mx-auto w-full max-w-md lg:max-w-none">
+        <div class="rounded-[28px] border border-line bg-bg p-2 shadow-2xl shadow-black/10">
+          <HeroPlayer client:visible />
+        </div>
+        <span class="float-slow absolute -left-4 top-10 hidden rounded-full border border-line bg-bg px-3 py-1.5 font-mono text-xs shadow-lg sm:inline-flex">SPSS · Excel</span>
+        <span class="float-slow delay absolute -right-3 top-1/2 hidden rounded-full bg-accent px-3 py-1.5 font-mono text-xs text-accent-fg shadow-lg sm:inline-flex">APA 7 ✓</span>
+        <span class="float-slow absolute -bottom-4 left-10 hidden items-center gap-1.5 rounded-full border border-line bg-bg px-3 py-1.5 text-xs shadow-lg sm:inline-flex">
+          <Icon name="sparkle" class="h-3.5 w-3.5 text-accent" /> Plain-English results
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pain points -->
+  <section class="border-y border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      <p class="eyebrow">Sound familiar?</p>
+      <ul class="-mx-4 mt-5 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+        {pains.map((p, i) => (
+          <li class="w-64 shrink-0 snap-start rounded-2xl border border-line bg-bg p-5 sm:w-auto">
+            <span class="grid h-11 w-11 place-items-center rounded-xl bg-accent-soft text-accent"><Icon name={p.icon} /></span>
+            <p class="mt-4 font-display text-lg font-semibold leading-tight">{p.title}</p>
+            <p class="mt-1 text-sm text-muted">{p.note}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+    <p class="eyebrow">How it works</p>
+    <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">From raw data to a chapter you can <span class="accent-word">defend</span>.</h2>
+
+    <div class="relative mt-14">
+    <div class="absolute left-0 right-0 top-[88px] hidden border-t-2 border-dashed border-line lg:block" aria-hidden="true"></div>
+    <ol class="relative grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {steps.map((s, i) => (
+        <li data-reveal style={`--reveal-delay:${i * 100}ms`} class="relative flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg">
+          <div class="relative flex h-44 items-center justify-center bg-surface p-5" aria-hidden="true">
+            {i === 0 && (
+              <div class="w-full space-y-2">
+                <div class="ml-auto w-4/5 rounded-2xl rounded-br-sm bg-accent px-3 py-2 text-xs text-accent-fg">Hi! Here's my questionnaire and data 🙏</div>
+                <div class="ml-auto flex w-3/5 items-center gap-2 rounded-xl border border-line bg-bg px-3 py-2 text-xs"><Icon name="file" class="h-4 w-4 text-accent" />data.xlsx</div>
+                <div class="w-3/5 rounded-2xl rounded-bl-sm border border-line bg-bg px-3 py-2 text-xs">Got it. Reviewing now 👍</div>
+              </div>
+            )}
+            {i === 1 && (
+              <div class="w-full rounded-2xl border border-line bg-bg p-4">
+                <div class="flex items-center gap-2 text-xs text-muted"><Icon name="tag" class="h-4 w-4 text-accent" />Your quote</div>
+                <p class="mt-2 font-mono text-2xl">₦50,000</p>
+                <div class="mt-3 flex items-center justify-between border-t border-line pt-2 text-xs"><span class="text-muted">Delivery</span><span class="font-medium">Friday</span></div>
+              </div>
+            )}
+            {i === 2 && (
+              <div class="relative flex h-full w-full items-end gap-2 rounded-2xl border border-line bg-bg p-4">
+                {[40, 58, 70, 88].map((h, j) => (
+                  <div class="flex-1 rounded-t-md" style={`height:${h}%;background:${j === 3 ? "var(--accent)" : "color-mix(in oklab, var(--accent) 35%, transparent)"}`} />
+                ))}
+                <span class="absolute right-3 top-3 rounded-full bg-accent-soft px-2 py-0.5 font-mono text-[11px]">p = .016</span>
+              </div>
+            )}
+            {i === 3 && (
+              <div class="w-full rounded-2xl border border-line bg-bg p-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex -space-x-2">
+                    <img src="/media/joshua-cutout.webp" alt="" class="h-10 w-10 rounded-full border-2 border-bg bg-accent-soft object-cover object-top" />
+                    <span class="grid h-10 w-10 place-items-center rounded-full border-2 border-bg bg-accent text-sm font-medium text-accent-fg">You</span>
+                  </div>
+                  <span class="flex items-center gap-1 rounded-full bg-accent-soft px-2 py-0.5 text-[11px]"><Icon name="video" class="h-3.5 w-3.5" />Live</span>
+                </div>
+                <p class="mt-3 text-xs text-muted">Now explaining</p>
+                <p class="text-sm font-medium">Table 4.6 · Chi-square</p>
+              </div>
+            )}
+            <span class="absolute left-4 top-4 grid h-8 w-8 place-items-center rounded-full bg-accent font-mono text-xs text-accent-fg">0{i + 1}</span>
+          </div>
+          <div class="p-5">
+            <h3 class="text-xl font-semibold">{s.title}</h3>
+            <p class="mt-1.5 text-[15px] text-muted">{s.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    </div>
+  </section>
+
+  <!-- Before / after -->
+  <section class="border-t border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+      <p class="eyebrow">What you get</p>
+      <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Not just output. <span class="accent-word">Understanding</span>.</h2>
+      <div class="mt-12" data-reveal>
+        <BeforeAfter />
+      </div>
+    </div>
+  </section>
+
+  <!-- Results: one compact horizontal strip -->
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <h2 class="text-3xl font-semibold sm:text-4xl">Students who <span class="accent-word">finished strong</span>.</h2>
+      <p class="eyebrow">Results</p>
+    </div>
+    <div data-reveal class="mt-8 grid grid-cols-3 divide-x divide-line overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
+      <div class="flex flex-col items-start gap-2 p-3 sm:flex-row sm:items-center sm:gap-4 sm:p-5">
+        <div class="flex shrink-0 -space-x-2" aria-hidden="true">
+          {["BSc", "HND", "MSc"].map((l, i) => (
+            <span class="grid h-7 w-7 place-items-center rounded-full border-2 border-surface font-mono text-[7px] font-medium sm:h-10 sm:w-10 sm:text-[9px]" style={`background:color-mix(in oklab, var(--accent) ${30 + i * 25}%, var(--bg));color:${i > 1 ? "var(--accent-fg)" : "var(--fg)"}`}>{l}</span>
+          ))}
+        </div>
+        <div class="leading-tight">
+          <p class="font-mono text-lg font-medium sm:text-2xl">10+</p>
+          <p class="text-xs text-muted sm:text-sm">students supported</p>
+        </div>
+      </div>
+      <div class="flex flex-col items-start gap-2 p-3 sm:flex-row sm:items-center sm:gap-4 sm:p-5">
+        <span class="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-accent sm:h-10 sm:w-10 text-accent-fg" aria-hidden="true"><Icon name="book" class="h-5 w-5" /></span>
+        <div class="leading-tight">
+          <p class="font-mono text-lg font-medium sm:text-2xl">2</p>
+          <p class="text-xs text-muted sm:text-sm">projects published</p>
+        </div>
+      </div>
+      <div class="flex flex-col items-start gap-2 p-3 sm:flex-row sm:items-center sm:gap-4 sm:p-5">
+        <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full border-2 border-accent font-serif text-lg sm:h-10 sm:w-10 sm:text-2xl italic text-accent" aria-hidden="true">A</span>
+        <div class="leading-tight">
+          <p class="font-mono text-lg font-medium sm:text-2xl">Grade A</p>
+          <p class="text-xs text-muted sm:text-sm">plus approvals with minimal changes</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prices + estimator -->
+  <section id="prices" class="scroll-mt-20 border-t border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="eyebrow">Prices</p>
+          <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">Clear prices, in <span class="accent-word">naira</span>.</h2>
+        </div>
+        <div class="flex gap-3">
+          {[["From", "₦30k", "Descriptive"], ["Full", "₦75k", "Chapter 4"], ["Qual", "₦50k", "Thematic"]].map(([k, v, l]) => (
+            <div class="rounded-2xl border border-line bg-bg px-4 py-3 text-center">
+              <p class="text-[11px] uppercase tracking-wider text-muted">{k}</p>
+              <p class="font-mono text-xl">{v}</p>
+              <p class="text-[11px] text-muted">{l}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="mt-12" data-reveal>
+        <Estimator />
+      </div>
+
+      <details class="mt-6 rounded-[var(--radius-card)] border border-line bg-bg p-6">
+        <summary class="cursor-pointer font-medium">See the full price list</summary>
+        {[
+          { title: "Quantitative", rows: QUANT },
+          { title: "Qualitative", rows: QUAL },
+        ].map((group) => (
+          <div class="mt-6 overflow-x-auto">
+            <h3 class="mb-2 font-semibold">{group.title}</h3>
+            <table class="w-full min-w-[520px] text-left text-sm">
+              <thead>
+                <tr class="border-b border-line text-muted">
+                  <th class="py-2 pr-4 font-medium">Package</th>
+                  <th class="py-2 pr-4 text-right font-medium">BSc / HND</th>
+                  <th class="py-2 text-right font-medium">MSc / PGD</th>
+                </tr>
+              </thead>
+              <tbody>
+                {group.rows.map((r) => (
+                  <tr class="border-b border-line align-top">
+                    <td class="py-3 pr-4"><p class="font-medium">{r.name}</p><p class="text-muted">{r.detail}</p></td>
+                    <td class="py-3 pr-4 text-right font-mono">{r.bsc === null ? "—" : naira(r.bsc)}</td>
+                    <td class="py-3 text-right font-mono">{r.quoteOnly ? "From " : ""}{naira(r.msc)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+        <p class="mt-4 text-sm text-muted">Mixed methods: 15% off the combined price · Transcription: ₦5,000 per hour of audio · Express (under 5 days): +30%</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- Test finder -->
+  <section id="finder" class="relative scroll-mt-20 overflow-hidden">
+    <div class="graph-paper pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="relative mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1fr_1.5fr]">
+      <div>
+        <span class="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1.5 text-sm text-accent-fg"><Icon name="sparkle" class="h-4 w-4" />Free tool</span>
+        <h2 class="mt-5 text-4xl font-semibold sm:text-5xl">Which <span class="accent-word">test</span> do I need?</h2>
+        <p class="mt-5 text-lg text-muted">Two things decide it: what your question asks, and your type of data.</p>
+        <div class="mt-8 flex flex-wrap gap-2 font-mono text-xs" aria-hidden="true">
+          {["χ²", "t-test", "ANOVA", "r", "regression"].map((t) => (
+            <span class="rounded-full border border-line bg-bg px-3 py-1.5">{t}</span>
+          ))}
+        </div>
+      </div>
+      <div data-reveal><TestFinder /></div>
+    </div>
+  </section>
+
+  <!-- Class -->
+  <section id="class" class="scroll-mt-20 border-t border-line bg-surface">
+    <div class="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1fr_1.2fr] lg:items-center">
+      <div>
+        <span class="inline-flex items-center gap-2 rounded-full border border-line bg-bg px-3 py-1.5 text-sm"><Icon name="video" class="h-4 w-4 text-accent" />Live on Google Meet</span>
+        <h2 class="mt-5 text-4xl font-semibold sm:text-5xl">Rather learn to do it <span class="accent-word">yourself</span>?</h2>
+        <p class="mt-5 text-lg text-muted">{CLASS.name}: {CLASS.weeks} weeks from research design to a finished Chapter 4.</p>
+        <div class="mt-8 flex items-center gap-4">
+          <a href={joinClass} class="inline-flex rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg">Join the next class</a>
+          <span class="font-mono text-2xl">{naira(CLASS.price)}</span>
+        </div>
+      </div>
+      <ol class="relative space-y-4 border-l-2 border-dashed border-line pl-8">
+        {classWeeks.map((w, i) => (
+          <li data-reveal style={`--reveal-delay:${i * 100}ms`} class="relative rounded-2xl border border-line bg-bg p-5">
+            <span class="absolute -left-[45px] top-5 grid h-7 w-7 place-items-center rounded-full bg-accent font-mono text-xs text-accent-fg">{i + 1}</span>
+            <p class="font-mono text-xs uppercase tracking-wider text-accent">{w.week}</p>
+            <ul class="mt-2 space-y-1">
+              {w.topics.map((t) => <li class="font-medium">{t}</li>)}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="mx-auto grid max-w-6xl scroll-mt-20 gap-10 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1fr_1.6fr]">
+    <div>
+      <p class="eyebrow">FAQ</p>
+      <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">Questions students <span class="accent-word">ask</span>.</h2>
+      <div class="mt-8 flex items-start gap-3 rounded-2xl bg-surface p-5">
+        <Icon name="shield" class="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+        <p class="text-sm">You stay the author. I make sure you understand every table you present.</p>
+      </div>
+    </div>
+    <div class="divide-y divide-line border-y border-line">
+      {faqs.map((f) => (
+        <details class="group py-5">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-medium">
+            {f.q}
+            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-line transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-3 text-muted">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="px-4 pb-20 sm:px-6">
+    <div class="relative mx-auto max-w-6xl overflow-hidden rounded-[32px] bg-accent px-6 py-14 text-accent-fg sm:px-12">
+      <div class="pointer-events-none absolute -right-10 -top-10 h-56 w-56 rounded-full border-[28px] border-accent-fg/10" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute -bottom-16 right-32 h-40 w-40 rounded-full border-[20px] border-accent-fg/10" aria-hidden="true"></div>
+      <div class="relative flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
+        <h2 class="max-w-xl text-3xl font-semibold text-accent-fg sm:text-4xl">Send your questionnaire. Get a price today.</h2>
+        <a href={hello} class="rounded-full bg-accent-fg px-6 py-3 text-sm font-medium text-accent">Chat on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <a href={hello} class="fixed bottom-5 right-5 z-40 inline-flex rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg shadow-lg sm:hidden">
+    WhatsApp me
+  </a>
+</Layout>

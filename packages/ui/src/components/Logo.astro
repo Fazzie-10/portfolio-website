@@ -1,0 +1,28 @@
+---
+// Official tool logos (from Iconify's open icon sets), inlined so single-colour marks follow the theme.
+const files = import.meta.glob<string>("../logos/*.svg", { query: "?raw", import: "default", eager: true });
+const LOGOS = Object.fromEntries(Object.entries(files).map(([path, svg]) => [path.split("/").pop()!.replace(".svg", ""), svg]));
+
+// Black-only marks that would vanish on a dark background
+const MONO = new Set(["vercel", "nextjs"]);
+
+interface Props {
+  name: string;
+  class?: string;
+}
+
+const { name, class: className = "h-5 w-auto" } = Astro.props;
+const svg = LOGOS[name];
+---
+
+{svg && <span class:list={["ja-logo inline-flex shrink-0", MONO.has(name) && "ja-logo-mono", className]} aria-hidden="true" set:html={svg} />}
+
+<style>
+  .ja-logo :global(svg) {
+    height: 100%;
+    width: auto;
+  }
+  :global([data-theme="dark"]) .ja-logo-mono {
+    filter: invert(1);
+  }
+</style>

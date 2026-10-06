@@ -1,8 +1,17 @@
-node_modules/
-build/
-dist/
-coverage/
-.DS_Store
-*.log
-.env*
+node_modules
+dist
+.astro
+.vercel
+.env
+.env.*
 !.env.example
+.DS_Store
+
+# Raw source media (hundreds of MB). Web-ready versions live in apps/*/public/media
+assets/
+
+# Local test output
+stress-test-report.md
+
+# Local editor/agent config
+.claude/

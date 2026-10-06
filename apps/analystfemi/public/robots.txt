@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://analystfemi.joshuaakintayo.me/sitemap-index.xml

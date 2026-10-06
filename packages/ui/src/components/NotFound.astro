@@ -1,0 +1,41 @@
+---
+import Layout from "./Layout.astro";
+import { SITES, siteUrl, whatsappLink, type SiteId } from "../sites";
+
+interface Props {
+  site: SiteId;
+  defaultTheme?: "dark";
+}
+
+const { site, defaultTheme } = Astro.props;
+---
+
+<Layout site={site} title="Page not found" description="This page doesn't exist. Find your way back to Joshua Akintayo's sites." defaultTheme={defaultTheme}>
+  <meta name="robots" content="noindex" slot="head" />
+  <section class="relative overflow-hidden">
+    <div class="graph-paper pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="relative mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center px-4 py-20 sm:px-6">
+      <p class="font-mono text-sm text-accent">Error 404</p>
+      <h1 class="mt-4 text-5xl font-semibold sm:text-6xl">This page is an <span class="accent-word">outlier</span>.</h1>
+      <p class="mt-5 max-w-xl text-lg text-muted">
+        It doesn't exist, or it moved. Head back home and you'll find your way.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/" class="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg">Back to home</a>
+        <a href={whatsappLink("Hi Joshua, I hit a broken link on your website.")} class="rounded-full border border-line bg-bg px-6 py-3 text-sm font-medium">Report it on WhatsApp</a>
+      </div>
+      {site === "hub" && (
+      <ul class="mt-12 grid gap-3 sm:grid-cols-3">
+        {SITES.filter((s) => s.id !== site).map((s) => (
+          <li>
+            <a href={siteUrl(s.id)} data-site={s.id} class="flex flex-col rounded-2xl border border-line bg-bg p-4 hover:border-accent">
+              <span class="flex items-center gap-2 font-medium text-fg"><span class="h-2.5 w-2.5 rounded-full bg-accent"></span>{s.name}</span>
+              <span class="mt-1 text-sm text-muted">{s.tagline}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      )}
+    </div>
+  </section>
+</Layout>
