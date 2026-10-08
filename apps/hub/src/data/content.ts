@@ -43,32 +43,6 @@ export const journey = [
   },
 ];
 
-export const stories: { kicker: string; title: string; body: string; image: string | null; href: string | null }[] = [
-  {
-    kicker: "Live tracker",
-    title: "President Tinubu Travel Tracker",
-    body: "Every presidential trip, logged and mapped, so the public can see where the president goes and how often.",
-    image: "/media/tinubu-tracker.webp",
-    href: "https://www.icirnigeria.org/president-tinubu-travel-tracker/",
-  },
-  {
-    kicker: "Investigation",
-    title: "Food prices: a 400% rise in a decade",
-    body: "Official NBS figures set against what Nigerians actually pay, ten years of food inflation in one story.",
-    image: "/media/food-prices.webp",
-    href: null, // TODO: link to the ICIR article once Joshua shares it
-  },
-];
-
-export const infographics = [
-  { title: "Tinubu: two years in", image: "/media/tinubu-2-years.webp" },
-  { title: "Israel vs Iran", image: "/media/israel-iran.webp" },
-  { title: "Nigeria's jailbreaks", image: "/media/jailbreaks.webp" },
-  { title: "School kidnappings", image: "/media/school-kidnappings.webp" },
-  { title: "Tax and revenue", image: "/media/tax.webp" },
-  { title: "School killings", image: "/media/school-killings.webp" },
-];
-
 export const socials = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/joshua-akintayo/" },
   { label: "TikTok", href: "https://www.tiktok.com/@analystfemi" },

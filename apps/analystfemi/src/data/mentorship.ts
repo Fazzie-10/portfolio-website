@@ -52,12 +52,6 @@ export const INCLUDED = [
   { icon: "users", title: "Interview & CV prep", note: "Get ready for the job search" },
 ] as const;
 
-export const SERVICES = [
-  { title: "Dashboards", body: "Power BI or Looker Studio dashboards your team will actually open." },
-  { title: "Analysis & reporting", body: "Clear answers from your data, with charts and a short written summary." },
-  { title: "Data cleaning & automation", body: "Messy spreadsheets turned into clean, automatically updated reports." },
-];
-
 export const FAQS = [
   {
     q: "Is this for complete beginners?",

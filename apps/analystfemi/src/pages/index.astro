@@ -4,12 +4,11 @@ import Icon from "@ja/ui/components/Icon.astro";
 import Logo from "@ja/ui/components/Logo.astro";
 import { siteUrl, whatsappLink } from "@ja/ui/sites";
 import HeroPlayer from "../remotion/HeroPlayer";
-import { FAQS, INCLUDED, PHASES, PROGRAM, SERVICES, TIKTOK, TOOLS, YOUTUBE } from "../data/mentorship";
+import { FAQS, INCLUDED, PHASES, PROGRAM, TIKTOK, TOOLS, YOUTUBE } from "../data/mentorship";
 import "../styles/global.css";
 
 const naira = (n: number) => `₦${n.toLocaleString("en-NG")}`;
 const reserve = whatsappLink(`Hi Joshua, I'd like to reserve a seat in the ${PROGRAM.name} mentorship.`);
-const quote = whatsappLink("Hi Joshua, I need data analysis for my business. Can we talk?");
 
 const showcase = [
   { id: "exec", label: "Executive summary", image: "/media/brightpark-executive.webp" },
@@ -257,39 +256,23 @@ const showcase = [
     </div>
   </section>
 
-  <!-- Business services + FAQ -->
-  <section class="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-2">
-    <div>
-      <p class="eyebrow">For businesses</p>
-      <h2 class="mt-4 text-3xl font-semibold sm:text-4xl">Need analysis, not a class?</h2>
-      <div class="mt-6 space-y-3">
-        {SERVICES.map((s) => (
-          <div class="flex gap-4 rounded-2xl border border-line p-4">
-            <Icon name="chart" class="mt-0.5 h-5 w-5 shrink-0 text-accent" />
-            <div>
-              <p class="font-medium">{s.title}</p>
-              <p class="text-sm text-muted">{s.body}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-      <a href={quote} class="mt-6 inline-flex rounded-full border border-line px-5 py-2.5 text-sm font-medium hover:border-accent">Get a quote on WhatsApp</a>
-    </div>
-
+  <!-- FAQ -->
+  <section id="faq" class="mx-auto grid max-w-6xl scroll-mt-20 gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-[1fr_1.6fr]">
     <div>
       <p class="eyebrow">FAQ</p>
       <h2 class="mt-4 text-3xl font-semibold sm:text-4xl">Before you join.</h2>
-      <div class="mt-6 divide-y divide-line border-y border-line">
-        {FAQS.map((f) => (
-          <details class="group py-4">
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-medium">
-              {f.q}
-              <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-line transition-transform group-open:rotate-45" aria-hidden="true">+</span>
-            </summary>
-            <p class="mt-2 text-muted">{f.a}</p>
-          </details>
-        ))}
-      </div>
+      <p class="mt-5 text-muted">Need data work for your business instead of a class? <a href={siteUrl("hub", "/#services")} class="font-medium text-accent underline underline-offset-4">See my services</a>.</p>
+    </div>
+    <div class="divide-y divide-line border-y border-line">
+      {FAQS.map((f) => (
+        <details class="group py-4">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-medium">
+            {f.q}
+            <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-line transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+          </summary>
+          <p class="mt-2 text-muted">{f.a}</p>
+        </details>
+      ))}
     </div>
   </section>
 

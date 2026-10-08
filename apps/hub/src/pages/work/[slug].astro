@@ -1,0 +1,122 @@
+---
+import Layout from "@ja/ui/components/Layout.astro";
+import Icon from "@ja/ui/components/Icon.astro";
+import { whatsappLink } from "@ja/ui/sites";
+import { CATEGORIES, PROJECTS, type Project } from "../../data/work";
+import "../../styles/global.css";
+
+export function getStaticPaths() {
+  return PROJECTS.filter((p) => p.caseStudy).map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+
+const { project: p } = Astro.props as { project: Project };
+const cs = p.caseStudy!;
+const category = CATEGORIES.find((c) => c.id === p.category)?.label;
+const more = PROJECTS.filter((x) => x.slug !== p.slug && x.caseStudy).slice(0, 3);
+const hire = whatsappLink(`Hi Joshua, I saw your ${p.title} case study. I'd like something similar.`);
+---
+
+<Layout
+  site="hub"
+  title={`${p.title} · Case study`}
+  description={p.summary.length > 160 ? p.summary.slice(0, 157) + "…" : p.summary}
+  image={p.image}
+  links={[{ label: "Work", href: "/#work" }, { label: "Contact", href: "/#contact" }]}
+>
+  <a slot="cta" href={hire} class="hidden rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg sm:inline-flex">WhatsApp me</a>
+
+  <article>
+    <header class="relative overflow-hidden border-b border-line">
+      <div class="graph-paper pointer-events-none absolute inset-0" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-5xl px-4 pb-12 pt-12 sm:px-6 sm:pt-16">
+        <nav class="flex items-center gap-2 text-sm text-muted" aria-label="Breadcrumb">
+          <a href="/#work" class="inline-block py-2 hover:text-fg">Work</a>
+          <span aria-hidden="true">/</span>
+          <span>{category}</span>
+        </nav>
+        <p class="eyebrow mt-4">{p.kind} · {p.year}</p>
+        <h1 class="mt-3 max-w-4xl text-4xl font-semibold leading-[1.05] sm:text-6xl">{p.title}</h1>
+        <p class="mt-5 max-w-3xl text-lg text-muted">{p.summary}</p>
+        <div class="mt-6 flex flex-wrap items-center gap-2">
+          {p.tools.map((t) => <span class="rounded-full bg-accent-soft px-3 py-1 text-sm">{t}</span>)}
+        </div>
+        {p.links && (
+          <div class="mt-8 flex flex-wrap gap-3">
+            {p.links.map((l) => (
+              <a href={l.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg">
+                {l.label} <Icon name="arrow" class="h-4 w-4" />
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <div class="mx-auto max-w-5xl px-4 pt-10 sm:px-6">
+      <img src={p.image} alt={p.title} class="w-full rounded-[var(--radius-card)] border border-line bg-surface" />
+    </div>
+
+    <div class="mx-auto grid max-w-5xl gap-6 px-4 py-14 sm:px-6 md:grid-cols-2">
+      <section class="rounded-[var(--radius-card)] border border-line p-6">
+        <p class="eyebrow">Context</p>
+        <p class="mt-3 text-[17px]">{cs.context}</p>
+      </section>
+      <section class="rounded-[var(--radius-card)] border border-accent bg-accent-soft p-6">
+        <p class="eyebrow text-fg">The question</p>
+        <p class="mt-3 text-[17px] font-medium">{cs.problem}</p>
+      </section>
+      <section class="rounded-[var(--radius-card)] border border-line p-6">
+        <p class="eyebrow">Approach</p>
+        <ol class="mt-4 space-y-4">
+          {cs.approach.map((a, i) => (
+            <li class="flex gap-3">
+              <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent font-mono text-xs text-accent-fg">{i + 1}</span>
+              <span>{a}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+      <section class="rounded-[var(--radius-card)] border border-line p-6">
+        <p class="eyebrow">Outcome</p>
+        <ul class="mt-4 space-y-4">
+          {cs.outcome.map((o) => (
+            <li class="flex gap-3">
+              <Icon name="check" class="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+              <span>{o}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+
+    <aside class="mx-auto max-w-5xl px-4 pb-16 sm:px-6">
+      <div class="relative overflow-hidden rounded-[28px] bg-accent px-6 py-10 text-accent-fg sm:px-10">
+        <div class="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full border-[24px] border-accent-fg/10" aria-hidden="true"></div>
+        <p class="relative font-display text-2xl font-semibold text-accent-fg sm:text-3xl">Want something like this for your team?</p>
+        <p class="relative mt-3 max-w-xl">Tell me what you need to track or automate, and I'll suggest the simplest thing that works.</p>
+        <a href={hire} class="relative mt-6 inline-flex rounded-full bg-accent-fg px-6 py-3 text-sm font-medium text-accent">Chat on WhatsApp</a>
+      </div>
+    </aside>
+  </article>
+
+  {more.length > 0 && (
+    <section class="border-t border-line bg-surface">
+      <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <p class="eyebrow">More case studies</p>
+        <div class="mt-6 grid gap-6 md:grid-cols-3">
+          {more.map((m) => (
+            <a href={`/work/${m.slug}/`} class="group overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg">
+              <div class="aspect-[16/10] overflow-hidden bg-surface">
+                <img src={m.image} alt={m.title} loading="lazy" class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
+              </div>
+              <div class="p-5">
+                <p class="font-mono text-xs text-muted">{m.kind}</p>
+                <p class="mt-1 font-semibold group-hover:text-accent">{m.title}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>

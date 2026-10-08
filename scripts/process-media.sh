@@ -85,3 +85,9 @@ SM="$A/speechmate demo.mp4"
 echo "Posters for lazily loaded videos"
 ff -ss 2 -i "$AUTO/vendoriq-site.mp4" -frames:v 1 -c:v libwebp -quality 80 "$AUTO/vendoriq-site.webp"
 ff -ss 12 -i "$AUTO/afstudio-output.mp4" -frames:v 1 -c:v libwebp -quality 80 "$AUTO/afstudio-output.webp"
+
+echo "Hub portfolio projects (from the old site) + dashboards shared with analystfemi"
+for f in "support.png:fintech-support" "flexcube.png:flexcube-ads" "capstone project.png:supplychain360" "netflix_project.png:netflix-pipeline"; do
+  ff -i "$OLD/${f%%:*}" -vf "scale='min(1400,iw)':-1" -c:v libwebp -quality 82 "$HUB/${f##*:}.webp"
+done
+for f in weather-dashboard sales-calendar brightpark-sales; do cp "$AF/$f.webp" "$HUB/$f.webp"; done

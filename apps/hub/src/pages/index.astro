@@ -1,49 +1,39 @@
 ---
 import Layout from "@ja/ui/components/Layout.astro";
+import Icon from "@ja/ui/components/Icon.astro";
 import { siteUrl, whatsappLink } from "@ja/ui/sites";
-import HeroPlayer from "../remotion/HeroPlayer";
-import { CV_URL, EMAIL, infographics, journey, proof, socials, stories } from "../data/content";
+import { CV_URL, EMAIL, journey, proof, socials } from "../data/content";
+import { CATEGORIES, INFOGRAPHICS, PROJECTS, SERVICES } from "../data/work";
 import "../styles/global.css";
 
+const hello = whatsappLink("Hi Joshua, I found you through joshuaakintayo.me and I'd like to talk.");
+const hire = whatsappLink("Hi Joshua, I'd like to hire you for a data project. Here's what I need:");
+
+// Real dashboards for the hero deck, front to back
+const deck = [
+  { src: "/media/fintech-support.webp", alt: "Customer Support Performance dashboard in Power BI" },
+  { src: "/media/brightpark-executive.webp", alt: "BrightPark executive summary dashboard" },
+  { src: "/media/weather-dashboard.webp", alt: "Live weather dashboard for Abuja, Ibadan and Kano" },
+  { src: "/media/flexcube-ads.webp", alt: "Flexcube ads cost report in Looker Studio" },
+];
+
 const doors = [
-  {
-    site: "analystfemi",
-    eyebrow: "AnalystFemi",
-    title: "Learn data analysis",
-    body: "The 12-week Zero to Data Analyst mentorship. Excel, PostgreSQL and Power BI, live on Google Meet.",
-    meta: "₦50,000 / month",
-  },
-  {
-    site: "automation",
-    eyebrow: "Automation",
-    title: "Automate my work",
-    body: "AI tools and automations that take repetitive work off your plate, from WhatsApp bots to video pipelines.",
-    meta: "5 tools built",
-  },
-  {
-    site: "insightshub",
-    eyebrow: "InsightsHub",
-    title: "Help with my research",
-    body: "Chapter 4 analysis for BSc, HND and Masters students, explained so you can defend every number.",
-    meta: "From ₦30,000",
-  },
+  { site: "analystfemi", eyebrow: "AnalystFemi", title: "Learn data analysis", body: "The 12-week Zero to Data Analyst mentorship, live on Google Meet.", meta: "₦50,000 / month" },
+  { site: "automation", eyebrow: "Automation", title: "Automate my work", body: "AI tools and automations, from WhatsApp bots to video pipelines.", meta: "5 tools built" },
+  { site: "insightshub", eyebrow: "InsightsHub", title: "Help with my research", body: "Chapter 4 analysis for BSc, HND and Masters students.", meta: "From ₦30,000" },
 ] as const;
 
-// Shape of the food-price story's index (2015 = 100), drawn as bars on its card
-const FOOD_INDEX = [100, 108, 121, 132, 146, 170, 205, 248, 330, 455, 500];
-
-const hello =whatsappLink("Hi Joshua, I found you through joshuaakintayo.me and I'd like to talk.");
+const linkFor = (p: (typeof PROJECTS)[number]) => (p.caseStudy ? `/work/${p.slug}/` : p.links?.[0]?.href);
 ---
 
 <Layout
   site="hub"
   title="Joshua Akintayo | AnalystFemi"
-  description="Joshua Akintayo is a data analyst and data engineer in Abuja: data journalism, analysis, AI automation, teaching and research support for students."
-  image="/media/og.jpg"
+  description="Joshua Akintayo is a data analyst and data engineer in Abuja: Power BI dashboards, data pipelines, data journalism, AI automation and teaching."
   links={[
+    { label: "Work", href: "#work" },
+    { label: "Services", href: "#services" },
     { label: "Story", href: "#story" },
-    { label: "Journalism", href: "#journalism" },
-    { label: "Work with me", href: "#doors" },
     { label: "Contact", href: "#contact" },
   ]}
 >
@@ -52,30 +42,39 @@ const hello =whatsappLink("Hi Joshua, I found you through joshuaakintayo.me and 
   </a>
 
   <!-- Hero -->
-  <section class="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-12 sm:px-6 sm:pt-20 lg:grid-cols-[1.15fr_1fr]">
-    <div>
-      <div class="flex items-center gap-3">
-        <img src="/media/joshua-cutout.webp" alt="" width="56" height="70" class="h-14 w-14 rounded-full border border-line bg-accent-soft object-cover object-top" />
-        <div class="leading-tight">
-          <p class="font-display font-semibold">Joshua Akintayo</p>
-          <p class="eyebrow mt-1">Data Analyst and Data Engineer</p>
+  <section class="relative overflow-hidden">
+    <div class="graph-paper pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pb-20 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[1.05fr_1fr]">
+      <div>
+        <div class="flex items-center gap-3">
+          <img src="/media/joshua-cutout.webp" alt="" width="56" height="70" class="h-14 w-14 rounded-full border border-line bg-accent-soft object-cover object-top" />
+          <div class="leading-tight">
+            <p class="font-display font-semibold">Joshua Akintayo</p>
+            <p class="eyebrow mt-1">Data Analyst and Data Engineer</p>
+          </div>
+        </div>
+        <h1 class="mt-7 text-[2.75rem] font-semibold leading-[0.98] sm:text-6xl lg:text-7xl">
+          I turn messy data into <span class="accent-word">decisions</span>.
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-muted">
+          Dashboards, data pipelines and data stories for businesses, newsrooms and teams, built by an analyst who also engineers the data underneath.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#work" class="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90">See my work</a>
+          <a href={hire} class="rounded-full border border-line bg-bg px-6 py-3 text-sm font-medium transition-colors hover:bg-surface">Hire me</a>
+          <a href={CV_URL} target="_blank" rel="noopener noreferrer" class="rounded-full px-4 py-3 text-sm font-medium text-muted underline-offset-4 hover:text-fg hover:underline">Download CV</a>
         </div>
       </div>
-      <h1 class="mt-7 text-[2.75rem] font-semibold leading-[0.98] sm:text-6xl lg:text-7xl">
-        I find the <span class="accent-word">story</span> in data, then build the systems that act on it.
-      </h1>
-      <p class="mt-6 max-w-xl text-lg text-muted">
-        I'm Joshua Akintayo, a data analyst and data engineer based in Abuja. I've told data stories in an investigative newsroom, built pipelines and AI tools, and I teach.
-        Whatever you need from data, there's a door for it below.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href="#doors" class="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90">Find your door</a>
-        <a href={CV_URL} target="_blank" rel="noopener noreferrer" class="rounded-full border border-line px-6 py-3 text-sm font-medium transition-colors hover:bg-surface">Download CV</a>
-      </div>
-    </div>
 
-    <div class="mx-auto w-full max-w-md lg:max-w-none">
-      <HeroPlayer client:visible />
+      <!-- A deck of real dashboards that cycles -->
+      <div class="hub-deck relative mx-auto aspect-[16/11] w-full max-w-xl" aria-label="Dashboards I've built">
+        {deck.map((d, i) => (
+          <figure class="hub-card absolute inset-x-0 top-0 overflow-hidden rounded-2xl border border-line bg-bg shadow-2xl shadow-black/15" data-pos={i}>
+            <img src={d.src} alt={d.alt} width="1400" height="788" loading={i === 0 ? "eager" : "lazy"} class="aspect-[16/9] w-full object-cover object-top" />
+          </figure>
+        ))}
+        <span class="float-slow absolute -bottom-2 left-4 z-10 rounded-full bg-accent px-3 py-1.5 font-mono text-xs text-accent-fg shadow-lg">Power BI · Looker Studio · Fabric</span>
+      </div>
     </div>
   </section>
 
@@ -91,90 +90,126 @@ const hello =whatsappLink("Hi Joshua, I found you through joshuaakintayo.me and 
     </dl>
   </section>
 
-  <!-- Three doors -->
-  <section id="doors" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
-    <p class="eyebrow">Work with me</p>
-    <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">
-      One person, <span class="accent-word">three</span> ways to help.
-    </h2>
+  <!-- Selected work -->
+  <section id="work" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="eyebrow">Selected work</p>
+        <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Dashboards, pipelines and <span class="accent-word">stories</span>.</h2>
+      </div>
+      <div class="work-filters flex flex-wrap gap-2" role="tablist" aria-label="Filter work">
+        {CATEGORIES.map((c, i) => (
+          <button type="button" role="tab" data-filter={c.id} aria-selected={i === 0 ? "true" : "false"} class="rounded-full border border-line px-4 py-2 text-sm transition-colors aria-selected:border-accent aria-selected:bg-accent aria-selected:text-accent-fg">
+            {c.label}
+          </button>
+        ))}
+      </div>
+    </div>
 
-    <div class="mt-12 grid gap-5 lg:grid-cols-3">
-      {doors.map((d) => (
-        <a
-          href={siteUrl(d.site)}
-          data-site={d.site}
-          class="group flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg text-fg transition-transform duration-300 hover:-translate-y-1"
-        >
-          <div class="relative aspect-[4/3] overflow-hidden bg-surface">
-            {d.site === "analystfemi" && (
-              <img src="/media/brightpark-executive.webp" alt="BrightPark Power BI dashboard built in Joshua's class" loading="lazy" class="h-full w-full object-cover object-left-top transition-transform duration-500 group-hover:scale-105" />
-            )}
-            {d.site === "automation" && (
-              <div class="flex h-full items-end justify-center pt-6">
-                <video
-                  data-src="/media/vendoriq-chat.mp4"
-                  poster="/media/vendoriq-chat.webp"
-                  muted
-                  loop
-                  playsinline
-                  preload="none"
-                  aria-label="VendorIQ answering a vendor on WhatsApp"
-                  class="h-full w-auto rounded-t-[22px] border-x-[6px] border-t-[6px] border-fg/80 object-cover object-top"
-                />
-              </div>
-            )}
-            {d.site === "insightshub" && (
-              <div class="flex h-full flex-col justify-center gap-3 p-6 font-mono text-[12px]">
-                <p class="text-muted">Table 4.3 · Education × Knowledge level (sample data)</p>
-                <div class="overflow-hidden rounded-xl border border-line bg-bg">
-                  <div class="flex justify-between border-b border-line px-3 py-2 text-muted"><span>Education</span><span>% adequate</span></div>
-                  <div class="flex justify-between px-3 py-1.5"><span>Primary</span><span>68.3</span></div>
-                  <div class="flex justify-between px-3 py-1.5"><span>Secondary</span><span>74.0</span></div>
-                  <div class="flex justify-between px-3 py-1.5"><span>Higher</span><span>79.2</span></div>
-                  <div class="flex justify-between border-t border-line px-3 py-2"><span class="text-muted">χ² test</span><span class="text-accent">p = .218</span></div>
-                </div>
-                <p class="font-sans text-[13px] text-fg">"Education was not linked to knowledge in this sample."</p>
-              </div>
-            )}
-          </div>
-          <div class="flex flex-1 flex-col gap-3 p-6">
-            <p class="eyebrow">{d.eyebrow}</p>
-            <h3 class="text-2xl font-semibold">{d.title}</h3>
-            <p class="text-[15px] text-muted">{d.body}</p>
-            <div class="mt-auto flex items-center justify-between pt-4">
-              <span class="font-mono text-sm text-accent">{d.meta}</span>
-              <span class="grid h-10 w-10 place-items-center rounded-full bg-accent text-accent-fg transition-transform group-hover:translate-x-1" aria-hidden="true">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {PROJECTS.map((p, i) => {
+        const href = linkFor(p);
+        const external = href?.startsWith("http");
+        return (
+          <a
+            href={href}
+            {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            data-category={p.category}
+            data-reveal
+            style={`--reveal-delay:${(i % 3) * 80}ms`}
+            class="work-card group flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg transition-transform duration-300 hover:-translate-y-1"
+          >
+            <div class="aspect-[16/10] overflow-hidden border-b border-line bg-surface">
+              <img src={p.image} alt={p.title} loading="lazy" class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
+            </div>
+            <div class="flex flex-1 flex-col gap-3 p-6">
+              <p class="font-mono text-xs text-muted">{p.kind} · {p.year}</p>
+              <h3 class="text-xl font-semibold leading-tight group-hover:text-accent">{p.title}</h3>
+              <p class="text-[15px] text-muted">{p.summary}</p>
+              <ul class="flex flex-wrap gap-1.5">
+                {p.tools.slice(0, 4).map((t) => <li class="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs">{t}</li>)}
+              </ul>
+              <span class="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-medium text-accent">
+                {p.caseStudy ? "Read the case study" : (p.links?.[0]?.label ?? "View")}
+                <Icon name="arrow" class="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </span>
             </div>
-          </div>
-        </a>
-      ))}
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- Infographics belong to the journalism filter -->
+    <div class="work-infographics mt-16" data-category="journalism">
+      <div class="flex items-end justify-between gap-4">
+        <h3 class="text-2xl font-semibold">Infographics for The ICIR</h3>
+        <p class="hidden text-sm text-muted sm:block">Tap any to see it full size</p>
+      </div>
+      <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+        {INFOGRAPHICS.map((g) => (
+          <a href={g.image} target="_blank" rel="noopener" class="group relative block aspect-[4/5] overflow-hidden rounded-2xl bg-surface">
+            <img src={g.image} alt={`Infographic: ${g.title}`} loading="lazy" class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
+            <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 pt-10 text-sm font-medium text-white">{g.title}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Services + doors -->
+  <section id="services" class="scroll-mt-20 border-t border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+      <div class="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:items-start">
+        <div>
+          <p class="eyebrow">Hire me</p>
+          <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">Data work for your <span class="accent-word">business</span>.</h2>
+          <p class="mt-5 max-w-md text-lg text-muted">Tell me what you're trying to understand or automate. I'll suggest the simplest thing that works, and quote before I start.</p>
+          <a href={hire} class="mt-8 inline-flex rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg">Get a quote on WhatsApp</a>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {SERVICES.map((s, i) => (
+            <div data-reveal style={`--reveal-delay:${i * 80}ms`} class="rounded-2xl border border-line bg-bg p-6">
+              <span class="grid h-10 w-10 place-items-center rounded-xl bg-accent-soft text-accent"><Icon name="chart" /></span>
+              <p class="mt-4 font-display text-lg font-semibold">{s.title}</p>
+              <p class="mt-1 text-[15px] text-muted">{s.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="mt-20">
+        <p class="eyebrow">Something else?</p>
+        <h3 class="mt-3 text-2xl font-semibold sm:text-3xl">Three more ways I can help.</h3>
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
+          {doors.map((d) => (
+            <a href={siteUrl(d.site)} data-site={d.site} class="group flex flex-col gap-2 rounded-[var(--radius-card)] border border-line bg-bg p-6 text-fg transition-transform hover:-translate-y-1">
+              <span class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-accent"></span><span class="eyebrow">{d.eyebrow}</span></span>
+              <span class="text-xl font-semibold">{d.title}</span>
+              <span class="text-[15px] text-muted">{d.body}</span>
+              <span class="mt-auto flex items-center justify-between pt-3">
+                <span class="font-mono text-sm text-accent">{d.meta}</span>
+                <Icon name="arrow" class="h-4 w-4 text-accent transition-transform group-hover:translate-x-1" />
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Story / journey -->
-  <section id="story" class="scroll-mt-20 border-t border-line bg-surface">
+  <section id="story" class="scroll-mt-20 border-t border-line">
     <div class="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[1fr_1.4fr]">
       <div class="lg:sticky lg:top-28 lg:self-start">
         <p class="eyebrow">The story</p>
-        <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">From the lab bench to the <span class="accent-word">newsroom</span>.</h2>
-        <p class="mt-6 text-lg text-muted">
-          Different hats, one habit: take messy information, find what's true in it, and make it useful to someone.
-        </p>
-        <img
-          src="/media/joshua-cutout.webp"
-          alt="Joshua Akintayo"
-          width="720"
-          height="900"
-          loading="lazy"
-          class="mt-10 w-full max-w-xs rounded-[var(--radius-card)] border border-line bg-accent-soft"
-        />
+        <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">From the lab bench to the <span class="accent-word">data stack</span>.</h2>
+        <p class="mt-6 text-lg text-muted">Different roles, one habit: take messy information, find what's true in it, and make it useful to someone.</p>
+        <img src="/media/joshua-cutout.webp" alt="Joshua Akintayo" width="720" height="900" loading="lazy" class="mt-10 w-full max-w-xs rounded-[var(--radius-card)] border border-line bg-accent-soft" />
       </div>
       <ol class="relative space-y-10 border-l border-line pl-8">
         {journey.map((j) => (
           <li class="relative">
-            <span class="absolute -left-[37px] top-1.5 h-3 w-3 rounded-full border-2 border-accent bg-surface"></span>
+            <span class="absolute -left-[37px] top-1.5 h-3 w-3 rounded-full border-2 border-accent bg-bg"></span>
             <p class="font-mono text-sm text-accent">{j.year}</p>
             <h3 class="mt-1 text-xl font-semibold">{j.title}</h3>
             <p class="mt-2 text-muted">{j.body}</p>
@@ -184,62 +219,13 @@ const hello =whatsappLink("Hi Joshua, I found you through joshuaakintayo.me and 
     </div>
   </section>
 
-  <!-- Journalism -->
-  <section id="journalism" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
-    <p class="eyebrow">Data journalism</p>
-    <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Public data, made <span class="accent-word">accountable</span>.</h2>
-    <p class="mt-5 max-w-2xl text-lg text-muted">Trackers, investigations and infographics I produced for public-interest reporting at The ICIR.</p>
-
-    <div class="mt-12 grid gap-6 md:grid-cols-2">
-      {stories.map((s) => {
-        const Tag = s.href ? "a" : "div";
-        return (
-          <Tag
-            {...(s.href ? { href: s.href, target: "_blank", rel: "noopener noreferrer" } : {})}
-            class="group overflow-hidden rounded-[var(--radius-card)] border border-line"
-          >
-            <div class="aspect-[16/10] overflow-hidden bg-surface">
-              {s.image ? (
-                <img src={s.image} alt={s.title} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-              ) : (
-                <div class="flex h-full items-end gap-2 p-8" aria-hidden="true">
-                  {FOOD_INDEX.map((v, i) => (
-                    <div
-                      class="flex-1 rounded-t-md"
-                      style={`height:${(v / 500) * 100}%; background:${i === FOOD_INDEX.length - 1 ? "var(--accent)" : "color-mix(in oklab, var(--accent) 30%, transparent)"}`}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-            <div class="p-6">
-              <p class="eyebrow">{s.kicker}</p>
-              <h3 class="mt-2 text-2xl font-semibold">{s.title}</h3>
-              <p class="mt-2 text-muted">{s.body}</p>
-              {s.href && <p class="mt-4 text-sm font-medium text-accent">Read on The ICIR →</p>}
-            </div>
-          </Tag>
-        );
-      })}
-    </div>
-
-    <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
-      {infographics.map((g) => (
-        <a href={g.image} target="_blank" rel="noopener" class="group relative block aspect-[4/5] overflow-hidden rounded-2xl bg-surface">
-          <img src={g.image} alt={`Infographic: ${g.title}`} loading="lazy" class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
-          <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 pt-10 text-sm font-medium text-white">{g.title}</span>
-        </a>
-      ))}
-    </div>
-  </section>
-
   <!-- Contact -->
   <section id="contact" class="scroll-mt-20 border-t border-line bg-surface">
     <div class="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-2 lg:items-end">
       <div>
         <p class="eyebrow">Contact</p>
         <h2 class="mt-4 text-5xl font-semibold sm:text-6xl">Let's <span class="accent-word">talk</span>.</h2>
-        <p class="mt-6 max-w-md text-lg text-muted">WhatsApp is the fastest way to reach me. Tell me what you're working on and I'll point you to the right door.</p>
+        <p class="mt-6 max-w-md text-lg text-muted">WhatsApp is the fastest way to reach me. Tell me what you're working on, whether it's a role, a project or a question.</p>
       </div>
       <div class="flex flex-col gap-4">
         <a href={hello} class="flex items-center justify-between rounded-[var(--radius-card)] bg-accent px-6 py-5 text-accent-fg transition-opacity hover:opacity-90">
@@ -266,10 +252,44 @@ const hello =whatsappLink("Hi Joshua, I found you through joshuaakintayo.me and 
   </section>
 
   <!-- On phones the header has no room for the WhatsApp button, so it floats instead -->
-  <a
-    href={hello}
-    class="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg shadow-lg sm:hidden"
-  >
+  <a href={hello} class="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg shadow-lg sm:hidden">
     WhatsApp me
   </a>
 </Layout>
+
+<style>
+  /* Fanned deck of dashboard screenshots; positions rotate every few seconds */
+  .hub-card {
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
+  }
+  .hub-card[data-pos="0"] { transform: translate(0, 0) rotate(0deg); z-index: 4; }
+  .hub-card[data-pos="1"] { transform: translate(6%, 8%) rotate(4deg) scale(0.94); z-index: 3; opacity: 0.9; }
+  .hub-card[data-pos="2"] { transform: translate(-6%, 14%) rotate(-5deg) scale(0.88); z-index: 2; opacity: 0.75; }
+  .hub-card[data-pos="3"] { transform: translate(0, 18%) rotate(1deg) scale(0.82); z-index: 1; opacity: 0; }
+  .work-card.is-filtered,
+  .work-infographics.is-filtered { display: none; }
+</style>
+
+<script>
+  // Hero deck: bring the next dashboard to the front every 3.5s
+  const cards = [...document.querySelectorAll<HTMLElement>(".hub-card")];
+  if (cards.length && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    setInterval(() => {
+      if (document.hidden) return;
+      for (const c of cards) c.dataset.pos = String((Number(c.dataset.pos) + cards.length - 1) % cards.length);
+    }, 3500);
+  }
+
+  // Work filters
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".work-filters [data-filter]");
+  buttons.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      const f = btn.dataset.filter;
+      buttons.forEach((b) => b.setAttribute("aria-selected", String(b === btn)));
+      document.querySelectorAll<HTMLElement>(".work-card, .work-infographics").forEach((el) => {
+        el.classList.toggle("is-filtered", f !== "all" && el.dataset.category !== f);
+        el.classList.add("is-visible");
+      });
+    }),
+  );
+</script>
