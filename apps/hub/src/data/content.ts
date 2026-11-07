@@ -3,11 +3,17 @@
 export const CV_URL = "https://drive.google.com/file/d/1w0rYCwm6PYxrA2VSYadvSOJS3YbtNZ_L/view?usp=sharing";
 export const EMAIL = "joshuaakintayo21@gmail.com";
 
-export const proof = [
-  { value: "ICIR", label: "Former data analyst in an investigative newsroom" },
-  { value: "Millions", label: "reached by my infographics" },
-  { value: "2", label: "student papers I analysed, now published" },
-  { value: "Stage 2", label: "iDICE Startup Bridge Founders Lab, with VendorIQ" },
+// logo = file name in packages/ui/src/logos (optional)
+export const stack: { name: string; logo?: string }[] = [
+  { name: "Power BI", logo: "powerbi" },
+  { name: "Looker Studio" },
+  { name: "Excel", logo: "excel" },
+  { name: "SQL" },
+  { name: "Python", logo: "python" },
+  { name: "Airflow" },
+  { name: "dbt" },
+  { name: "AWS" },
+  { name: "Microsoft Fabric" },
 ];
 
 export const journey = [
