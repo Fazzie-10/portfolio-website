@@ -8,9 +8,9 @@ export const DURATION = 10 * FPS;
 export const WIDTH = 800;
 export const HEIGHT = 900;
 
-const DISPLAY = '"Bricolage Grotesque Variable", system-ui, sans-serif';
-const SERIF = '"Instrument Serif", Georgia, serif';
-const MONO = '"JetBrains Mono Variable", ui-monospace, monospace';
+const DISPLAY = '"Geist Variable", system-ui, sans-serif';
+const SERIF = '"Newsreader Variable", Georgia, serif';
+const MONO = '"Geist Mono Variable", ui-monospace, monospace';
 const SPSS = "Arial, Helvetica, sans-serif";
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 

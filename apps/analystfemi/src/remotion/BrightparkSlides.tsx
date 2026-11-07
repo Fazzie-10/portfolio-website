@@ -13,7 +13,7 @@ export const DURATION = Math.round(PAGES.length * SLIDE * FPS);
 export const WIDTH = 900;
 export const HEIGHT = 580;
 
-const MONO = '"JetBrains Mono Variable", ui-monospace, monospace';
+const MONO = '"Geist Mono Variable", ui-monospace, monospace';
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 export const BrightparkSlides: React.FC = () => {

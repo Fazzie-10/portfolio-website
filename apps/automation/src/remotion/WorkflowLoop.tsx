@@ -8,8 +8,8 @@ export const DURATION = 9 * FPS;
 export const WIDTH = 800;
 export const HEIGHT = 900;
 
-const DISPLAY = '"Bricolage Grotesque Variable", system-ui, sans-serif';
-const MONO = '"JetBrains Mono Variable", ui-monospace, monospace';
+const DISPLAY = '"Geist Variable", system-ui, sans-serif';
+const MONO = '"Geist Mono Variable", ui-monospace, monospace';
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 const NODES = [

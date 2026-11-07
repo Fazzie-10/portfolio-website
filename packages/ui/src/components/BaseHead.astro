@@ -9,7 +9,7 @@ interface Props {
 
 // Every site has a 1200×630 preview image at /media/og.jpg (made by scripts/make-og.sh)
 const { title, description, image = "/media/og.jpg", type = "website", favicon } = Astro.props;
-import displayFont from "@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-opsz-normal.woff2?url";
+import displayFont from "@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2?url";
 import bodyFont from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 const ogImage = image && Astro.site ? new URL(image, Astro.site).href : undefined;
