@@ -82,9 +82,9 @@ const linkFor = (p: (typeof PROJECTS)[number]) => (p.caseStudy ? `/work/${p.slug
 
   <!-- Tools marquee -->
   <section class="overflow-hidden border-y border-line bg-surface py-5" aria-label="Tools I work with">
-    <div class="ja-marquee flex w-max gap-3">
-      {[...stack, ...stack].map((t, i) => (
-        <span class="inline-flex items-center gap-2 rounded-full border border-line bg-bg px-4 py-2 font-mono text-sm" aria-hidden={i >= stack.length ? "true" : undefined}>
+    <div class="ja-marquee flex w-max">
+      {[...stack, ...stack, ...stack, ...stack].map((t, i) => (
+        <span class="mr-3 inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-line bg-bg px-4 py-2 font-mono text-sm" aria-hidden={i >= stack.length ? "true" : undefined}>
           {t.logo && <Logo name={t.logo} class="h-5 w-auto" />}
           {t.name}
         </span>
@@ -313,7 +313,7 @@ const linkFor = (p: (typeof PROJECTS)[number]) => (p.caseStudy ? `/work/${p.slug
   .hub-card[data-pos="1"] { transform: translate(6%, 8%) rotate(4deg) scale(0.94); z-index: 3; opacity: 0.9; }
   .hub-card[data-pos="2"] { transform: translate(-6%, 14%) rotate(-5deg) scale(0.88); z-index: 2; opacity: 0.75; }
   .hub-card[data-pos="3"] { transform: translate(0, 18%) rotate(1deg) scale(0.82); z-index: 1; opacity: 0; }
-  /* Endless tools line; the list is doubled so -50% loops seamlessly */
+  /* Endless tools line: the list is repeated 4x (wide screens) and -50% = exactly 2 copies, so it loops with no jump */
   .ja-marquee {
     animation: ja-scroll 40s linear infinite;
   }

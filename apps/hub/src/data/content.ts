@@ -1,4 +1,4 @@
-// Everything written on the hub homepage lives here, so copy changes don't need layout changes.
+﻿// Everything written on the hub homepage lives here, so copy changes don't need layout changes.
 
 export const CV_URL = "https://drive.google.com/file/d/1w0rYCwm6PYxrA2VSYadvSOJS3YbtNZ_L/view?usp=sharing";
 export const EMAIL = "joshuaakintayo21@gmail.com";
@@ -6,14 +6,14 @@ export const EMAIL = "joshuaakintayo21@gmail.com";
 // logo = file name in packages/ui/src/logos (optional)
 export const stack: { name: string; logo?: string }[] = [
   { name: "Power BI", logo: "powerbi" },
-  { name: "Looker Studio" },
+  { name: "Looker Studio", logo: "looker" },
   { name: "Excel", logo: "excel" },
-  { name: "SQL" },
+  { name: "SQL", logo: "sql" },
   { name: "Python", logo: "python" },
-  { name: "Airflow" },
-  { name: "dbt" },
-  { name: "AWS" },
-  { name: "Microsoft Fabric" },
+  { name: "Airflow", logo: "airflow" },
+  { name: "dbt", logo: "dbt" },
+  { name: "AWS", logo: "aws" },
+  { name: "Microsoft Fabric", logo: "fabric" },
 ];
 
 export const journey = [
