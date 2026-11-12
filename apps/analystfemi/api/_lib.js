@@ -114,7 +114,7 @@ function serviceAccount() {
   return sa;
 }
 
-async function driveToken() {
+export async function driveToken() {
   const sa = serviceAccount();
   const now = Math.floor(Date.now() / 1000);
   const header = b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }));
