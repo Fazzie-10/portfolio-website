@@ -17,6 +17,17 @@ npm run dev:hub      # just one
 Colours live in `packages/ui/src/styles/theme.css` (one light + one dark palette per site).
 The WhatsApp number and site list live in `packages/ui/src/sites.ts`.
 
+## Course payments (AnalystFemi)
+
+Paid buttons ask for the buyer's Google email, then `apps/analystfemi/api/checkout.js` creates a Bachs checkout
+(same Bachs account and pattern as rcpt). After payment Bachs calls `api/webhook.js`, which checks the signature,
+product and amount, then shares the right Google Drive folder with that email.
+
+- Vercel functions only run on the deployed site. `npm run dev` shows a "not available on this preview" message.
+- Set the variables in `apps/analystfemi/.env.example` in Vercel, and add the webhook URL
+  `https://analystfemi.joshuaakintayo.me/api/webhook` in the Bachs dashboard (events: `checkout.completed`).
+- Products (created once, in Bachs): see `PRODUCTS` in `apps/analystfemi/api/_lib.js`. Launch prices are used until `LAUNCH_ENDS_ON`.
+
 ## Blog (AnalystFemi)
 
 Each post is one Markdown file:

@@ -1,0 +1,30 @@
+---
+import Layout from "@ja/ui/components/Layout.astro";
+import { whatsappLink } from "@ja/ui/sites";
+import "../styles/global.css";
+
+const help = whatsappLink("Hi Joshua, I just paid for the Excel & Power BI course and I have not got access yet.");
+---
+
+<Layout site="analystfemi" title="Payment received · AnalystFemi" description="Thanks for joining the AnalystFemi course. Here is how to get into your course folder.">
+  <meta name="robots" content="noindex" slot="head" />
+  <section class="relative overflow-hidden">
+    <div class="graph-paper pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="relative mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center px-4 py-20 sm:px-6">
+      <p class="font-mono text-sm text-accent">Payment received</p>
+      <h1 class="mt-4 text-5xl font-semibold sm:text-6xl">You're <span class="accent-word">in</span>. Welcome.</h1>
+      <p class="mt-5 max-w-xl text-lg text-muted">
+        It takes a few seconds to confirm. Then Google emails you an invite to the course folder in Drive.
+      </p>
+      <ol class="mt-8 space-y-3 text-[15px]">
+        <li class="flex gap-4 rounded-2xl border border-line bg-bg p-4"><span class="font-mono text-accent">01</span><span>Check your inbox (and spam or junk) for the Google Drive invite, sent to the email you used at checkout.</span></li>
+        <li class="flex gap-4 rounded-2xl border border-line bg-bg p-4"><span class="font-mono text-accent">02</span><span>Open the folder and start with <strong>00 Welcome</strong>. It has the lessons, practice files and the link to join the student WhatsApp group.</span></li>
+        <li class="flex gap-4 rounded-2xl border border-line bg-bg p-4"><span class="font-mono text-accent">03</span><span>Watch a lesson, open the same file, rebuild it, tick the checklist.</span></li>
+      </ol>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="https://drive.google.com" class="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg">Open Google Drive</a>
+        <a href={help} class="rounded-full border border-line bg-bg px-6 py-3 text-sm font-medium">No invite after 10 minutes? Message me</a>
+      </div>
+    </div>
+  </section>
+</Layout>

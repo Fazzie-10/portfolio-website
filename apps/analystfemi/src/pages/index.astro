@@ -60,7 +60,7 @@ const showcase = [
             {LAUNCH.active && <span class="text-lg line-through opacity-60">{naira(fullTier.price)}</span>}
           </p>
           {LAUNCH.active && <p class="mt-1 text-sm font-medium text-accent">{LAUNCH.percent}% off · {offerLine}</p>}
-          <a href={buyFull} class="mt-5 block rounded-full bg-accent px-6 py-4 text-center text-base font-medium text-accent-fg transition-opacity hover:opacity-90">Pay {naira(fullNow)} and start today</a>
+          <a href={buyFull} data-pay="full" data-pay-name={fullTier.name} data-pay-price={naira(fullNow)} class="mt-5 block rounded-full bg-accent px-6 py-4 text-center text-base font-medium text-accent-fg transition-opacity hover:opacity-90">Pay {naira(fullNow)} and start today</a>
           <p class="mt-3 text-sm text-muted">One payment, no subscription. Straight after paying you are added to the course Google Drive folder, with every lesson and practice file, and to the student WhatsApp group. Use the email you want access on.</p>
           <p class="mt-3 text-sm"><a href={freeLink} class="font-medium text-accent underline underline-offset-4">Not sure yet? Get the free starter pack</a> · <a href="#pricing" class="font-medium text-accent underline underline-offset-4">Compare tiers</a></p>
         </div>
@@ -360,6 +360,9 @@ const showcase = [
             </ul>
             <a
               href={buy(t.id, t.name)}
+              data-pay={t.price === 0 ? undefined : t.id}
+              data-pay-name={t.name}
+              data-pay-price={t.price === 0 ? undefined : naira(LAUNCH.active ? launchPrice(t.price) : t.price)}
               class:list={[
                 "mt-auto block rounded-full px-6 py-3 text-center text-sm font-medium transition-opacity hover:opacity-90",
                 t.highlight ? "bg-accent-fg text-accent" : t.price === 0 ? "border border-line bg-bg hover:bg-surface" : "bg-accent text-accent-fg",
@@ -411,9 +414,88 @@ const showcase = [
   <a href="#pricing" class="fixed bottom-5 right-5 z-40 inline-flex rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg shadow-lg sm:hidden">
     See the tiers
   </a>
+
+  <!-- Pay: asks for the Google email that gets Drive access, then goes to the Bachs checkout -->
+  <dialog id="pay-dialog" class="m-auto w-[min(92vw,26rem)] rounded-2xl border border-line bg-bg p-6 text-fg shadow-2xl backdrop:bg-black/50">
+    <form id="pay-form" class="space-y-4">
+      <div>
+        <h2 id="pay-title" class="font-display text-2xl font-semibold">Get the course</h2>
+        <p id="pay-price" class="mt-1 font-mono text-sm text-accent"></p>
+      </div>
+      <label class="block text-sm font-medium">
+        Google account email
+        <input id="pay-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@gmail.com" class="mt-1.5 block w-full rounded-xl border border-line bg-surface px-4 py-3 text-base font-normal" />
+        <span class="mt-1 block text-xs font-normal text-muted">This email gets access to the course folder in Google Drive, so use the one you open Drive with.</span>
+      </label>
+      <label class="block text-sm font-medium">
+        Your name <span class="font-normal text-muted">(optional)</span>
+        <input id="pay-name" name="name" type="text" autocomplete="name" class="mt-1.5 block w-full rounded-xl border border-line bg-surface px-4 py-3 text-base font-normal" />
+      </label>
+      <p id="pay-error" class="hidden text-sm text-red-500" role="alert"></p>
+      <div class="flex gap-3">
+        <button id="pay-submit" type="submit" class="flex-1 rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90 disabled:opacity-60">Continue to payment</button>
+        <button id="pay-cancel" type="button" class="rounded-full border border-line px-5 py-3 text-sm font-medium">Cancel</button>
+      </div>
+    </form>
+  </dialog>
 </Layout>
 
 <script>
+  // Paid tiers: ask for the Google email, create the checkout on the server, then redirect to Bachs.
+  const dialog = document.getElementById("pay-dialog") as HTMLDialogElement | null;
+  if (dialog) {
+    const form = document.getElementById("pay-form") as HTMLFormElement;
+    const title = document.getElementById("pay-title")!;
+    const price = document.getElementById("pay-price")!;
+    const email = document.getElementById("pay-email") as HTMLInputElement;
+    const nameInput = document.getElementById("pay-name") as HTMLInputElement;
+    const error = document.getElementById("pay-error")!;
+    const submit = document.getElementById("pay-submit") as HTMLButtonElement;
+    let tier = "";
+
+    const showError = (msg: string) => {
+      error.textContent = msg;
+      error.classList.toggle("hidden", !msg);
+    };
+
+    document.querySelectorAll<HTMLAnchorElement>("[data-pay]").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        tier = a.dataset.pay ?? "";
+        title.textContent = a.dataset.payName ?? "Get the course";
+        price.textContent = a.dataset.payPrice ? `${a.dataset.payPrice} · one payment` : "";
+        showError("");
+        dialog.showModal();
+        email.focus();
+      });
+    });
+    document.getElementById("pay-cancel")?.addEventListener("click", () => dialog.close());
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      showError("");
+      submit.disabled = true;
+      submit.textContent = "One moment…";
+      try {
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ tier, email: email.value, name: nameInput.value }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.url) {
+          window.location.assign(data.url);
+          return;
+        }
+        showError(data.error || (res.status === 404 ? "Checkout is not available on this preview. Message me on WhatsApp to pay." : "Could not start checkout. Please try again."));
+      } catch {
+        showError("Network problem. Check your connection and try again.");
+      }
+      submit.disabled = false;
+      submit.textContent = "Continue to payment";
+    });
+  }
+
   document.querySelectorAll<HTMLElement>(".af-tabs").forEach((root) => {
     root.querySelectorAll<HTMLButtonElement>("[data-tab]").forEach((btn) => {
       btn.addEventListener("click", () => {
