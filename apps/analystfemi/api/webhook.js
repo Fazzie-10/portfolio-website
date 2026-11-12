@@ -65,9 +65,10 @@ export async function POST(request) {
       return json({ ok: true, result: "mismatch" });
     }
 
-    const folderId = (process.env[product.folderEnv] || "").trim();
-    if (!folderId) throw new Error(`${product.folderEnv} is not set.`);
-    await shareFolder(folderId, email);
+    // A tier can list several folders (comma separated), e.g. Excel Track = modules 1 to 8. Only the first one sends the invite email.
+    const folderIds = (process.env[product.folderEnv] || "").split(",").map((s) => s.trim()).filter(Boolean);
+    if (!folderIds.length) throw new Error(`${product.folderEnv} is not set.`);
+    for (const [i, folderId] of folderIds.entries()) await shareFolder(folderId, email, { notify: i === 0 });
     console.log("webhook: shared", { event: event.id, tier: metadata.tier, checkout: pay.checkoutId });
     return json({ ok: true, result: `shared ${metadata.tier}` });
   } catch (e) {

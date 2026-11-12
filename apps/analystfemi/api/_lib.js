@@ -133,9 +133,9 @@ async function driveToken() {
 }
 
 /** Gives `email` read-only access to the folder. Google also emails them the invite. Safe to repeat. */
-export async function shareFolder(folderId, email) {
+export async function shareFolder(folderId, email, { notify = true } = {}) {
   const token = await driveToken();
-  const url = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(folderId)}/permissions?sendNotificationEmail=true&supportsAllDrives=true`;
+  const url = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(folderId)}/permissions?sendNotificationEmail=${notify}&supportsAllDrives=true`;
   const res = await fetch(url, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "content-type": "application/json" },
