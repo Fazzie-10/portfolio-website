@@ -22,6 +22,17 @@ export const TESTIMONIALS = [
     name: "Zacchaus",
     role: "Took the Power BI class",
   },
+  {
+    quote: [
+      "So, to be totally honest and frank, learning data analysis isn't easy, especially if you are totally new to it like myself.",
+      "But I don't regret learning it at all, I mean, I can boldly call myself a data analyst now. I was sceptical starting cause I thought it would be crazy, but I'm glad I took the decision to start. It's now added to my CV.",
+      "I had a good experience with learning it under you actually, you were frank where you needed to, you were jovial when the air was getting too tight, and you didn't take the classes for a joke at any point in time. I liked that aspect a lot.",
+      "So now, Excel no longer sounds like programming to me, I now find it fun building dashboards and all.",
+      "Yeah, overall, I had a great experience, and I will still cause I'm still learning.",
+    ],
+    name: "Bose",
+    role: "Took the Excel class",
+  },
 ];
 
 // Paste each checkout link here once the payment endpoint is live (Bachs).

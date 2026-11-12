@@ -102,17 +102,17 @@ const showcase = [
   <!-- Student voice -->
   <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
     <p class="eyebrow">What students say</p>
-    {TESTIMONIALS.map((t) => (
-      <figure data-reveal class="mt-6 grid gap-6 rounded-[var(--radius-card)] border border-line bg-surface p-6 sm:p-10 md:grid-cols-[auto_1fr]">
-        <span class="font-display text-7xl leading-none text-accent" aria-hidden="true">“</span>
-        <div>
-          <blockquote class="space-y-3 text-lg leading-relaxed">
+    <div class="mt-6 grid gap-5 lg:grid-cols-2">
+      {TESTIMONIALS.map((t, i) => (
+        <figure data-reveal style={`--reveal-delay:${i * 100}ms`} class="flex flex-col rounded-[var(--radius-card)] border border-line bg-surface p-6 sm:p-8">
+          <span class="font-display text-6xl leading-none text-accent" aria-hidden="true">“</span>
+          <blockquote class="mt-2 space-y-3 text-[17px] leading-relaxed">
             {t.quote.map((line) => <p>{line}</p>)}
           </blockquote>
-          <figcaption class="mt-6 border-t border-line pt-4 text-sm"><span class="font-medium">{t.name}</span> <span class="text-muted">· {t.role}</span></figcaption>
-        </div>
-      </figure>
-    ))}
+          <figcaption class="mt-auto border-t border-line pt-4 text-sm" style="margin-top: 1.5rem"><span class="font-medium">{t.name}</span> <span class="text-muted">· {t.role}</span></figcaption>
+        </figure>
+      ))}
+    </div>
   </section>
 
   <!-- Problem / difference -->
