@@ -1,5 +1,5 @@
 // POST /api/webhook  <- Bachs. Verifies the signature (same scheme as rcpt), checks what was paid, then shares the Drive folder.
-import { PRODUCTS, bachs, json, shareFolder, verifySignature } from "./_lib.js";
+import { PRODUCTS, bachs, json, sendWelcomeEmail, shareFolder, verifySignature } from "./_lib.js";
 
 const PAID_COLLECTION = new Set(["SUCCEEDED", "ACCEPTED", "OVERPAID"]);
 
@@ -68,9 +68,19 @@ export async function POST(request) {
     // A tier can list several folders (comma separated), e.g. Excel Track = modules 1 to 8. Only the first one sends the invite email.
     const folderIds = (process.env[product.folderEnv] || "").split(",").map((s) => s.trim()).filter(Boolean);
     if (!folderIds.length) throw new Error(`${product.folderEnv} is not set.`);
-    for (const [i, folderId] of folderIds.entries()) await shareFolder(folderId, email, { notify: i === 0 });
-    console.log("webhook: shared", { event: event.id, tier: metadata.tier, checkout: pay.checkoutId });
-    return json({ ok: true, result: `shared ${metadata.tier}` });
+    // Share quietly, then send our own branded welcome email. If that email cannot be sent, fall back to Google's invite
+    // so the buyer is never left without a message.
+    for (const folderId of folderIds) await shareFolder(folderId, email, { notify: false });
+    let emailed = true;
+    try {
+      await sendWelcomeEmail({ to: email, tierName: product.name, folderIds, idempotencyKey: `analystfemi-welcome-${pay.checkoutId}` });
+    } catch (mailErr) {
+      emailed = false;
+      console.error("welcome email failed, using Google's invite instead", mailErr);
+      await shareFolder(folderIds[0], email, { notify: true });
+    }
+    console.log("webhook: shared", { event: event.id, tier: metadata.tier, checkout: pay.checkoutId, emailed });
+    return json({ ok: true, result: `shared ${metadata.tier}`, emailed });
   } catch (e) {
     console.error("webhook failed", e);
     // 4xx from Drive (e.g. the email is not a Google account) will not fix itself on retry: stop retrying, handle by hand.

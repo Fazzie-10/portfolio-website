@@ -99,6 +99,62 @@ export async function verifySignature(headers, raw, secret, nowMs = Date.now()) 
   return sigs.some((s) => safeEqual(expected, s.toLowerCase()));
 }
 
+/* ---------- Welcome email (Resend, same account and verified domain rcpt used) ---------- */
+
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+export function welcomeEmail({ tierName, email, folderIds, whatsappLink }) {
+  const links = folderIds.map((id) => `https://drive.google.com/drive/folders/${id}`);
+  const many = links.length > 1;
+  const subject = `You're in: ${tierName} (AnalystFemi)`;
+  const text = [
+    `Welcome to the ${tierName}.`,
+    "",
+    "Your payment is confirmed and your course folder is shared with this email address:",
+    email,
+    "",
+    ...links.map((l, i) => `${many ? `Folder ${i + 1}: ` : "Open your course folder: "}${l}`),
+    "",
+    "Start with the 00 Welcome file. It explains how to use the course.",
+    whatsappLink ? `Join the student WhatsApp group: ${whatsappLink}` : "The link to the student WhatsApp group is inside the 00 Welcome file.",
+    "",
+    "Open the folder while signed in to Google with the email above. If something does not open, reply to this email.",
+    "",
+    "Joshua Akintayo",
+    "AnalystFemi",
+  ].join("\n");
+  const button = (href, label) =>
+    `<p style="margin:0 0 12px"><a href="${esc(href)}" style="display:inline-block;background:#0f766e;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:600">${esc(label)}</a></p>`;
+  const html = `<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#0f172a;line-height:1.55">
+  <h1 style="font-size:24px;margin:0 0 8px">Welcome. You're in.</h1>
+  <p style="margin:0 0 16px">Your payment for the <strong>${esc(tierName)}</strong> is confirmed, and your course folder is now shared with <strong>${esc(email)}</strong>.</p>
+  ${links.map((l, i) => button(l, many ? `Open folder ${i + 1}` : "Open your course folder")).join("")}
+  <p style="margin:16px 0">Start with the <strong>00 Welcome</strong> file. It explains how to use the course.</p>
+  ${whatsappLink ? button(whatsappLink, "Join the student WhatsApp group") : `<p style="margin:0 0 16px">The link to the student WhatsApp group is inside the 00 Welcome file.</p>`}
+  <p style="margin:16px 0;color:#475569;font-size:14px">Open the folder while signed in to Google with the email above. If something does not open, just reply to this email.</p>
+  <p style="margin:24px 0 0">Joshua Akintayo<br><span style="color:#475569">AnalystFemi</span></p>
+</div>`;
+  return { subject, text, html };
+}
+
+/** Sends the branded welcome email through Resend. Throws if it cannot, so the caller can fall back to Google's invite. */
+export async function sendWelcomeEmail({ to, tierName, folderIds, idempotencyKey }) {
+  const key = (process.env.RESEND_API_KEY || "").trim();
+  if (!key) throw new Error("RESEND_API_KEY is not set.");
+  const from = (process.env.MAIL_FROM || "AnalystFemi <hello@mail.joshuaakintayo.me>").trim();
+  const replyTo = (process.env.MAIL_REPLY_TO || "joshuaakintayo21@gmail.com").trim();
+  const mail = welcomeEmail({ tierName, email: to, folderIds, whatsappLink: (process.env.WHATSAPP_GROUP_LINK || "").trim() });
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "content-type": "application/json", ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}) },
+    body: JSON.stringify({ from, to: [to], reply_to: replyTo, subject: mail.subject, html: mail.html, text: mail.text }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new Error(`Resend failed (${res.status}) ${data?.message ?? ""}`);
+  }
+}
+
 /* ---------- Google Drive: share a course folder with the buyer ---------- */
 
 import { createSign } from "node:crypto";
