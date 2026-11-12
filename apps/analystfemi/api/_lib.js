@@ -133,9 +133,14 @@ export async function driveToken() {
 }
 
 /** Gives `email` read-only access to the folder. Google also emails them the invite. Safe to repeat. */
+// Shown inside Google's invite email. The invite is sent in the service account's name, so this explains who it is from.
+const INVITE_MESSAGE =
+  "Welcome to the AnalystFemi Excel & Power BI course, taught by Joshua Akintayo. This is your course folder, shared after your payment. Open the 00 Welcome file first: it explains how to use the course and has the link to join the student WhatsApp group. If anything does not open, reply on WhatsApp via analystfemi.joshuaakintayo.me.";
+
 export async function shareFolder(folderId, email, { notify = true } = {}) {
   const token = await driveToken();
-  const url = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(folderId)}/permissions?sendNotificationEmail=${notify}&supportsAllDrives=true`;
+  const message = notify ? `&emailMessage=${encodeURIComponent(INVITE_MESSAGE)}` : "";
+  const url = `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(folderId)}/permissions?sendNotificationEmail=${notify}${message}&supportsAllDrives=true`;
   const res = await fetch(url, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "content-type": "application/json" },
