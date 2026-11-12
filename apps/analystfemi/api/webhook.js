@@ -73,7 +73,7 @@ export async function POST(request) {
     for (const folderId of folderIds) await shareFolder(folderId, email, { notify: false });
     let emailed = true;
     try {
-      await sendWelcomeEmail({ to: email, tierName: product.name, folderIds, idempotencyKey: `analystfemi-welcome-${pay.checkoutId}` });
+      await sendWelcomeEmail({ to: email, tierName: product.name, folderIds, idempotencyKey: `analystfemi-welcome-${pay.checkoutId}`, community: metadata.tier === "full" });
     } catch (mailErr) {
       emailed = false;
       console.error("welcome email failed, using Google's invite instead", mailErr);

@@ -34,8 +34,8 @@ export const RCPT = {
   stack: ["Next.js", "Cloudflare Workers", "Supabase", "pdf-lib"],
   metrics: [
     { value: "16", label: "businesses using it" },
-    { value: "27", label: "receipts & invoices sent" },
-    { value: "₦2.52M", label: "in sales recorded" },
+    { value: "28", label: "receipts & invoices sent" },
+    { value: "₦2.62M", label: "in sales recorded" },
   ],
   metricsAsOf: "12 Nov 2026",
 };

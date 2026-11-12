@@ -103,7 +103,9 @@ export async function verifySignature(headers, raw, secret, nowMs = Date.now()) 
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
-export function welcomeEmail({ tierName, email, folderIds, whatsappLink }) {
+export function welcomeEmail({ tierName, email, folderIds, whatsappLink, community = true }) {
+  // The AnalystFemi Data Club (WhatsApp) is part of the Full Course only.
+  if (!community) whatsappLink = "";
   const links = folderIds.map((id) => `https://drive.google.com/drive/folders/${id}`);
   const many = links.length > 1;
   const subject = `You're in: ${tierName} (AnalystFemi)`;
@@ -116,7 +118,7 @@ export function welcomeEmail({ tierName, email, folderIds, whatsappLink }) {
     ...links.map((l, i) => `${many ? `Folder ${i + 1}: ` : "Open your course folder: "}${l}`),
     "",
     "Start with the 00 Welcome file. It explains how to use the course.",
-    whatsappLink ? `Join the student WhatsApp group: ${whatsappLink}` : "The link to the student WhatsApp group is inside the 00 Welcome file.",
+    ...(whatsappLink ? [`Join the AnalystFemi Data Club on WhatsApp: ${whatsappLink}`] : []),
     "",
     "Open the folder while signed in to Google with the email above. If something does not open, reply to this email.",
     "",
@@ -130,7 +132,7 @@ export function welcomeEmail({ tierName, email, folderIds, whatsappLink }) {
   <p style="margin:0 0 16px">Your payment for the <strong>${esc(tierName)}</strong> is confirmed, and your course folder is now shared with <strong>${esc(email)}</strong>.</p>
   ${links.map((l, i) => button(l, many ? `Open folder ${i + 1}` : "Open your course folder")).join("")}
   <p style="margin:16px 0">Start with the <strong>00 Welcome</strong> file. It explains how to use the course.</p>
-  ${whatsappLink ? button(whatsappLink, "Join the student WhatsApp group") : `<p style="margin:0 0 16px">The link to the student WhatsApp group is inside the 00 Welcome file.</p>`}
+  ${whatsappLink ? button(whatsappLink, "Join the AnalystFemi Data Club on WhatsApp") : ""}
   <p style="margin:16px 0;color:#475569;font-size:14px">Open the folder while signed in to Google with the email above. If something does not open, just reply to this email.</p>
   <p style="margin:24px 0 0">Joshua Akintayo<br><span style="color:#475569">AnalystFemi</span></p>
 </div>`;
@@ -138,12 +140,12 @@ export function welcomeEmail({ tierName, email, folderIds, whatsappLink }) {
 }
 
 /** Sends the branded welcome email through Resend. Throws if it cannot, so the caller can fall back to Google's invite. */
-export async function sendWelcomeEmail({ to, tierName, folderIds, idempotencyKey }) {
+export async function sendWelcomeEmail({ to, tierName, folderIds, idempotencyKey, community = true }) {
   const key = (process.env.RESEND_API_KEY || "").trim();
   if (!key) throw new Error("RESEND_API_KEY is not set.");
   const from = (process.env.MAIL_FROM || "AnalystFemi <hello@mail.joshuaakintayo.me>").trim();
   const replyTo = (process.env.MAIL_REPLY_TO || "joshuaakintayo21@gmail.com").trim();
-  const mail = welcomeEmail({ tierName, email: to, folderIds, whatsappLink: (process.env.WHATSAPP_GROUP_LINK || "").trim() });
+  const mail = welcomeEmail({ tierName, email: to, folderIds, whatsappLink: (process.env.WHATSAPP_GROUP_LINK || "").trim(), community });
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "content-type": "application/json", ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}) },
@@ -191,7 +193,7 @@ export async function driveToken() {
 /** Gives `email` read-only access to the folder. Google also emails them the invite. Safe to repeat. */
 // Shown inside Google's invite email. The invite is sent in the service account's name, so this explains who it is from.
 const INVITE_MESSAGE =
-  "Welcome to the AnalystFemi Excel & Power BI course, taught by Joshua Akintayo. This is your course folder, shared after your payment. Open the 00 Welcome file first: it explains how to use the course and has the link to join the student WhatsApp group. If anything does not open, reply on WhatsApp via analystfemi.joshuaakintayo.me.";
+  "Welcome to the AnalystFemi Excel & Power BI course, taught by Joshua Akintayo. This is your course folder, shared after your payment. Open the 00 Welcome file first: it explains how to use the course. If anything does not open, reply on WhatsApp via analystfemi.joshuaakintayo.me.";
 
 export async function shareFolder(folderId, email, { notify = true } = {}) {
   const token = await driveToken();

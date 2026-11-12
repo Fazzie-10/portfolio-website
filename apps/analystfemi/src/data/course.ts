@@ -50,7 +50,7 @@ export const LAUNCH = {
   active: true,
   percent: 50,
   cap: "the first 14 days",
-  endsOn: "", // Set to launch date + 14 days when you go live, e.g. "30 November 2026". Empty shows "the first 14 days".
+  endsOn: "26 November 2026", // Keep in step with LAUNCH_ENDS_ON (2026-11-26) in Vercel.
 };
 
 export const TIKTOK = { handle: "@analystfemi", url: "https://www.tiktok.com/@analystfemi", followers: "457" };
@@ -101,7 +101,7 @@ export const TIERS = [
       "Dashboard backgrounds, icons and templates",
       "PDF guides, plus all checklists",
       "“AI in Data Analysis” PDF",
-      "WhatsApp community access",
+      "AnalystFemi Data Club (WhatsApp community)",
       "Certificate of completion",
     ],
   },
@@ -144,7 +144,7 @@ export const INCLUDED = [
   { icon: "video", title: "Real class lessons", note: "Cut from live classes where students worked on messy data" },
   { icon: "file", title: "Every practice file", note: "Datasets, workbooks and Power BI files to rebuild each lesson" },
   { icon: "check", title: "Checklists and PDF guides", note: "Step-by-step guides, plus an AI in Data Analysis guide" },
-  { icon: "users", title: "WhatsApp community", note: "Full Course. Ask questions and share your dashboards" },
+  { icon: "users", title: "AnalystFemi Data Club", note: "Full Course. A WhatsApp community to ask questions and share your dashboards" },
 ] as const;
 
 export const FOR_YOU = [
@@ -160,11 +160,11 @@ export const NOT_FOR_YOU = [
 ];
 
 export const FAQS = [
-  { q: "Is this live?", a: "No. It is recorded, so you learn at your own pace. Full Course students can ask questions in the WhatsApp community." },
+  { q: "Is this live?", a: "No. It is recorded, so you learn at your own pace. Full Course students can ask questions in the AnalystFemi Data Club on WhatsApp." },
   { q: "Is it for complete beginners?", a: "Yes. It starts with the basics of data analysis and Excel, then builds up to Power BI." },
   { q: "What do I need?", a: "A Windows laptop, because Power BI Desktop only runs on Windows. Excel 2021 or Microsoft 365 (XLOOKUP and some other functions need it). Power BI Desktop is free." },
   { q: "Does it cover SQL?", a: "No. The course focuses on Excel and Power BI, the two tools most junior analyst roles ask for first." },
   { q: "Will I get a job?", a: "I cannot promise that. You will leave with real projects to show and the skills to handle practical tests." },
   { q: "What if it is not for me?", a: "Start with the Free Starter Pack. If you buy and it is not right, message me within 7 days of buying, having watched less than a quarter of it, and I will refund you." },
-  { q: "How do I pay and get access?", a: "Pay securely on the checkout page. Straight after payment you are added to the course Google Drive folder with the lessons and practice files, and to the student WhatsApp group. Use the email address you want access on." },
+  { q: "How do I pay and get access?", a: "Pay securely on the checkout page. Straight after payment you are added to the course Google Drive folder with the lessons and practice files. The Full Course also adds you to the AnalystFemi Data Club on WhatsApp. Use the email address you want access on." },
 ];
