@@ -54,13 +54,6 @@
   --d-accent: #a3e635; --d-accent-fg: #0a0a0b; --d-accent-soft: #1f2a10;
 }
 
-[data-site="insightshub"] {
-  --l-bg: #ffffff; --l-surface: #eef2fb; --l-fg: #0f172a; --l-muted: #55607a;
-  --l-accent: #1e3a8a; --l-accent-fg: #ffffff; --l-accent-soft: #dbe4f8;
-  --d-bg: #0b1020; --d-surface: #131b33; --d-fg: #e7ecf7; --d-muted: #97a3bf;
-  --d-accent: #93b4ff; --d-accent-fg: #0b1020; --d-accent-soft: #1a2647;
-}
-
 /* ---------- Resolver: light by default ---------- */
 
 [data-site] {

@@ -4,11 +4,20 @@ import Icon from "@ja/ui/components/Icon.astro";
 import Logo from "@ja/ui/components/Logo.astro";
 import { siteUrl, whatsappLink } from "@ja/ui/sites";
 import HeroPlayer from "../remotion/HeroPlayer";
-import { FAQS, INCLUDED, PHASES, PROGRAM, TIKTOK, TOOLS, YOUTUBE } from "../data/mentorship";
+import { CHECKOUT, COURSE, FAQS, FOR_YOU, INCLUDED, LAUNCH, NOT_FOR_YOU, PARTS, TESTIMONIALS, TIERS, TIKTOK, TOOLS, YOUTUBE } from "../data/course";
 import "../styles/global.css";
 
 const naira = (n: number) => `₦${n.toLocaleString("en-NG")}`;
-const reserve = whatsappLink(`Hi Joshua, I'd like to reserve a seat in the ${PROGRAM.name} mentorship.`);
+const launchPrice = (n: number) => Math.round(n * (1 - LAUNCH.percent / 100));
+// Use the Nestuge link when it exists, otherwise open a WhatsApp message.
+const buy = (id: "free" | "excel" | "full", name: string) =>
+  CHECKOUT[id] || whatsappLink(`Hi Joshua, I'd like the ${name} (${COURSE.name}).`);
+const freeLink = buy("free", "Free Starter Pack");
+const fullTier = TIERS.find((t) => t.id === "full")!;
+const fullNow = LAUNCH.active ? launchPrice(fullTier.price) : fullTier.price;
+const buyFull = buy("full", fullTier.name);
+const hours = (m: number) => (m >= 60 ? `${(m / 60).toFixed(1).replace(".0", "")} h` : `${m} min`);
+const offerLine = LAUNCH.endsOn ? `Launch offer for ${LAUNCH.cap}, ends ${LAUNCH.endsOn}.` : `Launch offer for ${LAUNCH.cap}.`;
 
 const showcase = [
   { id: "exec", label: "Executive summary", image: "/media/brightpark-executive.webp" },
@@ -19,8 +28,8 @@ const showcase = [
 
 <Layout
   site="analystfemi"
-  title="AnalystFemi · Zero to Data Analyst mentorship"
-  description="Learn data analysis live with AnalystFemi: a 12-week mentorship in Excel, SQL and Power BI on Google Meet, with real projects. ₦50,000 a month."
+  title="AnalystFemi · Excel & Power BI course for data analysts"
+  description="Learn Excel and Power BI with 11+ hours of real class lessons, practice files and two capstone projects. Start free, from ₦10,000."
   links={[
     { label: "Curriculum", href: "#curriculum" },
     { label: "Student work", href: "#work" },
@@ -29,8 +38,8 @@ const showcase = [
     { label: "Blog", href: "/blog/" },
   ]}
 >
-  <a slot="cta" href={reserve} class="hidden rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90 sm:inline-flex">
-    Reserve a seat
+  <a slot="cta" href={freeLink} class="hidden rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90 sm:inline-flex">
+    Get the free pack
   </a>
 
   <!-- Hero -->
@@ -38,19 +47,22 @@ const showcase = [
     <div class="graph-paper pointer-events-none absolute inset-0" aria-hidden="true"></div>
     <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[1fr_1.1fr]">
       <div>
-        <span class="inline-flex items-center gap-2 rounded-full border border-line bg-bg px-3 py-1.5 text-sm">
-          <Icon name="video" class="h-4 w-4 text-accent" />
-          12-week live mentorship · Google Meet
-        </span>
-        <h1 class="mt-6 text-[2.75rem] font-semibold leading-[0.98] sm:text-6xl lg:text-7xl">
-          Go from zero to <span class="accent-word whitespace-nowrap">data analyst</span> in 12 weeks.
+        <h1 class="text-[2.75rem] font-semibold leading-[0.98] sm:text-6xl lg:text-7xl">
+          Learn <span class="accent-word whitespace-nowrap">Excel and Power BI</span> by watching real dashboards get built.
         </h1>
         <p class="mt-6 max-w-lg text-lg text-muted">
-          Excel, PostgreSQL and Power BI, taught live, with four portfolio projects you can show employers.
+          {COURSE.hours} hours of lessons cut from real classes, every practice file, and two capstone projects for your portfolio. Start free.
         </p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href={reserve} class="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90">Reserve a seat</a>
-          <a href="#curriculum" class="rounded-full border border-line bg-bg px-6 py-3 text-sm font-medium transition-colors hover:bg-surface">See the curriculum</a>
+        <div class="mt-8 max-w-lg rounded-2xl border border-line bg-bg p-5 shadow-xl shadow-black/5 sm:p-6">
+          <p class="eyebrow">Full Course · Excel + Power BI</p>
+          <p class="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono">
+            <span class="text-4xl font-medium sm:text-5xl">{naira(fullNow)}</span>
+            {LAUNCH.active && <span class="text-lg line-through opacity-60">{naira(fullTier.price)}</span>}
+          </p>
+          {LAUNCH.active && <p class="mt-1 text-sm font-medium text-accent">{LAUNCH.percent}% off · {offerLine}</p>}
+          <a href={buyFull} class="mt-5 block rounded-full bg-accent px-6 py-4 text-center text-base font-medium text-accent-fg transition-opacity hover:opacity-90">Pay {naira(fullNow)} and start today</a>
+          <p class="mt-3 text-sm text-muted">One payment, no subscription. Straight after paying you are added to the course Google Drive folder, with every lesson and practice file, and to the student WhatsApp group. Use the email you want access on.</p>
+          <p class="mt-3 text-sm"><a href={freeLink} class="font-medium text-accent underline underline-offset-4">Not sure yet? Get the free starter pack</a> · <a href="#pricing" class="font-medium text-accent underline underline-offset-4">Compare tiers</a></p>
         </div>
         <a href="#instructor" class="mt-10 flex w-fit items-center gap-3 border-t border-line pt-6 text-sm">
           <img src="/media/joshua-purple.webp" alt="" width="44" height="44" class="h-11 w-11 rounded-full object-cover" />
@@ -64,7 +76,7 @@ const showcase = [
         </div>
         <span class="float-slow absolute -left-3 -top-3 hidden rounded-full border border-line bg-bg px-3 py-1.5 font-mono text-xs shadow-lg sm:inline-flex">Real dashboard · built in my Power BI class</span>
         <span class="float-slow delay absolute -bottom-5 right-8 hidden items-center gap-2 rounded-full border border-line bg-white px-3 py-2 shadow-lg sm:inline-flex">
-          <Logo name="excel" class="h-5 w-auto" /><span class="text-xs text-neutral-400">→</span><Logo name="postgresql" class="h-5 w-auto" /><span class="text-xs text-neutral-400">→</span><Logo name="powerbi" class="h-5 w-auto" />
+          <Logo name="excel" class="h-5 w-auto" /><span class="text-xs text-neutral-400">→</span><Logo name="powerbi" class="h-5 w-auto" />
         </span>
       </div>
     </div>
@@ -74,9 +86,9 @@ const showcase = [
   <section class="border-y border-line bg-surface">
     <dl class="mx-auto grid max-w-6xl grid-cols-2 divide-line px-4 sm:px-6 lg:grid-cols-4 lg:divide-x">
       {[
-        [naira(PROGRAM.pricePerMonth), "per month · 3 months"],
-        ["3×", "live sessions a week, 2 hrs"],
-        ["4", "portfolio projects"],
+        [COURSE.lessons, "video lessons"],
+        [COURSE.hours, "hours of teaching"],
+        [String(COURSE.capstones), "capstone projects"],
         ["0", "experience needed"],
       ].map(([v, l]) => (
         <div class="py-6 lg:px-6 lg:first:pl-0">
@@ -87,152 +99,201 @@ const showcase = [
     </dl>
   </section>
 
-  <!-- Tools -->
+  <!-- Student voice -->
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+    <p class="eyebrow">What students say</p>
+    {TESTIMONIALS.map((t) => (
+      <figure data-reveal class="mt-6 grid gap-6 rounded-[var(--radius-card)] border border-line bg-surface p-6 sm:p-10 md:grid-cols-[auto_1fr]">
+        <span class="font-display text-7xl leading-none text-accent" aria-hidden="true">“</span>
+        <div>
+          <blockquote class="space-y-3 text-lg leading-relaxed">
+            {t.quote.map((line) => <p>{line}</p>)}
+          </blockquote>
+          <figcaption class="mt-6 border-t border-line pt-4 text-sm"><span class="font-medium">{t.name}</span> <span class="text-muted">· {t.role}</span></figcaption>
+        </div>
+      </figure>
+    ))}
+  </section>
+
+  <!-- Problem / difference -->
   <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-    <p class="eyebrow">The tech stack</p>
-    <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Three tools <span class="accent-word">employers</span> ask for.</h2>
-    <div class="mt-10 grid gap-4 md:grid-cols-3">
-      {TOOLS.map((t, i) => (
-        <article data-reveal style={`--reveal-delay:${i * 80}ms`} class="flex items-start gap-4 rounded-[var(--radius-card)] border border-line p-5">
-          <span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-line bg-white p-2.5"><Logo name={t.logo} class="h-8 w-auto" /></span>
-          <div>
-            <h3 class="text-xl font-semibold">{t.name}</h3>
-            <p class="mt-1 text-[15px] text-muted">{t.learn}</p>
-          </div>
-        </article>
-      ))}
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-start">
+      <div>
+        <p class="eyebrow">Why this course</p>
+        <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">You finished a tutorial. You still can’t <span class="accent-word">build it alone.</span></h2>
+      </div>
+      <div class="space-y-5 text-lg text-muted">
+        <p>Most courses show you clean data and a finished result. Real work starts with a messy spreadsheet and a manager who wants answers.</p>
+        <p>These lessons are cut from real classes. You watch the data get cleaned, the formulas break, the mistakes get fixed and the dashboard take shape.</p>
+        <p class="text-fg"><strong class="font-semibold">Then you open the same files and build it yourself.</strong> Watch, rebuild, tick the checklist. That is the whole method.</p>
+      </div>
     </div>
   </section>
 
-  <!-- Curriculum -->
-  <section id="curriculum" class="scroll-mt-20 border-t border-line bg-surface">
+  <!-- Tools -->
+  <section class="border-t border-line bg-surface">
     <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-      <p class="eyebrow">Curriculum</p>
-      <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">From your first formula to your <span class="accent-word">first job</span>.</h2>
-
-      <!-- Progress rail -->
-      <div class="mt-10 hidden grid-cols-12 gap-1 md:grid" aria-hidden="true">
-        {Array.from({ length: 12 }, (_, i) => (
-          <div class="h-2 rounded-full" style={`background:color-mix(in oklab, var(--accent) ${25 + Math.floor(i / 4) * 30}%, transparent)`}></div>
-        ))}
-      </div>
-
-      <div class="mt-4 grid gap-4 md:grid-cols-3">
-        {PHASES.map((m, i) => (
-          <article data-reveal style={`--reveal-delay:${i * 100}ms`} class="flex flex-col rounded-[var(--radius-card)] border border-line bg-bg p-6">
-            <div class="flex items-center justify-between">
-              <span class="font-mono text-xs uppercase tracking-wider text-muted">{m.phase}</span>
-              <span class="rounded-full bg-accent px-2.5 py-0.5 font-mono text-xs text-accent-fg">{m.tool}</span>
+      <p class="eyebrow">The tech stack</p>
+      <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Two tools <span class="accent-word">employers</span> ask for.</h2>
+      <div class="mt-10 grid gap-4 md:grid-cols-2">
+        {TOOLS.map((t, i) => (
+          <article data-reveal style={`--reveal-delay:${i * 80}ms`} class="flex items-start gap-4 rounded-[var(--radius-card)] border border-line bg-bg p-5">
+            <span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-line bg-white p-2.5"><Logo name={t.logo} class="h-8 w-auto" /></span>
+            <div>
+              <h3 class="text-xl font-semibold">{t.name}</h3>
+              <p class="mt-1 text-[15px] text-muted">{t.learn}</p>
             </div>
-            <h3 class="mt-3 text-xl font-semibold">{m.title}</h3>
-            <ul class="mt-4 space-y-2.5">
-              {m.modules.map((t) => (
-                <li class="flex items-center gap-2.5">
-                  <Icon name="check" class="h-4 w-4 shrink-0 text-accent" />
-                  <span>{t}</span>
-                </li>
-              ))}
-            </ul>
-            <p class="mt-auto pt-6"><span class="inline-flex rounded-xl bg-accent-soft px-3 py-2 text-sm font-medium">{m.project}</span></p>
           </article>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- Student work -->
-  <section id="work" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-24">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <p class="eyebrow">Built in class</p>
-        <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">Real dashboards, built <span class="accent-word">with students</span>.</h2>
-      </div>
-      <p class="max-w-xs text-sm text-muted">Portfolio projects from my Power BI class.</p>
-    </div>
+  <!-- Curriculum -->
+  <section id="curriculum" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-24">
+    <p class="eyebrow">Curriculum</p>
+    <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">From your first formula to your <span class="accent-word">first dashboards</span>.</h2>
+    <p class="mt-4 max-w-2xl text-muted">{COURSE.modules} modules in two parts. Part 1 is in the Excel Track and the Full Course. Part 2 is in the Full Course.</p>
 
-    <!-- BrightPark: three-page report with tabs -->
-    <div data-reveal class="af-tabs mt-10 overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
-        <p class="font-display font-semibold">BrightPark sales report <span class="font-sans text-sm font-normal text-muted">· 3 pages</span></p>
-        <div class="flex gap-1.5" role="tablist">
+    <div class="mt-10 grid gap-4 lg:grid-cols-2">
+      {PARTS.map((p, i) => (
+        <article data-reveal style={`--reveal-delay:${i * 100}ms`} class="flex flex-col rounded-[var(--radius-card)] border border-line bg-bg p-6">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs uppercase tracking-wider text-muted">{p.part}</span>
+            <span class="rounded-full bg-accent px-2.5 py-0.5 font-mono text-xs text-accent-fg">{p.tool}</span>
+          </div>
+          <h3 class="mt-3 text-xl font-semibold">{p.title}</h3>
+          <ul class="mt-4 divide-y divide-line">
+            {p.modules.map((m) => (
+              <li class="flex items-baseline gap-3 py-2.5">
+                <span class="font-mono text-xs text-muted">{m.n}</span>
+                <span class="flex-1">{m.t}</span>
+                <span class="font-mono text-xs text-muted">{hours(m.m)}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="mt-auto pt-6"><span class="inline-flex rounded-xl bg-accent-soft px-3 py-2 text-sm font-medium">{p.project}</span></p>
+        </article>
+      ))}
+    </div>
+    <p class="mt-4 rounded-2xl border border-line bg-surface px-5 py-4 text-sm"><span class="font-medium">Bonus:</span> build a portfolio website with AI, so your projects have a home to share with employers.</p>
+  </section>
+
+  <!-- Student work -->
+  <section id="work" class="border-t border-line bg-surface scroll-mt-20">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="eyebrow">Built in class</p>
+          <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">Real dashboards, built <span class="accent-word">with students</span>.</h2>
+        </div>
+        <p class="max-w-xs text-sm text-muted">Portfolio projects from my Power BI class. You get the same files.</p>
+      </div>
+
+      <div data-reveal class="af-tabs mt-10 overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
+          <p class="font-display font-semibold">BrightPark sales report <span class="font-sans text-sm font-normal text-muted">· 3 pages</span></p>
+          <div class="flex gap-1.5" role="tablist">
+            {showcase.map((s, i) => (
+              <button type="button" role="tab" data-tab={s.id} aria-selected={i === 0 ? "true" : "false"} class="rounded-full border border-line px-3 py-1 text-xs aria-selected:border-accent aria-selected:bg-accent aria-selected:text-accent-fg">
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div class="bg-surface p-3 sm:p-5">
           {showcase.map((s, i) => (
-            <button type="button" role="tab" data-tab={s.id} aria-selected={i === 0 ? "true" : "false"} class="rounded-full border border-line px-3 py-1 text-xs aria-selected:border-accent aria-selected:bg-accent aria-selected:text-accent-fg">
-              {s.label}
-            </button>
+            <img src={s.image} alt={`BrightPark Power BI report: ${s.label}`} data-panel={s.id} loading="lazy" class:list={["w-full rounded-xl", i !== 0 && "hidden"]} />
           ))}
         </div>
       </div>
-      <div class="bg-bg p-3 sm:p-5">
-        {showcase.map((s, i) => (
-          <img src={s.image} alt={`BrightPark Power BI report: ${s.label}`} data-panel={s.id} loading="lazy" class:list={["w-full rounded-xl", i !== 0 && "hidden"]} />
-        ))}
-      </div>
-    </div>
 
-    <div class="mt-4 grid gap-4 md:grid-cols-2">
-      <figure data-reveal class="overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
-        <img src="/media/weather-dashboard.webp" alt="Weather dashboard for Abuja, Ibadan and Kano built in Power BI" loading="lazy" class="w-full" />
-        <figcaption class="flex items-center justify-between px-4 py-3 text-sm"><span class="font-medium">Weather dashboard</span><span class="text-muted">Live API data · Abuja, Ibadan, Kano</span></figcaption>
-      </figure>
-      <figure data-reveal style="--reveal-delay:100ms" class="overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
-        <video data-src="/media/sales-calendar.mp4" poster="/media/sales-calendar.webp" muted loop playsinline preload="none" aria-label="Interactive sales calendar with tooltips" class="w-full"></video>
-        <figcaption class="flex items-center justify-between px-4 py-3 text-sm"><span class="font-medium">Sales performance calendar</span><span class="text-muted">Interactive tooltips</span></figcaption>
-      </figure>
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        <figure data-reveal class="overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg">
+          <img src="/media/weather-dashboard.webp" alt="Weather dashboard for Abuja, Ibadan and Kano built in Power BI" loading="lazy" class="w-full" />
+          <figcaption class="flex items-center justify-between px-4 py-3 text-sm"><span class="font-medium">Weather dashboard</span><span class="text-muted">Live API data · Abuja, Ibadan, Kano</span></figcaption>
+        </figure>
+        <figure data-reveal style="--reveal-delay:100ms" class="overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg">
+          <video data-src="/media/sales-calendar.mp4" poster="/media/sales-calendar.webp" muted loop playsinline preload="none" aria-label="Interactive sales calendar with tooltips" class="w-full"></video>
+          <figcaption class="flex items-center justify-between px-4 py-3 text-sm"><span class="font-medium">Sales performance calendar</span><span class="text-muted">Interactive tooltips</span></figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 
   <!-- Watch me teach -->
-  <section class="border-t border-line bg-surface">
-    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p class="eyebrow">Watch me teach</p>
-          <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">See how I <span class="accent-word">explain</span> it.</h2>
-        </div>
-        <p class="max-w-sm text-muted">Two full lessons from my TikTok. Every class is this hands-on, step by step, with real data.</p>
+  <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="eyebrow">Watch me teach</p>
+        <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">See how I <span class="accent-word">explain</span> it.</h2>
       </div>
-      <div class="mt-10 grid gap-5 lg:grid-cols-2">
-        {[
-          { src: "/media/power-query.mp4", poster: "/media/power-query.webp", title: "Data cleaning with Power Query", meta: "Power BI · 5 min", logo: "powerbi" },
-          { src: "/media/vlookup-vs-xlookup.mp4", poster: "/media/vlookup-vs-xlookup.webp", title: "VLOOKUP vs XLOOKUP", meta: "Excel · 3 min", logo: "excel" },
-        ].map((v, i) => (
-          <figure data-reveal style={`--reveal-delay:${i * 100}ms`} class="overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg">
-            <video src={v.src} poster={v.poster} controls preload="none" playsinline aria-label={`Lesson: ${v.title}`} class="aspect-video w-full bg-black"></video>
-            <figcaption class="flex items-center gap-3 px-5 py-4">
-              <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-line bg-white p-1.5"><Logo name={v.logo} class="h-5 w-auto" /></span>
-              <span class="leading-tight"><span class="block font-medium">{v.title}</span><span class="text-sm text-muted">{v.meta}</span></span>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
+      <p class="max-w-sm text-muted">Two sample lessons. The course is this hands-on, step by step, with real data.</p>
+    </div>
+    <div class="mt-10 grid gap-5 lg:grid-cols-2">
+      {[
+        { src: "/media/power-query.mp4", poster: "/media/power-query.webp", title: "Data cleaning with Power Query", meta: "Power BI · 5 min", logo: "powerbi" },
+        { src: "/media/vlookup-vs-xlookup.mp4", poster: "/media/vlookup-vs-xlookup.webp", title: "VLOOKUP vs XLOOKUP", meta: "Excel · 3 min", logo: "excel" },
+      ].map((v, i) => (
+        <figure data-reveal style={`--reveal-delay:${i * 100}ms`} class="overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg">
+          <video src={v.src} poster={v.poster} controls preload="none" playsinline aria-label={`Lesson: ${v.title}`} class="aspect-video w-full bg-black"></video>
+          <figcaption class="flex items-center gap-3 px-5 py-4">
+            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-line bg-white p-1.5"><Logo name={v.logo} class="h-5 w-auto" /></span>
+            <span class="leading-tight"><span class="block font-medium">{v.title}</span><span class="text-sm text-muted">{v.meta}</span></span>
+          </figcaption>
+        </figure>
+      ))}
     </div>
   </section>
 
-  <!-- What's included + instructor -->
-  <section id="instructor" class="mx-auto grid max-w-6xl scroll-mt-20 gap-6 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-[1.2fr_1fr]">
-    <div>
+  <!-- What's included + for/not for -->
+  <section class="border-t border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
       <p class="eyebrow">What's included</p>
-      <div class="mt-6 grid gap-3 sm:grid-cols-2">
+      <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Everything to <span class="accent-word">learn it and prove it</span>.</h2>
+      <div class="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {INCLUDED.map((it, i) => (
-          <div data-reveal style={`--reveal-delay:${i * 80}ms`} class="rounded-2xl border border-line p-5">
+          <div data-reveal style={`--reveal-delay:${i * 80}ms`} class="rounded-2xl border border-line bg-bg p-5">
             <span class="grid h-10 w-10 place-items-center rounded-xl bg-accent-soft text-accent"><Icon name={it.icon} /></span>
             <p class="mt-3 font-display text-lg font-semibold leading-tight">{it.title}</p>
             <p class="mt-1 text-sm text-muted">{it.note}</p>
           </div>
         ))}
       </div>
-    </div>
 
-    <article data-reveal class="relative flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
-      <img src="/media/joshua-purple.webp" alt="Joshua Akintayo" width="720" height="720" loading="lazy" class="aspect-[4/3] w-full object-cover object-top" />
-      <div class="p-6">
+      <div class="mt-10 grid gap-4 md:grid-cols-2">
+        <div class="rounded-[var(--radius-card)] border border-line bg-bg p-6">
+          <h3 class="font-display text-xl font-semibold">This is for you if</h3>
+          <ul class="mt-4 space-y-2.5">
+            {FOR_YOU.map((t) => (
+              <li class="flex items-start gap-2.5"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-accent" /><span>{t}</span></li>
+            ))}
+          </ul>
+        </div>
+        <div class="rounded-[var(--radius-card)] border border-line bg-bg p-6">
+          <h3 class="font-display text-xl font-semibold">This is not for you if</h3>
+          <ul class="mt-4 space-y-2.5">
+            {NOT_FOR_YOU.map((t) => (
+              <li class="flex items-start gap-2.5"><span class="mt-0.5 w-4 shrink-0 text-center text-muted" aria-hidden="true">–</span><span class="text-muted">{t}</span></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instructor -->
+  <section id="instructor" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-24">
+    <article data-reveal class="grid overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface md:grid-cols-[1fr_1.4fr]">
+      <img src="/media/joshua-purple.webp" alt="Joshua Akintayo" width="720" height="720" loading="lazy" class="aspect-[4/3] h-full w-full object-cover object-top md:aspect-auto" />
+      <div class="p-6 sm:p-10">
         <p class="eyebrow">Your instructor</p>
-        <h3 class="mt-2 text-2xl font-semibold">Joshua Akintayo</h3>
-        <p class="mt-2 text-[15px] text-muted">
-          Data analyst and data engineer. Former data analyst at The ICIR, Microsoft Certified Fabric Analytics Engineer, and founder of InsightsHub.
+        <h2 class="mt-2 text-3xl font-semibold">Joshua Akintayo</h2>
+        <p class="mt-3 text-muted">
+          Data analyst and data engineer. Former data analyst at The ICIR, Microsoft Certified Fabric Analytics Engineer, and the builder of rsch, a research workspace for students. I teach the way I work: open the data, find the problem, fix it, and explain why.
         </p>
-        <div class="mt-4 flex flex-wrap gap-2 text-sm">
-          <a href={TIKTOK.url} target="_blank" rel="noopener noreferrer" class="rounded-full border border-line px-3 py-1.5 hover:border-accent">TikTok {TIKTOK.handle} · {TIKTOK.followers}</a>
+        <div class="mt-5 flex flex-wrap gap-2 text-sm">
+          <a href={TIKTOK.url} target="_blank" rel="noopener noreferrer" class="rounded-full border border-line px-3 py-1.5 hover:border-accent">TikTok {TIKTOK.handle}</a>
           <a href={YOUTUBE} target="_blank" rel="noopener noreferrer" class="rounded-full border border-line px-3 py-1.5 hover:border-accent">YouTube</a>
           <a href={siteUrl("hub")} class="rounded-full border border-line px-3 py-1.5 hover:border-accent">Full story →</a>
         </div>
@@ -240,19 +301,77 @@ const showcase = [
     </article>
   </section>
 
+  <!-- Research projects: rsch -->
+  <section class="px-4 pb-4 sm:px-6">
+    <div data-reveal class="mx-auto grid max-w-6xl items-center gap-6 rounded-[var(--radius-card)] border border-line bg-bg p-6 sm:p-10 md:grid-cols-[1fr_auto]">
+      <div>
+        <p class="eyebrow">Also for students</p>
+        <h2 class="mt-2 text-2xl font-semibold sm:text-3xl">Writing a research project? Use <span class="accent-word">rsch</span>.</h2>
+        <p class="mt-3 max-w-2xl text-muted">
+          rsch takes you from questionnaire to Chapter 4 in one workspace: build the questionnaire, collect responses on phones, clean the data and get your results written up.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="https://getrsch.pages.dev" target="_blank" rel="noopener noreferrer" class="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90">Open rsch</a>
+        <a href={siteUrl("automation", "/#builds")} class="rounded-full border border-line bg-bg px-6 py-3 text-sm font-medium transition-colors hover:bg-surface">How it works</a>
+      </div>
+    </div>
+  </section>
+
   <!-- Pricing -->
-  <section id="pricing" class="scroll-mt-20 px-4 sm:px-6">
-    <div data-reveal class="relative mx-auto grid max-w-6xl gap-8 overflow-hidden rounded-[32px] bg-accent px-6 py-12 text-accent-fg sm:px-12 lg:grid-cols-[1.3fr_1fr] lg:items-center">
-      <div class="pointer-events-none absolute -right-12 -top-12 h-56 w-56 rounded-full border-[28px] border-accent-fg/10" aria-hidden="true"></div>
-      <div class="relative">
-        <p class="font-mono text-xs uppercase tracking-wider">Invest in your future</p>
-        <p class="mt-3 font-mono text-5xl font-medium sm:text-6xl">{naira(PROGRAM.pricePerMonth)}<span class="text-2xl opacity-70"> / month</span></p>
-        <p class="mt-2">3-month program · {PROGRAM.sessions} · {PROGRAM.platform}</p>
+  <section id="pricing" class="scroll-mt-20 border-t border-line bg-surface">
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
+      <p class="eyebrow">Pricing</p>
+      <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Start free. <span class="accent-word">Pay once</span> when you’re ready.</h2>
+      <p class="mt-4 max-w-2xl text-muted">One payment, no subscription. Access comes straight after you pay.</p>
+      {LAUNCH.active && (
+        <p class="mt-6 inline-flex rounded-full bg-accent-soft px-4 py-2 text-sm font-medium">{LAUNCH.percent}% off · {offerLine}</p>
+      )}
+
+      <div class="mt-10 grid gap-4 lg:grid-cols-3">
+        {TIERS.map((t, i) => (
+          <article
+            data-reveal
+            style={`--reveal-delay:${i * 100}ms`}
+            class:list={[
+              "relative flex flex-col rounded-[var(--radius-card)] border p-6 sm:p-7",
+              t.highlight ? "border-accent bg-accent text-accent-fg shadow-2xl shadow-black/10" : "border-line bg-bg",
+            ]}
+          >
+            {t.highlight && <span class="absolute -top-3 left-6 rounded-full bg-bg px-3 py-1 font-mono text-xs text-accent ring-1 ring-accent">Most complete</span>}
+            <h3 class="font-display text-2xl font-semibold">{t.name}</h3>
+            <p class:list={["mt-1 text-sm", t.highlight ? "opacity-80" : "text-muted"]}>{t.blurb}</p>
+            <p class="mt-6 flex items-baseline gap-2 font-mono">
+              {t.price === 0 ? (
+                <span class="text-5xl font-medium">Free</span>
+              ) : LAUNCH.active ? (
+                <>
+                  <span class="text-5xl font-medium">{naira(launchPrice(t.price))}</span>
+                  <span class="text-lg line-through opacity-60">{naira(t.price)}</span>
+                </>
+              ) : (
+                <span class="text-5xl font-medium">{naira(t.price)}</span>
+              )}
+            </p>
+            <ul class="mt-6 space-y-3 text-[15px]">
+              {t.features.map((f) => (
+                <li class="flex items-start gap-2.5"><Icon name="check" class="mt-1 h-4 w-4 shrink-0" /><span>{f}</span></li>
+              ))}
+            </ul>
+            <a
+              href={buy(t.id, t.name)}
+              class:list={[
+                "mt-auto block rounded-full px-6 py-3 text-center text-sm font-medium transition-opacity hover:opacity-90",
+                t.highlight ? "bg-accent-fg text-accent" : t.price === 0 ? "border border-line bg-bg hover:bg-surface" : "bg-accent text-accent-fg",
+              ]}
+              style="margin-top: 2rem"
+            >
+              {t.cta}
+            </a>
+          </article>
+        ))}
       </div>
-      <div class="relative flex flex-col gap-3">
-        <a href={reserve} class="rounded-full bg-accent-fg px-6 py-3 text-center text-sm font-medium text-accent">Reserve your seat on WhatsApp</a>
-        <p class="text-center text-sm">Beginner friendly · Practical · Career-focused</p>
-      </div>
+      <p class="mt-6 text-sm text-muted">Secure checkout, then instant access to the course folder and the student WhatsApp group. Questions? <a href={whatsappLink("Hi Joshua, I have a question about the Excel & Power BI course.")} class="font-medium text-accent underline underline-offset-4">Message me on WhatsApp</a>.</p>
     </div>
   </section>
 
@@ -261,7 +380,7 @@ const showcase = [
     <div>
       <p class="eyebrow">FAQ</p>
       <h2 class="mt-4 text-3xl font-semibold sm:text-4xl">Before you join.</h2>
-      <p class="mt-5 text-muted">Need data work for your business instead of a class? <a href={siteUrl("hub", "/#services")} class="font-medium text-accent underline underline-offset-4">See my services</a>.</p>
+      <p class="mt-5 text-muted">Need data work for your business instead of a course? <a href={siteUrl("hub", "/#services")} class="font-medium text-accent underline underline-offset-4">See my services</a>.</p>
     </div>
     <div class="divide-y divide-line border-y border-line">
       {FAQS.map((f) => (
@@ -276,8 +395,21 @@ const showcase = [
     </div>
   </section>
 
-  <a href={reserve} class="fixed bottom-5 right-5 z-40 inline-flex rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg shadow-lg sm:hidden">
-    Reserve a seat
+  <!-- Final call -->
+  <section class="px-4 pb-20 sm:px-6">
+    <div data-reveal class="relative mx-auto max-w-6xl overflow-hidden rounded-[32px] bg-accent px-6 py-12 text-center text-accent-fg sm:px-12">
+      <div class="pointer-events-none absolute -right-12 -top-12 h-56 w-56 rounded-full border-[28px] border-accent-fg/10" aria-hidden="true"></div>
+      <h2 class="relative mx-auto max-w-2xl text-3xl font-semibold sm:text-4xl">Your first dashboard is a few lessons away.</h2>
+      <p class="relative mt-3">Try the free pack today. Upgrade when you’re sure.</p>
+      <div class="relative mt-6 flex flex-wrap justify-center gap-3">
+        <a href={freeLink} class="rounded-full bg-accent-fg px-6 py-3 text-sm font-medium text-accent">Get the free pack</a>
+        <a href="#pricing" class="rounded-full border border-accent-fg/40 px-6 py-3 text-sm font-medium">Compare tiers</a>
+      </div>
+    </div>
+  </section>
+
+  <a href="#pricing" class="fixed bottom-5 right-5 z-40 inline-flex rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg shadow-lg sm:hidden">
+    See the tiers
   </a>
 </Layout>
 

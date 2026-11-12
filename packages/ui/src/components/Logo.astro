@@ -12,7 +12,20 @@ interface Props {
 }
 
 const { name, class: className = "h-5 w-auto" } = Astro.props;
-const svg = LOGOS[name];
+const raw = LOGOS[name];
+
+// Give every rendered logo its own SVG ids. Several logos use gradients/filters referenced by id; if the same
+// logo appears twice and the first copy is hidden (display:none, e.g. a desktop-only chip), the visible copy
+// points at the hidden one's gradients and renders broken on phones.
+const g = globalThis as { __jaLogoUid?: number };
+const uid = (g.__jaLogoUid = (g.__jaLogoUid ?? 0) + 1);
+let svg = raw;
+if (raw) {
+  for (const [, id] of raw.matchAll(/\sid="([^"]+)"/g)) {
+    const next = `${id}-${uid}`;
+    svg = svg.split(`id="${id}"`).join(`id="${next}"`).split(`url(#${id})`).join(`url(#${next})`).split(`href="#${id}"`).join(`href="#${next}"`);
+  }
+}
 ---
 
 {svg && <span class:list={["ja-logo inline-flex shrink-0", MONO.has(name) && "ja-logo-mono", className]} aria-hidden="true" set:html={svg} />}

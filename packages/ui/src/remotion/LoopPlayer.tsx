@@ -12,6 +12,9 @@ interface Props {
   width: number;
   height: number;
   radius?: number;
+  // Shown instead of an empty box until the animation starts (so there is never a dead, blank cell)
+  poster?: string;
+  posterAlt?: string;
 }
 
 type PlayerModule = typeof import("@remotion/player");
@@ -19,7 +22,7 @@ type PlayerModule = typeof import("@remotion/player");
 // Shared looping Remotion player for every site's animations.
 // Shows a same-sized placeholder first, then loads Remotion on the first interaction.
 // People who ask their device to reduce motion get a still frame near the end instead.
-export default function LoopPlayer({ load, width, height, radius = 24 }: Props) {
+export default function LoopPlayer({ load, width, height, radius = 24, poster, posterAlt = "" }: Props) {
   const [reduced, setReduced] = useState(false);
   const [ready, setReady] = useState<{ player: PlayerModule; comp: LoadedComposition } | null>(null);
 
@@ -58,7 +61,12 @@ export default function LoopPlayer({ load, width, height, radius = 24 }: Props) 
 
   const box = { width: "100%", aspectRatio: `${width} / ${height}`, borderRadius: radius, overflow: "hidden" } as const;
 
-  if (!ready) return <div style={{ ...box, background: "var(--surface)" }} aria-hidden="true" />;
+  if (!ready)
+    return (
+      <div style={{ ...box, background: "var(--surface)" }} aria-hidden={posterAlt ? undefined : "true"}>
+        {poster && <img src={poster} alt={posterAlt} width={width} height={height} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top left" }} />}
+      </div>
+    );
 
   const { Player } = ready.player;
   const { component, durationInFrames, fps } = ready.comp;

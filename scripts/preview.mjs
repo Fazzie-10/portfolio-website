@@ -11,7 +11,7 @@ import path from "node:path";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const astroBin = path.join(root, "node_modules", "astro", "bin", "astro.mjs");
-const apps = [["hub", 4321], ["analystfemi", 4322], ["automation", 4323], ["insightshub", 4324]];
+const apps = [["hub", 4321], ["analystfemi", 4322], ["automation", 4323]];
 
 const lanIp = Object.values(networkInterfaces())
   .flat()

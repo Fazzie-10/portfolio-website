@@ -19,9 +19,8 @@ const deck = [
 ];
 
 const doors = [
-  { site: "analystfemi", eyebrow: "AnalystFemi", title: "Learn data analysis", body: "The 12-week Zero to Data Analyst mentorship. Excel, PostgreSQL and Power BI, live on Google Meet.", meta: "₦50,000 / month" },
-  { site: "automation", eyebrow: "Automation", title: "Automate my work", body: "AI tools and automations that take repetitive work off your plate, from WhatsApp bots to video pipelines.", meta: "5 tools built" },
-  { site: "insightshub", eyebrow: "InsightsHub", title: "Help with my research", body: "Chapter 4 analysis for BSc, HND and Masters students, explained so you can defend every number.", meta: "From ₦30,000" },
+  { site: "analystfemi", eyebrow: "AnalystFemi", title: "Learn data analysis", body: "A recorded Excel and Power BI course with real class lessons, practice files and two capstone projects. Start free.", meta: "From ₦10,000" },
+  { site: "automation", eyebrow: "Automation", title: "Automate my work", body: "Live AI products and custom automations that take repetitive work off your plate: receipts, research and video.", meta: "rcpt · rsch · tucpac" },
 ] as const;
 
 const linkFor = (p: (typeof PROJECTS)[number]) => (p.caseStudy ? `/work/${p.slug}/` : p.links?.[0]?.href);
@@ -92,14 +91,14 @@ const linkFor = (p: (typeof PROJECTS)[number]) => (p.caseStudy ? `/work/${p.slug
     </div>
   </section>
 
-  <!-- Three doors -->
+  <!-- Two doors -->
   <section id="doors" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
     <p class="eyebrow">Work with me</p>
     <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">
-      One person, <span class="accent-word">three</span> ways to help.
+      One person, <span class="accent-word">two</span> ways to help.
     </h2>
 
-    <div class="mt-12 grid gap-5 lg:grid-cols-3">
+    <div class="mt-12 grid gap-5 md:grid-cols-2">
       {doors.map((d) => (
         <a
           href={siteUrl(d.site)}
@@ -111,31 +110,16 @@ const linkFor = (p: (typeof PROJECTS)[number]) => (p.caseStudy ? `/work/${p.slug
               <img src="/media/brightpark-executive.webp" alt="BrightPark Power BI dashboard built in Joshua's class" loading="lazy" class="h-full w-full object-cover object-left-top transition-transform duration-500 group-hover:scale-105" />
             )}
             {d.site === "automation" && (
-              <div class="flex h-full items-end justify-center pt-6">
-                <video
-                  data-src="/media/vendoriq-chat.mp4"
-                  poster="/media/vendoriq-chat.webp"
-                  muted
-                  loop
-                  playsinline
-                  preload="none"
-                  aria-label="VendorIQ answering a vendor on WhatsApp"
-                  class="h-full w-auto rounded-t-[22px] border-x-[6px] border-t-[6px] border-fg/80 object-cover object-top"
-                />
-              </div>
-            )}
-            {d.site === "insightshub" && (
-              <div class="flex h-full flex-col justify-center gap-3 p-6 font-mono text-[12px]">
-                <p class="text-muted">Table 4.3 · Education × Knowledge level (sample data)</p>
-                <div class="overflow-hidden rounded-xl border border-line bg-bg">
-                  <div class="flex justify-between border-b border-line px-3 py-2 text-muted"><span>Education</span><span>% adequate</span></div>
-                  <div class="flex justify-between px-3 py-1.5"><span>Primary</span><span>68.3</span></div>
-                  <div class="flex justify-between px-3 py-1.5"><span>Secondary</span><span>74.0</span></div>
-                  <div class="flex justify-between px-3 py-1.5"><span>Higher</span><span>79.2</span></div>
-                  <div class="flex justify-between border-t border-line px-3 py-2"><span class="text-muted">χ² test</span><span class="text-accent">p = .218</span></div>
-                </div>
-                <p class="font-sans text-[13px] text-fg">"Education was not linked to knowledge in this sample."</p>
-              </div>
+              <video
+                data-src="/media/rcpt-promo.mp4"
+                poster="/media/rcpt-promo.webp"
+                muted
+                loop
+                playsinline
+                preload="none"
+                aria-label="rcpt, one of the live products: branded receipts with a QR code"
+                class="h-full w-full object-cover"
+              />
             )}
           </div>
           <div class="flex flex-1 flex-col gap-3 p-6">

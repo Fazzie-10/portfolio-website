@@ -6,6 +6,8 @@ export default function HeroPlayer() {
     <LoopPlayer
       width={900}
       height={580}
+      poster="/media/brightpark-executive.webp"
+      posterAlt="BrightPark executive summary dashboard built in the Power BI class"
       load={() => import("./BrightparkSlides").then((m) => ({ component: m.BrightparkSlides, durationInFrames: m.DURATION, fps: m.FPS }))}
     />
   );

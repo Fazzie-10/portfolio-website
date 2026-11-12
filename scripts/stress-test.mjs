@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const apps = ["hub", "analystfemi", "automation", "insightshub"];
+const apps = ["hub", "analystfemi", "automation"];
 const offline = process.argv.includes("--offline");
 
 const problems = []; // { level: "error" | "warn", site, page, msg }

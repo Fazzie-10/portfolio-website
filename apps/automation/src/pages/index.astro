@@ -1,10 +1,8 @@
 ---
 import Layout from "@ja/ui/components/Layout.astro";
 import Icon from "@ja/ui/components/Icon.astro";
-import Logo from "@ja/ui/components/Logo.astro";
 import { siteUrl, whatsappLink } from "@ja/ui/sites";
-import WorkflowPlayer from "../remotion/WorkflowPlayer";
-import { PROCESS, SMALL_BUILDS, SNIPPY, SOCIALS, STACK, VENDORIQ } from "../data/builds";
+import { CAPABILITIES, PROCESS, RCPT, RSCH, SMALL_BUILDS, SOCIALS, TUCPAC } from "../data/builds";
 import "../styles/global.css";
 
 const hello = whatsappLink("Hi Joshua, I saw your automation work and I'd like to talk about a build.");
@@ -13,8 +11,8 @@ const hello = whatsappLink("Hi Joshua, I saw your automation work and I'd like t
 <Layout
   site="automation"
   defaultTheme="dark"
-  title="Joshua Akintayo · AI tools & automation"
-  description="Joshua Akintayo builds AI tools and automations that take repetitive work off your plate: WhatsApp assistants, transcription tools and video pipelines."
+  title="Joshua Akintayo · rcpt, rsch, tucpac and custom automations"
+  description="Joshua Akintayo builds live AI products and automations: rcpt (branded receipts), rsch (research workspace) and tucpac (AI video clipper), plus custom tools that take repetitive work off your plate."
   links={[
     { label: "Builds", href: "#builds" },
     { label: "How I work", href: "#process" },
@@ -36,15 +34,11 @@ const hello = whatsappLink("Hi Joshua, I saw your automation work and I'd like t
 
     <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pb-20 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[1.2fr_1fr]">
       <div>
-        <span class="inline-flex items-center gap-2 rounded-full border border-line bg-bg px-3 py-1.5 text-sm">
-          <span class="h-2 w-2 animate-pulse rounded-full bg-accent"></span>
-          AI tools & automation
-        </span>
-        <h1 class="mt-6 text-[2.75rem] font-semibold leading-[0.98] sm:text-6xl lg:text-7xl">
+        <h1 class="text-[2.75rem] font-semibold leading-[0.98] sm:text-6xl lg:text-7xl">
           I build AI tools that do the <span class="accent-word">boring</span> work.
         </h1>
         <p class="mt-6 max-w-lg text-lg text-muted">
-          WhatsApp assistants, transcription tools and video pipelines that take repetitive work off your plate.
+          Live products for real users: branded receipts for vendors, a research workspace for students and an AI clipper for creators. I build custom ones for you too.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <a href={hello} class="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90">Discuss a build</a>
@@ -63,47 +57,34 @@ const hello = whatsappLink("Hi Joshua, I saw your automation work and I'd like t
         </div>
       </div>
 
-      <!-- Phone with the real VendorIQ chat -->
-      <div class="relative mx-auto w-[260px] sm:w-[290px]">
-        <div class="rounded-[44px] border border-line bg-fg/90 p-2.5 shadow-2xl shadow-black/40">
-          <div class="overflow-hidden rounded-[36px] bg-black">
-            <!-- Drawn header: the recording's own header is cropped out so other chats' notifications never show -->
-            <div class="flex items-center gap-2.5 bg-[#1f1f1f] px-4 pb-2.5 pt-5 text-white" aria-hidden="true">
-              <span class="text-lg leading-none opacity-80">‹</span>
-              <span class="grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-white">
-                <img src="/media/vendoriq-logo.webp" alt="" class="h-full max-w-none object-cover object-left" style="width:118px" />
-              </span>
-              <span class="leading-tight">
-                <span class="block text-sm font-semibold">VendorIQ</span>
-                <span class="block text-[10px] text-white/60">online</span>
-              </span>
-            </div>
-            <video
-              src="/media/vendoriq-chat.mp4"
-              poster="/media/vendoriq-chat.webp"
-              autoplay
-              muted
-              loop
-              playsinline
-              aria-label="VendorIQ on WhatsApp logging sales and answering questions"
-              class="aspect-[540/963] w-full object-cover object-top"
-            ></video>
+      <!-- Browser frame with the rcpt product film -->
+      <div class="relative mx-auto w-full max-w-xl">
+        <div class="overflow-hidden rounded-2xl border border-line bg-bg shadow-2xl shadow-black/40">
+          <div class="flex items-center gap-1.5 border-b border-line bg-surface px-3 py-2" aria-hidden="true">
+            <span class="h-2.5 w-2.5 rounded-full bg-line"></span><span class="h-2.5 w-2.5 rounded-full bg-line"></span><span class="h-2.5 w-2.5 rounded-full bg-line"></span>
+            <span class="ml-3 font-mono text-[11px] text-muted">rcpt.rcpt.workers.dev</span>
           </div>
+          <video
+            src="/media/rcpt-promo.mp4"
+            poster="/media/rcpt-promo.webp"
+            autoplay
+            muted
+            loop
+            playsinline
+            aria-label="rcpt product film: set up your brand once, then send a branded receipt with a QR code in about ten seconds"
+            class="aspect-video w-full"
+          ></video>
         </div>
-        <span class="float-slow absolute -left-16 top-16 hidden rounded-full border border-line bg-bg px-3 py-1.5 font-mono text-xs shadow-lg sm:inline-flex">Voice notes ✓</span>
-        <span class="float-slow delay absolute -right-14 top-1/2 hidden rounded-full bg-accent px-3 py-1.5 font-mono text-xs text-accent-fg shadow-lg sm:inline-flex">Gemini</span>
-        <span class="float-slow absolute -left-10 bottom-16 hidden rounded-full border border-line bg-bg px-3 py-1.5 font-mono text-xs shadow-lg sm:inline-flex">FastAPI + Supabase</span>
       </div>
     </div>
   </section>
 
-  <!-- Stack marquee -->
-  <section class="overflow-hidden border-y border-line bg-surface py-5" aria-label="Tools I build with">
-    <div class="ja-marquee flex w-max gap-3">
-      {[...STACK, ...STACK].map((t) => (
-        <span class="inline-flex items-center gap-2 rounded-full border border-line bg-bg px-4 py-2 font-mono text-sm">
-          {t.logo && <Logo name={t.logo} class={t.logo === "gemini" ? "h-4 w-auto" : "h-5 w-auto"} />}
-          {t.logo !== "gemini" && t.name}
+  <!-- What I build, scrolling -->
+  <section class="overflow-hidden border-y border-line bg-surface py-5" aria-label="What I build">
+    <div class="ja-marquee flex w-max">
+      {[...CAPABILITIES, ...CAPABILITIES, ...CAPABILITIES, ...CAPABILITIES].map((c, i) => (
+        <span class="mr-3 inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-line bg-bg px-4 py-2 font-mono text-sm" aria-hidden={i >= CAPABILITIES.length ? "true" : undefined}>
+          <span class="h-1.5 w-1.5 rounded-full bg-accent"></span>{c}
         </span>
       ))}
     </div>
@@ -114,80 +95,130 @@ const hello = whatsappLink("Hi Joshua, I saw your automation work and I'd like t
     <p class="eyebrow">Builds</p>
     <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Real problems, <span class="accent-word">working</span> tools.</h2>
 
-    <!-- VendorIQ -->
+    <!-- rcpt -->
     <article data-reveal class="mt-12 grid overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface lg:grid-cols-[1fr_1.15fr]">
       <div class="flex flex-col gap-5 p-6 sm:p-8">
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <img src="/media/vendoriq-logo.webp" alt="VendorIQ" width="600" height="152" class="h-9 w-auto rounded-md bg-white px-2 py-1" />
-          <span class="rounded-full border border-line px-3 py-1 font-mono text-[11px]">{VENDORIQ.status}</span>
+          <h3 class="text-3xl font-semibold">{RCPT.name}</h3>
+          <span class="rounded-full border border-line px-3 py-1 font-mono text-[11px]">{RCPT.status}</span>
         </div>
         <div>
           <p class="eyebrow">The problem</p>
-          <p class="mt-1.5">{VENDORIQ.problem}</p>
+          <p class="mt-1.5">{RCPT.problem}</p>
         </div>
         <div>
           <p class="eyebrow">What I built</p>
-          <p class="mt-1.5">{VENDORIQ.built}</p>
+          <p class="mt-1.5">{RCPT.built}</p>
         </div>
-        <ul class="mt-auto flex flex-wrap gap-2">
-          {VENDORIQ.stack.map((s) => <li class="rounded-full bg-accent-soft px-3 py-1 font-mono text-xs">{s}</li>)}
-        </ul>
+        <dl class="grid grid-cols-3 gap-2">
+          {RCPT.metrics.map((m) => (
+            <div class="rounded-xl border border-line bg-bg px-3 py-2.5">
+              <dt class="font-mono text-lg font-medium sm:text-xl">{m.value}</dt>
+              <dd class="mt-0.5 text-[11px] leading-snug text-muted">{m.label}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="-mt-3 text-[11px] text-muted">Live counters from the product, {RCPT.metricsAsOf}.</p>
+        <a href={RCPT.href} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline">
+          Open rcpt <Icon name="arrow" class="h-4 w-4" />
+        </a>
       </div>
       <div class="relative bg-bg p-4 sm:p-6">
         <div class="overflow-hidden rounded-2xl border border-line">
           <div class="flex items-center gap-1.5 border-b border-line bg-surface px-3 py-2" aria-hidden="true">
             <span class="h-2.5 w-2.5 rounded-full bg-line"></span><span class="h-2.5 w-2.5 rounded-full bg-line"></span><span class="h-2.5 w-2.5 rounded-full bg-line"></span>
-            <span class="ml-3 font-mono text-[11px] text-muted">vendoriq landing page</span>
+            <span class="ml-3 font-mono text-[11px] text-muted">rcpt product film</span>
           </div>
-          <video data-src="/media/vendoriq-site.mp4" poster="/media/vendoriq-site.webp" muted loop playsinline preload="none" aria-label="VendorIQ landing page" class="w-full"></video>
+          <video data-src="/media/rcpt-promo.mp4" poster="/media/rcpt-promo.webp" muted loop playsinline preload="none" aria-label="rcpt product film" class="w-full"></video>
         </div>
       </div>
     </article>
 
-    <!-- Snippy -->
+    <!-- rsch -->
     <article data-reveal class="mt-5 grid overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface lg:grid-cols-[1.15fr_1fr]">
       <div class="order-2 bg-bg p-4 sm:p-6 lg:order-1">
         <video
-          src="/media/snippy-demo.mp4"
-          poster="/media/snippy-demo.webp"
+          src="/media/rsch-film.mp4"
+          poster="/media/rsch-film.webp"
           controls
           preload="none"
           playsinline
-          aria-label="Snippy demo: paste a YouTube link, pick clips, render"
+          aria-label="rsch product film: from questionnaire to Chapter 4"
           class="w-full rounded-2xl border border-line"
         ></video>
-        <p class="mt-2 text-center text-xs text-muted">▶ Play the walkthrough (with sound)</p>
+        <p class="mt-2 text-center text-xs text-muted">▶ Play the product film</p>
       </div>
       <div class="order-1 flex flex-col gap-5 p-6 sm:p-8 lg:order-2">
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <h3 class="text-3xl font-semibold">{SNIPPY.name}</h3>
-          <span class="rounded-full border border-line px-3 py-1 font-mono text-[11px]">{SNIPPY.status}</span>
+          <h3 class="text-3xl font-semibold">{RSCH.name}</h3>
+          <span class="rounded-full border border-line px-3 py-1 font-mono text-[11px]">{RSCH.status}</span>
         </div>
         <div>
           <p class="eyebrow">The problem</p>
-          <p class="mt-1.5">{SNIPPY.problem}</p>
+          <p class="mt-1.5">{RSCH.problem}</p>
+        </div>
+        <div>
+          <p class="eyebrow">What I built</p>
+          <p class="mt-1.5">{RSCH.built}</p>
         </div>
         <ol class="grid grid-cols-2 gap-2 text-sm">
-          {["Paste a link", "Transcribe", "Pick clips", "Render 9:16"].map((s, i) => (
+          {RSCH.steps.map((s, i) => (
             <li class="flex items-center gap-2 rounded-xl border border-line bg-bg px-3 py-2">
               <span class="font-mono text-xs text-accent">0{i + 1}</span>{s}
             </li>
           ))}
         </ol>
-        <ul class="mt-auto flex flex-wrap gap-2">
-          {SNIPPY.stack.map((s) => <li class="rounded-full bg-accent-soft px-3 py-1 font-mono text-xs">{s}</li>)}
-        </ul>
+        <a href={RSCH.href} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline">
+          Open rsch <Icon name="arrow" class="h-4 w-4" />
+        </a>
+      </div>
+    </article>
+
+    <!-- tucpac -->
+    <article data-reveal class="mt-5 grid overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface lg:grid-cols-[1fr_1.15fr]">
+      <div class="flex flex-col gap-5 p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 class="text-3xl font-semibold">{TUCPAC.name}</h3>
+            <p class="mt-1 font-mono text-xs text-accent">{TUCPAC.tagline}</p>
+          </div>
+          <span class="rounded-full border border-line px-3 py-1 font-mono text-[11px]">{TUCPAC.status}</span>
+        </div>
+        <div>
+          <p class="eyebrow">The problem</p>
+          <p class="mt-1.5">{TUCPAC.problem}</p>
+        </div>
+        <div>
+          <p class="eyebrow">What I built</p>
+          <p class="mt-1.5">{TUCPAC.built}</p>
+        </div>
+        <ol class="grid grid-cols-2 gap-2 text-sm">
+          {TUCPAC.steps.map((s, i) => (
+            <li class="flex items-center gap-2 rounded-xl border border-line bg-bg px-3 py-2">
+              <span class="font-mono text-xs text-accent">0{i + 1}</span>{s}
+            </li>
+          ))}
+        </ol>
+        <a href={TUCPAC.href} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline">
+          Open the AI Clipper <Icon name="arrow" class="h-4 w-4" />
+        </a>
+      </div>
+      <div class="relative bg-bg p-4 sm:p-6">
+        <a href={TUCPAC.href} target="_blank" rel="noopener noreferrer" class="block overflow-hidden rounded-2xl border border-line" aria-label="Open tucpac in a new tab">
+          <div class="flex items-center gap-1.5 border-b border-line bg-surface px-3 py-2" aria-hidden="true">
+            <span class="h-2.5 w-2.5 rounded-full bg-line"></span><span class="h-2.5 w-2.5 rounded-full bg-line"></span><span class="h-2.5 w-2.5 rounded-full bg-line"></span>
+            <span class="ml-3 font-mono text-[11px] text-muted">tucpac.vercel.app</span>
+          </div>
+          <img src="/media/tucpac-landing.webp" alt="The tucpac home page: drop a talking-head video, or open the AI Clipper" width="1280" height="720" loading="lazy" class="w-full" />
+        </a>
       </div>
     </article>
 
     <!-- Smaller builds -->
-    <div class="mt-5 grid gap-5 md:grid-cols-3">
+    <div class="mt-5 grid gap-5 md:grid-cols-2">
       {SMALL_BUILDS.map((b, i) => (
         <article data-reveal style={`--reveal-delay:${i * 100}ms`} class="flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface">
           <div class="relative flex h-72 items-center justify-center overflow-hidden bg-bg" aria-hidden="true">
-            {b.name === "AF Studio" && (
-              <video data-src="/media/afstudio-output.mp4" poster="/media/afstudio-output.webp" muted loop playsinline preload="none" class="h-full w-auto object-cover" />
-            )}
             {b.name === "SpeechMate" && (
               <video data-src="/media/speechmate-demo.mp4" poster="/media/speechmate-demo.webp" muted loop playsinline preload="none" class="h-full w-auto object-cover" />
             )}
@@ -201,9 +232,6 @@ const hello = whatsappLink("Hi Joshua, I saw your automation work and I'd like t
               <span class="rounded-full border border-line px-2.5 py-0.5 font-mono text-[10px]">{b.status}</span>
             </div>
             <p class="text-[15px] text-muted">{b.body}</p>
-            <ul class="flex flex-wrap gap-1.5">
-              {b.stack.map((s) => <li class="rounded-full bg-accent-soft px-2.5 py-0.5 font-mono text-[11px]">{s}</li>)}
-            </ul>
             {b.href && (
               <a href={b.href} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-medium text-accent hover:underline">
                 Try it live <Icon name="arrow" class="h-4 w-4" />
@@ -212,30 +240,22 @@ const hello = whatsappLink("Hi Joshua, I saw your automation work and I'd like t
           </div>
         </article>
       ))}
-    </div>
-  </section>
+    </div>  </section>
 
   <!-- How I work -->
   <section id="process" class="scroll-mt-20 border-t border-line bg-surface">
-    <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-2">
-      <div>
-        <p class="eyebrow">How I work</p>
-        <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">From messy task to <span class="accent-word">autopilot</span>.</h2>
-        <ol class="mt-10 space-y-3">
-          {PROCESS.map((p, i) => (
-            <li data-reveal style={`--reveal-delay:${i * 80}ms`} class="flex gap-4 rounded-2xl border border-line bg-bg p-4">
-              <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent font-mono text-xs text-accent-fg">0{i + 1}</span>
-              <div>
-                <p class="font-display text-lg font-semibold">{p.title}</p>
-                <p class="text-[15px] text-muted">{p.body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <div class="mx-auto w-full max-w-md rounded-[28px] border border-line bg-bg p-2 lg:max-w-none">
-        <WorkflowPlayer client:visible />
-      </div>
+    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+      <p class="eyebrow">Need something custom?</p>
+      <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">From a task you repeat to a tool that <span class="accent-word">runs</span>.</h2>
+      <ol class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {PROCESS.map((p, i) => (
+          <li data-reveal style={`--reveal-delay:${i * 80}ms`} class="flex flex-col gap-3 rounded-2xl border border-line bg-bg p-6">
+            <span class="grid h-9 w-9 place-items-center rounded-full bg-accent font-mono text-xs text-accent-fg">0{i + 1}</span>
+            <p class="font-display text-xl font-semibold">{p.title}</p>
+            <p class="text-[15px] text-muted">{p.body}</p>
+          </li>
+        ))}
+      </ol>
     </div>
   </section>
 

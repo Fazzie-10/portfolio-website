@@ -1,4 +1,4 @@
-﻿// Everything written on the hub homepage lives here, so copy changes don't need layout changes.
+// Everything written on the hub homepage lives here, so copy changes don't need layout changes.
 
 export const CV_URL = "https://drive.google.com/file/d/1w0rYCwm6PYxrA2VSYadvSOJS3YbtNZ_L/view?usp=sharing";
 export const EMAIL = "joshuaakintayo21@gmail.com";
@@ -29,8 +29,8 @@ export const journey = [
   },
   {
     year: "2024",
-    title: "Founded InsightsHub",
-    body: "Started InsightsHub to help students with research data analysis: statistics and structured reports for academic work. Data Analytics at Turing College. Microsoft Certified: Fabric Analytics Engineer.",
+    title: "Started helping students with research",
+    body: "Began helping students with research data analysis: statistics and structured reports for academic work, work that now lives in rsch. Data Analytics at Turing College. Microsoft Certified: Fabric Analytics Engineer.",
   },
   {
     year: "2024",
@@ -45,7 +45,7 @@ export const journey = [
   {
     year: "2026",
     title: "Builder and teacher",
-    body: "Building AI tools like VendorIQ and Snippy, and teaching the 12-week Zero to Data Analyst mentorship live on Google Meet.",
+    body: "Building live AI products like rcpt, rsch and tucpac, and teaching Excel and Power BI through the AnalystFemi recorded course.",
   },
 ];
 

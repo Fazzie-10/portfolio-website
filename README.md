@@ -1,28 +1,26 @@
 # Joshua Akintayo — sites
 
-One repo, four Astro sites sharing a design system (`packages/ui`).
+One repo, three Astro sites sharing a design system (`packages/ui`).
 
 | App | Local | Live (after deploy) |
 |---|---|---|
 | `apps/hub` | http://localhost:4321 | joshuaakintayo.me |
 | `apps/analystfemi` | http://localhost:4322 | analystfemi.joshuaakintayo.me |
 | `apps/automation` | http://localhost:4323 | automation.joshuaakintayo.me |
-| `apps/insightshub` | http://localhost:4324 | insightshub.joshuaakintayo.me |
 
 ```bash
 npm install
-npm run dev          # all four sites
+npm run dev          # all three sites
 npm run dev:hub      # just one
 ```
 
 Colours live in `packages/ui/src/styles/theme.css` (one light + one dark palette per site).
 The WhatsApp number and site list live in `packages/ui/src/sites.ts`.
 
-## Blog (InsightsHub and AnalystFemi)
+## Blog (AnalystFemi)
 
 Each post is one Markdown file:
 
-- InsightsHub: `apps/insightshub/src/content/blog/`
 - AnalystFemi: `apps/analystfemi/src/content/blog/`
 
 The file name becomes the URL (`which-statistical-test-should-i-use.md` → `/blog/which-statistical-test-should-i-use/`).
@@ -50,7 +48,7 @@ After deploying, submit each site's sitemap in Google Search Console.
 ## Testing before deploy
 
 ```bash
-node scripts/preview.mjs --phone    # build all four exactly as they'll go live, serve on 4321-4324 (phone-friendly links)
+node scripts/preview.mjs --phone    # build all three exactly as they'll go live, serve on 4321-4323 (phone-friendly links)
 node scripts/stress-test.mjs        # broken links/assets, SEO tags, alt text, page weight, external links
 ```
 

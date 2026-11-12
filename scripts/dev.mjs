@@ -11,7 +11,6 @@ const apps = [
   ["hub", 4321],
   ["analystfemi", 4322],
   ["automation", 4323],
-  ["insightshub", 4324],
 ];
 
 const only = process.argv[2];

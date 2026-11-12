@@ -9,35 +9,59 @@ export const SOCIALS = {
 export const STACK: { name: string; logo: string | null }[] = [
   { name: "Python", logo: "python" }, { name: "FastAPI", logo: "fastapi" }, { name: "Supabase", logo: "supabase" },
   { name: "Gemini", logo: "gemini" }, { name: "Claude", logo: "claude" }, { name: "Deepgram", logo: "deepgram" },
-  { name: "faster-whisper", logo: null }, { name: "Railway", logo: "railway" }, { name: "WhatsApp", logo: "whatsapp" },
-  { name: "React", logo: "react" }, { name: "Next.js", logo: "nextjs" }, { name: "Streamlit", logo: "streamlit" },
-  { name: "OpenCV", logo: "opencv" }, { name: "MediaPipe", logo: null }, { name: "FFmpeg", logo: "ffmpeg" }, { name: "Vercel", logo: "vercel" },
+  { name: "WhatsApp", logo: "whatsapp" }, { name: "React", logo: "react" }, { name: "Next.js", logo: "nextjs" },
+  { name: "OpenCV", logo: "opencv" }, { name: "FFmpeg", logo: "ffmpeg" }, { name: "Vercel", logo: "vercel" },
 ];
 
-export const VENDORIQ = {
-  name: "VendorIQ",
-  status: "Paused · iDICE Founders Lab Stage 2",
-  problem: "Nigerian vendors keep their sales, debts and stock in their heads or in notebooks, so they never really know what they made.",
-  built: "A WhatsApp-native bookkeeper. Vendors log sales, expenses and debts in plain English or a voice note, ask \"How much did I make last week?\", and get receipts and daily summaries back.",
-  stack: ["FastAPI", "Supabase", "Gemini", "Green API", "Railway"],
+// What the products and custom builds do, shown in the scrolling strip under the hero
+export const CAPABILITIES = [
+  "Branded receipts with a QR check",
+  "Questionnaire to Chapter 4",
+  "Long video to 9:16 clips",
+  "Speech to text, any length",
+  "Colour palettes for charts",
+  "Custom automations for your business",
+];
+
+// Live products. Facts here come from the products' own sites, repos and build notes.
+// rcpt's numbers are read from the live counter on rcpt.rcpt.workers.dev; refresh them before each deploy.
+export const RCPT = {
+  name: "rcpt",
+  status: "Live · early users",
+  href: "https://rcpt.rcpt.workers.dev",
+  problem: "Small vendors prove payment with screenshots and handwritten notes. Customers can't tell a genuine receipt from an edited one.",
+  built: "Set up your logo and colours once, type what the customer bought, and a branded receipt reaches their WhatsApp in about 10 seconds. Every receipt carries a QR code anyone can scan to check it's real. Print on A4 or thermal paper, or keep every sale in a searchable record.",
+  stack: ["Next.js", "Cloudflare Workers", "Supabase", "pdf-lib"],
+  metrics: [
+    { value: "16", label: "businesses using it" },
+    { value: "27", label: "receipts & invoices sent" },
+    { value: "₦2.52M", label: "in sales recorded" },
+  ],
+  metricsAsOf: "12 Nov 2026",
 };
 
-export const SNIPPY = {
-  name: "Snippy",
-  status: "Desktop app · in use",
-  problem: "Turning a long YouTube video into short clips takes hours of watching, cutting, cropping and captioning.",
-  built: "Paste a YouTube link and Snippy transcribes it, suggests the strongest clips, crops them to 9:16 with face tracking, burns in subtitles and renders them, ready to post.",
-  stack: ["Python", "faster-whisper", "OpenCV", "ffmpeg"],
+export const RSCH = {
+  name: "rsch",
+  status: "Live",
+  href: "https://getrsch.pages.dev",
+  problem: "Students can collect questionnaire responses, but cleaning the data, picking the right test and writing Chapter 4 means juggling form builders, spreadsheets, statistics software and AI chat tools.",
+  built: "One guided workspace from questionnaire to results. It coaches you on weak questions before launch, collects responses on phones, flags rushed answers, runs the statistics in its own engine (not an AI model) and helps you write up Chapter 4.",
+  steps: ["Build the questionnaire", "Collect on phones", "Clean the data", "Get Chapter 4"],
+  stack: ["React", "Hono", "Custom stats engine", "Cloudflare Pages"],
+};
+
+export const TUCPAC = {
+  name: "tucpac",
+  tagline: "The AI Clipper engine",
+  status: "Live · early",
+  href: "https://tucpac.vercel.app",
+  problem: "Turning a long video or podcast into short clips means watching all of it, finding the best moments, then cropping, captioning and exporting each clip by hand.",
+  built: "Paste a YouTube link or drop in a long video and the AI Clipper finds the strongest moments, centres the speaker and exports 9:16 clips with a title banner and captions, ready to post.",
+  steps: ["Paste a link or upload", "Transcribe", "AI picks the moments", "Export 9:16 clips"],
+  stack: ["React", "FastAPI", "Modal", "FFmpeg", "OpenCV", "Deepgram", "Gemini"],
 };
 
 export const SMALL_BUILDS = [
-  {
-    name: "AF Studio",
-    status: "Windows app · personal tool",
-    body: "My own FocuSee-style screen recorder. It follows the cursor with smooth auto-zoom, frames the video for vertical or landscape, and adds captions. Packaged as an .exe.",
-    stack: ["Python", "ffmpeg", "OpenCV", "MediaPipe", "Deepgram"],
-    href: null as string | null,
-  },
   {
     name: "SpeechMate",
     status: "Live",
@@ -53,10 +77,9 @@ export const SMALL_BUILDS = [
     href: "https://paletteiq.vercel.app",
   },
 ];
-
 export const PROCESS = [
-  { title: "Audit", body: "We look at where your time goes and find the repetitive work worth automating." },
-  { title: "Map", body: "I sketch the flow: what triggers it, what the AI decides, where data lands." },
-  { title: "Build", body: "I build it with AI-assisted coding, then test it against your real data." },
-  { title: "Hand over", body: "You get a working tool, a short walkthrough, and support while it beds in." },
+  { title: "Find the repeat work", body: "We look at where your week goes and pick the one task worth automating first." },
+  { title: "Sketch the flow", body: "Before any code: what starts it, what the AI decides, and where the result lands." },
+  { title: "Build and test", body: "I build it and test it on your real data, not sample data." },
+  { title: "Hand it over", body: "You get a working tool, a short walkthrough and support while it settles in." },
 ];

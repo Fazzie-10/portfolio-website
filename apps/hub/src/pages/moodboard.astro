@@ -44,7 +44,7 @@ const previews = [
     site: "automation",
     label: "automation.joshuaakintayo.me",
     role: "AI-assisted coding and automation. Dark by default.",
-    eyebrow: "AI tools & automation",
+    eyebrow: "Live products",
     before: "I build AI tools that do the",
     accent: "boring",
     after: " work.",
@@ -57,43 +57,8 @@ const previews = [
     ],
     bars: [80, 62, 48, 40, 30, 22],
   },
-  {
-    site: "insightshub",
-    label: "insightshub.joshuaakintayo.me",
-    role: "Research and Chapter 4 help, plus research-methods classes.",
-    eyebrow: "For BSc, HND & Masters students",
-    before: "Stuck at",
-    accent: "Chapter 4",
-    after: "? Let's make your results make sense.",
-    body: "SPSS, thematic analysis and APA tables, explained in plain English so you can defend every number.",
-    cta: "Get a quote",
-    stats: [
-      { value: "10+", label: "students supported" },
-      { value: "2", label: "published papers" },
-      { value: "₦30k", label: "starting price" },
-    ],
-    bars: [45, 45, 60, 52, 75, 82],
-  },
 ] as const;
 
-const prices = {
-  quant: [
-    { item: "Descriptive statistics only", detail: "Frequencies, percentages, mean & SD, clean tables and charts", bsc: "₦30,000", msc: "₦45,000" },
-    { item: "Analysis + hypothesis testing", detail: "t-test, chi-square, correlation, ANOVA, regression, APA tables", bsc: "₦50,000", msc: "₦80,000" },
-    { item: "Full Chapter 4", detail: "All of the above, plain-English interpretation, discussion guidance, 1 defence-prep call", bsc: "₦75,000", msc: "₦120,000" },
-    { item: "Advanced models", detail: "Factor analysis, SEM, mediation/moderation, panel data", bsc: "—", msc: "From ₦150,000" },
-  ],
-  qual: [
-    { item: "Thematic analysis, up to 10 interviews/FGDs", detail: "Coding, themes, quotes table, write-up guidance", bsc: "₦50,000", msc: "₦70,000" },
-    { item: "Thematic analysis, 11–25 interviews/FGDs", detail: "As above, at larger scale", bsc: "₦80,000", msc: "₦110,000" },
-  ],
-  addons: [
-    "Mixed methods (quant + qual): 15% off the combined price",
-    "Transcription: ₦5,000 per hour of audio",
-    "Express delivery (under 5 days): +30%",
-    "Research Methods & SPSS live class: ₦30,000 for 4 weeks (proposal)",
-  ],
-};
 ---
 
 <Layout
@@ -140,7 +105,7 @@ const prices = {
 
   <!-- Site palettes -->
   <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-    <h2 class="text-2xl font-semibold">The four sites, light and dark</h2>
+    <h2 class="text-2xl font-semibold">The three sites, light and dark</h2>
     <div class="mt-8 space-y-14">
       {previews.map((p) => (
         <div>
@@ -155,46 +120,5 @@ const prices = {
         </div>
       ))}
     </div>
-  </section>
-
-  <!-- InsightsHub pricing draft -->
-  <section data-site="insightshub" class="mx-auto my-12 max-w-6xl rounded-[var(--radius-card)] border border-line bg-bg px-4 py-10 text-fg sm:px-8">
-    <p class="eyebrow">InsightsHub · pricing draft</p>
-    <h2 class="mt-3 text-3xl font-semibold">Clear prices, in <span class="accent-word">naira</span>.</h2>
-    <p class="mt-3 max-w-2xl text-muted">Starting point for the price estimator. Change any number before we build it in.</p>
-
-    {[
-      { title: "Quantitative (SPSS, Excel, R, Stata)", rows: prices.quant },
-      { title: "Qualitative", rows: prices.qual },
-    ].map((group) => (
-      <div class="mt-8 overflow-x-auto">
-        <h3 class="mb-3 text-lg font-semibold">{group.title}</h3>
-        <table class="w-full min-w-[560px] text-left text-sm">
-          <thead>
-            <tr class="border-b border-line text-muted">
-              <th class="py-2 pr-4 font-medium">Package</th>
-              <th class="py-2 pr-4 text-right font-medium">BSc / HND</th>
-              <th class="py-2 text-right font-medium">MSc / PGD</th>
-            </tr>
-          </thead>
-          <tbody>
-            {group.rows.map((r) => (
-              <tr class="border-b border-line align-top">
-                <td class="py-3 pr-4">
-                  <p class="font-medium">{r.item}</p>
-                  <p class="text-muted">{r.detail}</p>
-                </td>
-                <td class="py-3 pr-4 text-right font-mono">{r.bsc}</td>
-                <td class="py-3 text-right font-mono">{r.msc}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    ))}
-
-    <ul class="mt-8 grid gap-2 text-sm sm:grid-cols-2">
-      {prices.addons.map((a) => <li class="rounded-xl bg-surface px-4 py-3">{a}</li>)}
-    </ul>
   </section>
 </Layout>
