@@ -35,10 +35,11 @@ export const TESTIMONIALS = [
   },
 ];
 
-// Paste each checkout link here once the payment endpoint is live (Bachs).
-// While a link is empty, the buy buttons open a pre-filled WhatsApp message instead.
+// free = the Free Starter Pack Drive folder ("anyone with the link can view").
+// excel / full: paid tiers use the Bachs checkout (/api/checkout) via the pay buttons. These only act as a no-JavaScript
+// fallback; while empty they open a pre-filled WhatsApp message.
 export const CHECKOUT = {
-  free: "",
+  free: "https://drive.google.com/drive/folders/1MQxJ6rMJsEKmel-rS4aHSihZVz-BmKO7",
   excel: "",
   full: "",
 };
