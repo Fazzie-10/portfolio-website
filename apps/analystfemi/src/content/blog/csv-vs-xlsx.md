@@ -6,9 +6,9 @@ tags: ["Excel", "Data hygiene", "Beginners"]
 draft: true
 cta:
   title: "Build good habits from day one"
-  body: "The Zero to Data Analyst mentorship starts with data hygiene, then takes you through formulas, Power Query and dashboards with real Nigerian business data."
-  label: "Reserve a seat on WhatsApp"
-  message: "Hi Joshua, I read your CSV vs XLSX post. I'd like to join the Zero to Data Analyst mentorship."
+  body: "The Excel & Power BI course starts with data hygiene, then takes you through formulas, Power Query and dashboards with real business data."
+  label: "See the course"
+  message: "Hi Joshua, I read your CSV vs XLSX post. I'd like the Excel & Power BI course."
 ---
 
 You open a sales file. You spend an hour cleaning it: new columns, formulas, a second sheet for your summary. You press **Ctrl+S**, close Excel, and go to bed.

@@ -6,10 +6,10 @@ tags: ["Excel", "Lookups", "Formulas"]
 cover: "/media/vlookup-vs-xlookup.webp"
 coverAlt: "Excel sheet showing a VLOOKUP formula on a product lookup table"
 cta:
-  title: "Learn lookups, Power Query and dashboards live"
-  body: "The Zero to Data Analyst mentorship takes you from your first formula to a finished dashboard, with real Nigerian business data. ₦50,000 a month."
-  label: "Reserve a seat on WhatsApp"
-  message: "Hi Joshua, I read your VLOOKUP vs XLOOKUP post. I'd like to join the Zero to Data Analyst mentorship."
+  title: "Learn lookups, Power Query and dashboards"
+  body: "The Excel & Power BI course takes you from your first formula to a finished dashboard. Start with the free pack, then upgrade from ₦10,000."
+  label: "See the course"
+  message: "Hi Joshua, I read your VLOOKUP vs XLOOKUP post. I'd like the Excel & Power BI course."
 ---
 
 Lookups are where Excel stops being a calculator and starts being a data tool. They let you pull information from one table into another, like bringing a product's price into a list of orders.
@@ -131,4 +131,4 @@ Open any table with a product or ID column and try this:
 2. Do the same with **XLOOKUP**.
 3. Insert a new column into the lookup table and watch which formula breaks.
 
-That third step teaches you more than any explanation. It's exactly how we learn in the [Zero to Data Analyst mentorship](/#curriculum): real data, real mistakes, and fixing them together.
+That third step teaches you more than any explanation. It's exactly how we learn in the [Excel & Power BI course](/#curriculum): real data, real mistakes, and fixing them step by step.

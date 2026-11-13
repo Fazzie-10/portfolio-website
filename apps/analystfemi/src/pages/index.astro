@@ -4,20 +4,40 @@ import Icon from "@ja/ui/components/Icon.astro";
 import Logo from "@ja/ui/components/Logo.astro";
 import { siteUrl, whatsappLink } from "@ja/ui/sites";
 import HeroPlayer from "../remotion/HeroPlayer";
-import { CHECKOUT, COURSE, FAQS, FOR_YOU, INCLUDED, LAUNCH, NOT_FOR_YOU, PARTS, TESTIMONIALS, TIERS, TIKTOK, TOOLS, YOUTUBE } from "../data/course";
+import {
+  ANALYSIS_LOOP,
+  CHECKOUT,
+  COMPARISON,
+  COURSE,
+  FAQS,
+  FOR_YOU,
+  INCLUDED_STACK,
+  LAUNCH,
+  MARKET_SALARIES,
+  NOT_FOR_YOU,
+  PARTS,
+  PRICE_COMPARISONS,
+  PRICE_LADDER,
+  ROLES_BRIDGE,
+  TESTIMONIALS,
+  TIERS,
+  TIKTOK,
+  TOOLS,
+  YOUTUBE,
+} from "../data/course";
 import "../styles/global.css";
 
 const naira = (n: number) => `₦${n.toLocaleString("en-NG")}`;
 const launchPrice = (n: number) => Math.round(n * (1 - LAUNCH.percent / 100));
-// Use the Nestuge link when it exists, otherwise open a WhatsApp message.
-const buy = (id: "free" | "excel" | "full", name: string) =>
-  CHECKOUT[id] || whatsappLink(`Hi Joshua, I'd like the ${name} (${COURSE.name}).`);
+
+const buy = (id: "free" | "full", name: string) =>
+  CHECKOUT[id] || whatsappLink(`Hi Joshua, I'd like to enroll in ${name} (${COURSE.name}).`);
+
 const freeLink = buy("free", "Free Starter Pack");
 const fullTier = TIERS.find((t) => t.id === "full")!;
 const fullNow = LAUNCH.active ? launchPrice(fullTier.price) : fullTier.price;
 const buyFull = buy("full", fullTier.name);
 const hours = (m: number) => (m >= 60 ? `${(m / 60).toFixed(1).replace(".0", "")} h` : `${m} min`);
-const offerLine = LAUNCH.endsOn ? `Launch offer for ${LAUNCH.cap}, ends ${LAUNCH.endsOn}.` : `Launch offer for ${LAUNCH.cap}.`;
 
 const showcase = [
   { id: "exec", label: "Executive summary", image: "/media/brightpark-executive.webp" },
@@ -28,404 +48,951 @@ const showcase = [
 
 <Layout
   site="analystfemi"
-  title="AnalystFemi · Excel & Power BI course for data analysts"
-  description="Learn Excel and Power BI with 11+ hours of real class lessons, practice files and two capstone projects. Start free, from ₦10,000."
+  title={`${COURSE.name} · ${COURSE.tagline} by Joshua Akintayo`}
+  description="Master Excel and Power BI with 11+ hours of real messy data classes, two capstone portfolio projects, and direct WhatsApp mentorship. Start free or join the founding launch."
   links={[
+    { label: "Market Demand", href: "#demand" },
+    { label: "The System", href: "#system" },
     { label: "Curriculum", href: "#curriculum" },
-    { label: "Student work", href: "#work" },
-    { label: "Instructor", href: "#instructor" },
+    { label: "Mentorship", href: "#mentorship" },
+    { label: "Results", href: "#results" },
     { label: "Pricing", href: "#pricing" },
+    { label: "FAQ", href: "#faq" },
     { label: "Blog", href: "/blog/" },
   ]}
 >
-  <a slot="cta" href={freeLink} class="hidden rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90 sm:inline-flex">
-    Get the free pack
+  <a slot="cta" href={buyFull} data-pay="full" data-pay-name={fullTier.name} data-pay-price={naira(fullNow)} class="btn-press hidden rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90 sm:inline-flex">
+    Enroll for {naira(fullNow)}
   </a>
 
-  <!-- Hero -->
-  <section class="relative overflow-hidden">
+  <!-- 1. HERO SECTION -->
+  <section class="relative overflow-hidden pt-6 pb-16 sm:pt-10 sm:pb-24">
     <div class="graph-paper pointer-events-none absolute inset-0" aria-hidden="true"></div>
-    <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[1fr_1.1fr]">
-      <div>
-        <h1 class="text-[2.75rem] font-semibold leading-[0.98] sm:text-6xl lg:text-7xl">
-          Learn <span class="accent-word whitespace-nowrap">Excel and Power BI</span> by watching real dashboards get built.
-        </h1>
-        <p class="mt-6 max-w-lg text-lg text-muted">
-          {COURSE.hours} hours of lessons cut from real classes, every practice file, and two capstone projects for your portfolio. Start free.
-        </p>
-        <div class="mt-8 max-w-lg rounded-2xl border border-line bg-bg p-5 shadow-xl shadow-black/5 sm:p-6">
-          <p class="eyebrow">Full Course · Excel + Power BI</p>
-          <p class="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono">
-            <span class="text-4xl font-medium sm:text-5xl">{naira(fullNow)}</span>
-            {LAUNCH.active && <span class="text-lg line-through opacity-60">{naira(fullTier.price)}</span>}
+    <div class="relative mx-auto max-w-6xl px-4 sm:px-6">
+      <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
+        <div>
+          <!-- Main Headline (Pill badge removed as requested) -->
+          <h1 class="text-[2.6rem] font-bold leading-[1.03] tracking-tight sm:text-5xl lg:text-[3.85rem]">
+            Become the Data Analyst Behind <span class="accent-word">High-Stakes Business Decisions</span>.
+          </h1>
+
+          <!-- Subhead -->
+          <p class="mt-6 text-lg leading-relaxed text-muted sm:text-xl">
+            Get paid to take messy, corrupted spreadsheets, build executive Power BI dashboards, and guide million-naira business decisions — even if you have never worked in tech or written a single line of code before.
           </p>
-          {LAUNCH.active && <p class="mt-1 text-sm font-medium text-accent">{LAUNCH.percent}% off · {offerLine}</p>}
-          <a href={buyFull} data-pay="full" data-pay-name={fullTier.name} data-pay-price={naira(fullNow)} class="mt-5 block rounded-full bg-accent px-6 py-4 text-center text-base font-medium text-accent-fg transition-opacity hover:opacity-90">Pay {naira(fullNow)} and start today</a>
-          <p class="mt-3 text-sm text-muted">One payment, no subscription. Straight after paying you are added to the course Google Drive folder, with every lesson and practice file. The Full Course also gets you into the AnalystFemi Data Club on WhatsApp. Use the email you want access on.</p>
-          <p class="mt-3 text-sm"><a href={freeLink} class="font-medium text-accent underline underline-offset-4">Not sure yet? Get the free starter pack</a> · <a href="#pricing" class="font-medium text-accent underline underline-offset-4">Compare tiers</a></p>
+
+          <!-- Primary CTA Bento Box -->
+          <div class="bento-card bento-glow mt-8 p-5 sm:p-7">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <span class="font-mono text-xs uppercase tracking-wider text-accent font-semibold flex items-center gap-2">
+                <span class="pulse-dot"></span>
+                Flagship Program · Excel + Power BI + Mentorship
+              </span>
+              <span class="rounded-full bg-accent-soft px-2.5 py-0.5 text-xs font-semibold text-accent">50% Off Launch</span>
+            </div>
+
+            <div class="mt-3 flex flex-wrap items-baseline gap-3 font-mono">
+              <span class="text-4xl font-bold sm:text-5xl">{naira(fullNow)}</span>
+              <span class="text-xl line-through text-muted">{naira(fullTier.price)}</span>
+              <span class="text-xs text-muted">one-time payment · lifetime access</span>
+            </div>
+
+            <a
+              href={buyFull}
+              data-pay="full"
+              data-pay-name={fullTier.name}
+              data-pay-price={naira(fullNow)}
+              class="btn-press mt-5 block w-full rounded-xl bg-accent px-6 py-4 text-center text-base font-semibold text-accent-fg shadow-lg shadow-accent/20 transition-all hover:brightness-105"
+            >
+              Enroll in {COURSE.name} for {naira(fullNow)} →
+            </a>
+
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
+              <span>✓ Instant Google Drive course access</span>
+              <span>✓ AnalystFemi WhatsApp Data Club</span>
+              <span>✓ 30-Day Money-Back Guarantee</span>
+            </div>
+
+            <div class="mt-4 border-t border-line pt-3 text-center text-sm">
+              <a href={freeLink} class="font-medium text-accent underline underline-offset-4 hover:opacity-80">
+                Not ready to pay yet? Download the Free Starter Pack with 4 lessons & dataset →
+              </a>
+            </div>
+          </div>
+
+          <!-- Micro Pills -->
+          <div class="mt-6 flex flex-wrap gap-2 text-xs font-mono text-muted">
+            <span class="rounded-lg border border-line bg-surface px-2.5 py-1">Messy Datasets</span>
+            <span class="rounded-lg border border-line bg-surface px-2.5 py-1">Power Query Automation</span>
+            <span class="rounded-lg border border-line bg-surface px-2.5 py-1">Star Schema DAX</span>
+            <span class="rounded-lg border border-line bg-surface px-2.5 py-1">Executive UI Dashboards</span>
+          </div>
+
+          <!-- Teacher Attribution -->
+          <a href="#instructor" class="mt-8 flex w-fit items-center gap-3 text-sm transition-opacity hover:opacity-85">
+            <img src="/media/joshua-purple.webp" alt="Joshua Akintayo" width="48" height="48" class="h-12 w-12 rounded-full border border-line object-cover" />
+            <div class="leading-tight">
+              <span class="block font-semibold">Taught by Joshua Akintayo</span>
+              <span class="text-xs text-muted">Data analyst & data engineer · {TIKTOK.handle}</span>
+            </div>
+          </a>
         </div>
-        <a href="#instructor" class="mt-10 flex w-fit items-center gap-3 border-t border-line pt-6 text-sm">
-          <img src="/media/joshua-purple.webp" alt="" width="44" height="44" class="h-11 w-11 rounded-full object-cover" />
-          <span class="leading-tight"><span class="block font-medium">Taught by Joshua Akintayo</span><span class="text-muted">Data analyst & data engineer · {TIKTOK.handle}</span></span>
-        </a>
+
+        <!-- Hero Graphic with Mockup & Floating Motion Tags -->
+        <div class="relative">
+          <div class="relative rounded-[28px] border border-line bg-bg p-2.5 shadow-2xl shadow-black/10 transition-transform duration-300 hover:scale-[1.01]">
+            <HeroPlayer client:visible />
+          </div>
+
+          <!-- Floating Tags with Natural Floating Motion -->
+          <div class="hero-tag float-slow -top-4 -left-4 hidden md:inline-flex">
+            <span>Messy Data Cleaned in Power Query</span>
+          </div>
+          <div class="hero-tag float-slow delay top-1/3 -right-6 hidden md:inline-flex">
+            <span>DAX Year-over-Year KPIs</span>
+          </div>
+          <div class="hero-tag float-slow -bottom-4 left-6 hidden md:inline-flex">
+            <span>Executive PowerPoint UI Canvas</span>
+          </div>
+        </div>
       </div>
 
-      <div class="relative">
-        <div class="rounded-[28px] border border-line bg-bg p-2 shadow-2xl shadow-black/10">
-          <HeroPlayer client:visible />
+      <!-- Objection Breakers: The Bento "You Do Not Need" Section -->
+      <div class="mt-16 sm:mt-20">
+        <p class="font-mono text-xs uppercase tracking-wider text-muted text-center sm:text-left">Eliminating the barriers</p>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="bento-card p-5">
+            <span class="flex h-7 w-7 items-center justify-center rounded-md border border-line font-mono text-sm text-muted">×</span>
+            <p class="mt-3 text-[15px] font-medium leading-snug">You do not need a computer science or math degree.</p>
+          </div>
+          <div class="bento-card p-5">
+            <span class="flex h-7 w-7 items-center justify-center rounded-md border border-line font-mono text-sm text-muted">×</span>
+            <p class="mt-3 text-[15px] font-medium leading-snug">You do not need to write code in Python or SQL.</p>
+          </div>
+          <div class="bento-card p-5">
+            <span class="flex h-7 w-7 items-center justify-center rounded-md border border-line font-mono text-sm text-muted">×</span>
+            <p class="mt-3 text-[15px] font-medium leading-snug">You do not need prior tech industry experience.</p>
+          </div>
+          <div class="bento-card bento-dark bento-glow-dark p-5 shadow-lg">
+            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-accent font-mono text-sm text-accent-fg font-bold">✓</span>
+            <p class="mt-3 text-[15px] font-semibold leading-snug text-white">
+              All you need is to learn how to <span class="text-[#2dd4bf]">think through the data</span> and solve business problems.
+            </p>
+          </div>
         </div>
-        <span class="float-slow absolute -left-3 -top-3 hidden rounded-full border border-line bg-bg px-3 py-1.5 font-mono text-xs shadow-lg sm:inline-flex">Real dashboard · built in my Power BI class</span>
-        <span class="float-slow delay absolute -bottom-5 right-8 hidden items-center gap-2 rounded-full border border-line bg-white px-3 py-2 shadow-lg sm:inline-flex">
-          <Logo name="excel" class="h-5 w-auto" /><span class="text-xs text-neutral-400">→</span><Logo name="powerbi" class="h-5 w-auto" />
-        </span>
       </div>
     </div>
   </section>
 
-  <!-- Key facts strip -->
+  <!-- Key facts banner -->
   <section class="border-y border-line bg-surface">
     <dl class="mx-auto grid max-w-6xl grid-cols-2 divide-line px-4 sm:px-6 lg:grid-cols-4 lg:divide-x">
       {[
-        [COURSE.lessons, "video lessons"],
-        [COURSE.hours, "hours of teaching"],
-        [String(COURSE.capstones), "capstone projects"],
-        ["0", "experience needed"],
+        [COURSE.lessons, "recorded class lessons"],
+        [COURSE.hours, "hours of real teaching"],
+        [String(COURSE.capstones), "capstone portfolio builds"],
+        ["Full", "WhatsApp mentorship layer"],
       ].map(([v, l]) => (
         <div class="py-6 lg:px-6 lg:first:pl-0">
-          <dt class="font-mono text-2xl font-medium sm:text-3xl">{v}</dt>
+          <dt class="font-mono text-2xl font-bold sm:text-3xl">{v}</dt>
           <dd class="text-sm text-muted">{l}</dd>
         </div>
       ))}
     </dl>
   </section>
 
-  <!-- Student voice -->
-  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-    <p class="eyebrow">What students say</p>
-    <div class="mt-6 grid gap-5 lg:grid-cols-2">
-      {TESTIMONIALS.map((t, i) => (
-        <figure data-reveal style={`--reveal-delay:${i * 100}ms`} class="flex flex-col rounded-[var(--radius-card)] border border-line bg-surface p-6 sm:p-8">
-          <span class="font-display text-6xl leading-none text-accent" aria-hidden="true">“</span>
-          <blockquote class="mt-2 space-y-3 text-[17px] leading-relaxed">
-            {t.quote.map((line) => <p>{line}</p>)}
-          </blockquote>
-          <figcaption class="mt-auto border-t border-line pt-4 text-sm" style="margin-top: 1.5rem"><span class="font-medium">{t.name}</span> <span class="text-muted">· {t.role}</span></figcaption>
-        </figure>
-      ))}
-    </div>
-  </section>
-
-  <!-- Problem / difference -->
-  <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-    <div class="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-start">
-      <div>
-        <p class="eyebrow">Why this course</p>
-        <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">You finished a tutorial. You still can’t <span class="accent-word">build it alone.</span></h2>
+  <!-- 2. MARKET REALITY & BENTO SALARY PROOF (NAIRA ONLY) -->
+  <section id="demand" class="scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="max-w-3xl">
+        <p class="eyebrow">Real Market Demand in Nigeria</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          Companies Are Desperately Looking For People Who Can Turn Messy Spreadsheets Into Profit. <span class="accent-word">Right Now</span>.
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-muted">
+          Not someday. Not in five years. Right now across Lagos, Abuja, and remote Nigerian businesses. Check real salary postings across Nigerian job boards:
+        </p>
       </div>
-      <div class="space-y-5 text-lg text-muted">
-        <p>Most courses show you clean data and a finished result. Real work starts with a messy spreadsheet and a manager who wants answers.</p>
-        <p>These lessons are cut from real classes. You watch the data get cleaned, the formulas break, the mistakes get fixed and the dashboard take shape.</p>
-        <p class="text-fg"><strong class="font-semibold">Then you open the same files and build it yourself.</strong> Watch, rebuild, tick the checklist. That is the whole method.</p>
-      </div>
-    </div>
-  </section>
 
-  <!-- Tools -->
-  <section class="border-t border-line bg-surface">
-    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-      <p class="eyebrow">The tech stack</p>
-      <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Two tools <span class="accent-word">employers</span> ask for.</h2>
-      <div class="mt-10 grid gap-4 md:grid-cols-2">
-        {TOOLS.map((t, i) => (
-          <article data-reveal style={`--reveal-delay:${i * 80}ms`} class="flex items-start gap-4 rounded-[var(--radius-card)] border border-line bg-bg p-5">
-            <span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-line bg-white p-2.5"><Logo name={t.logo} class="h-8 w-auto" /></span>
+      <!-- Real Salary Postings Bento Grid -->
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {MARKET_SALARIES.map((s, idx) => (
+          <div class:list={["bento-card flex flex-col justify-between p-6", idx === 2 && "bento-glow border-accent/40"]}>
             <div>
-              <h3 class="text-xl font-semibold">{t.name}</h3>
-              <p class="mt-1 text-[15px] text-muted">{t.learn}</p>
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-[11px] text-muted uppercase tracking-wider">{s.type}</span>
+                {idx === 2 && <span class="rounded bg-accent/20 px-2 py-0.5 font-mono text-[10px] text-accent font-semibold">High Value</span>}
+              </div>
+              <h3 class="mt-2 text-lg font-bold leading-tight">{s.role}</h3>
+              <p class="mt-3 font-mono text-xl font-bold text-accent">{s.range}</p>
             </div>
-          </article>
+            <p class="mt-4 border-t border-line pt-3 text-xs leading-relaxed text-muted">
+              {s.duty}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <!-- What Brands Are Actually Hiring You To Do: Bento Summary -->
+      <div class="bento-card bento-glow mt-8 p-6 sm:p-8">
+        <h3 class="text-xl font-semibold">And when you look at what employers are actually paying for, it is always the same core responsibilities:</h3>
+        <p class="mt-3 text-muted leading-relaxed">
+          Cleaning corrupted sales and transaction exports, fixing broken formulas, automating weekly reporting pipelines so nobody wastes 8 hours doing manual copy-pasting, calculating business growth KPIs, and designing executive dashboards that reveal where money is being lost.
+        </p>
+        <div class="mt-6 flex flex-wrap items-baseline gap-4 border-t border-line pt-5">
+          <span class="font-mono text-3xl font-bold text-accent sm:text-4xl">₦150k – ₦750k+</span>
+          <span class="text-sm text-muted">monthly earnings for analysts who know how to solve real business problems with Excel and Power BI.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. DEMYSTIFYING THE CRAFT: BENTO WORKFLOW LOOP -->
+  <section id="system" class="scroll-mt-20 border-t border-line bg-surface px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="max-w-3xl">
+        <p class="eyebrow">The Real Work</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          So What Exactly Does a <span class="accent-word">Data Analyst</span> Actually Do?
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-muted">
+          Every growing business has the exact same problem: they are drowning in messy spreadsheets. Daily sales logs, warehouse receipts, customer registration lists, payment exports from Paystack, Flutterwave, or banking portals.
+        </p>
+      </div>
+
+      <!-- The Contrast Bento: Tools vs Answers -->
+      <div class="mt-10 grid gap-4 md:grid-cols-3">
+        <div class="bento-card p-5">
+          <p class="font-mono text-xs uppercase tracking-wider text-muted">The Intern</p>
+          <p class="mt-2 text-base font-medium">An intern can type SUM and copy formulas.</p>
+        </div>
+        <div class="bento-card p-5">
+          <p class="font-mono text-xs uppercase tracking-wider text-muted">The AI Tool</p>
+          <p class="mt-2 text-base font-medium">Even AI can now draw a quick bar chart in seconds.</p>
+        </div>
+        <div class="bento-card p-5">
+          <p class="font-mono text-xs uppercase tracking-wider text-muted">The Template</p>
+          <p class="mt-2 text-base font-medium">Anyone can download a colorful PowerPoint template.</p>
+        </div>
+      </div>
+
+      <!-- The Big Executive Question Card -->
+      <div class="bento-card bento-glow mt-8 p-6 sm:p-8">
+        <p class="font-mono text-sm uppercase tracking-wider text-accent font-semibold">The Million-Naira Question</p>
+        <h3 class="mt-2 text-2xl font-bold sm:text-3xl">
+          "Why did our revenue drop 24% last month, and what should the CEO do on Monday?"
+        </h3>
+        <p class="mt-4 text-muted">And other critical business questions like:</p>
+        <ul class="mt-3 grid gap-2.5 sm:grid-cols-2 text-sm">
+          <li class="flex items-start gap-2"><span class="text-accent font-mono font-bold">?</span><span>Which products generate 80% of actual profit vs. just vanity volume?</span></li>
+          <li class="flex items-start gap-2"><span class="text-accent font-mono font-bold">?</span><span>Which customer segments are churning right after their first purchase?</span></li>
+          <li class="flex items-start gap-2"><span class="text-accent font-mono font-bold">?</span><span>Which sales reps or branches are consistently underperforming targets?</span></li>
+          <li class="flex items-start gap-2"><span class="text-accent font-mono font-bold">?</span><span>What inventory should we reorder next week to avoid running out of stock?</span></li>
+        </ul>
+        <p class="mt-6 font-semibold text-lg">
+          The person who answers these questions is the <span class="rounded bg-accent/20 px-2 py-0.5 text-accent">Data Analyst</span>.
+        </p>
+      </div>
+
+      <!-- The 6-Step Visual Loop as an Interactive Bento Grid -->
+      <div class="bento-card mt-8 p-6 sm:p-8">
+        <div class="flex items-center justify-between border-b border-line pb-4">
+          <p class="font-mono text-xs uppercase tracking-wider text-muted font-bold">The AnalystFemi 6-Step Pipeline</p>
+          <span class="font-mono text-xs text-accent">↺ repeatable business intelligence loop</span>
+        </div>
+        <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {ANALYSIS_LOOP.map((step) => (
+            <div class="rounded-xl border border-line bg-surface/60 p-4 transition-transform hover:-translate-y-1">
+              <span class="font-mono text-xs font-bold text-accent">{step.step}</span>
+              <h4 class="mt-1 font-bold text-base">{step.label}</h4>
+              <p class="mt-1 text-xs text-muted leading-relaxed">{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. THE CATCH & THE MARKET GAP (BENTO SPLIT) -->
+  <section class="px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="max-w-3xl">
+        <p class="eyebrow">The Market Gap</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          There Are Thousands of People Calling Themselves Data Analysts. <span class="accent-word">But Not Enough Good Ones.</span>
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-muted">
+          A lot of people think learning data analysis means watching a 5-minute tutorial on a clean, 20-row sample table, collecting a free PDF certificate, and putting "Data Analyst" in their LinkedIn bio.
+        </p>
+        <p class="mt-3 text-lg leading-relaxed text-muted">
+          Then they get their first real business test or freelance dataset with 15,000 corrupted rows, mixed date formats, and null values — and they completely freeze.
+        </p>
+      </div>
+
+      <!-- Comparison: Weak vs High-Value Analyst -->
+      <div class="mt-12 grid gap-6 lg:grid-cols-2">
+        <div class="bento-card p-6 sm:p-8">
+          <span class="font-mono text-xs uppercase tracking-wider text-muted">The Outdated Way</span>
+          <h3 class="mt-2 text-2xl font-bold line-through opacity-70">The "Button Clicker"</h3>
+          <ul class="mt-6 space-y-3.5 text-[15px] text-muted">
+            <li class="flex items-start gap-2.5"><span class="font-mono text-muted">×</span><span>Only knows how to work with clean, pre-packaged tutorial data.</span></li>
+            <li class="flex items-start gap-2.5"><span class="font-mono text-muted">×</span><span>Panics when formulas return #N/A or #VALUE! errors.</span></li>
+            <li class="flex items-start gap-2.5"><span class="font-mono text-muted">×</span><span>Builds cluttered, neon pie charts that give managers headaches.</span></li>
+            <li class="flex items-start gap-2.5"><span class="font-mono text-muted">×</span><span>Shows numbers without knowing what business decision they guide.</span></li>
+            <li class="flex items-start gap-2.5"><span class="font-mono text-muted">×</span><span>Has a certificate but zero portfolio projects to show employers.</span></li>
+          </ul>
+        </div>
+
+        <div class="bento-card bento-dark bento-glow-dark p-6 sm:p-8 shadow-xl">
+          <span class="font-mono text-xs uppercase tracking-wider text-[#2dd4bf] font-bold">The AnalystFemi Standard</span>
+          <h3 class="mt-2 text-2xl font-bold text-white">The High-Value Decision Partner</h3>
+          <ul class="mt-6 space-y-3.5 text-[15px] text-white/90">
+            <li class="flex items-start gap-2.5"><span class="font-mono text-[#2dd4bf] font-bold">✓</span><span>Confidently tames real-world dirty files using Power Query automation.</span></li>
+            <li class="flex items-start gap-2.5"><span class="font-mono text-[#2dd4bf] font-bold">✓</span><span>Builds bulletproof Star Schema models and advanced DAX time-intelligence.</span></li>
+            <li class="flex items-start gap-2.5"><span class="font-mono text-[#2dd4bf] font-bold">✓</span><span>Designs executive UI dashboards with custom backgrounds that tell a story.</span></li>
+            <li class="flex items-start gap-2.5"><span class="font-mono text-[#2dd4bf] font-bold">✓</span><span>Translates raw numbers into plain English recommendations for leadership.</span></li>
+            <li class="flex items-start gap-2.5"><span class="font-mono text-[#2dd4bf] font-bold">✓</span><span>Has 2 production-ready capstone portfolio projects ready on day one.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. THE BRIDGE: BENTO CARDS -->
+  <section class="border-t border-line bg-surface px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="max-w-3xl">
+        <p class="eyebrow">Your Unfair Advantage</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          And You May Already Be <span class="accent-word">Closer Than You Think</span>.
+        </h2>
+        <p class="mt-4 text-lg text-muted">
+          You don't need to throw away your previous life to become a data analyst. Your past experience actually makes you faster:
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-4 sm:grid-cols-2">
+        {ROLES_BRIDGE.map((r) => (
+          <div class="bento-card p-6">
+            <p class="text-sm text-muted">{r.who}</p>
+            <p class="mt-1 text-xl font-bold text-accent">{r.has}</p>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{r.desc}</p>
+          </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- Curriculum -->
-  <section id="curriculum" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-24">
-    <p class="eyebrow">Curriculum</p>
-    <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">From your first formula to your <span class="accent-word">first dashboards</span>.</h2>
-    <p class="mt-4 max-w-2xl text-muted">{COURSE.modules} modules in two parts. Part 1 is in the Excel Track and the Full Course. Part 2 is in the Full Course.</p>
-
-    <div class="mt-10 grid gap-4 lg:grid-cols-2">
-      {PARTS.map((p, i) => (
-        <article data-reveal style={`--reveal-delay:${i * 100}ms`} class="flex flex-col rounded-[var(--radius-card)] border border-line bg-bg p-6">
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-xs uppercase tracking-wider text-muted">{p.part}</span>
-            <span class="rounded-full bg-accent px-2.5 py-0.5 font-mono text-xs text-accent-fg">{p.tool}</span>
-          </div>
-          <h3 class="mt-3 text-xl font-semibold">{p.title}</h3>
-          <ul class="mt-4 divide-y divide-line">
-            {p.modules.map((m) => (
-              <li class="flex items-baseline gap-3 py-2.5">
-                <span class="font-mono text-xs text-muted">{m.n}</span>
-                <span class="flex-1">{m.t}</span>
-                <span class="font-mono text-xs text-muted">{hours(m.m)}</span>
-              </li>
-            ))}
-          </ul>
-          <p class="mt-auto pt-6"><span class="inline-flex rounded-xl bg-accent-soft px-3 py-2 text-sm font-medium">{p.project}</span></p>
-        </article>
-      ))}
-    </div>
-    <p class="mt-4 rounded-2xl border border-line bg-surface px-5 py-4 text-sm"><span class="font-medium">Bonus:</span> build a portfolio website with AI, so your projects have a home to share with employers.</p>
-  </section>
-
-  <!-- Student work -->
-  <section id="work" class="border-t border-line bg-surface scroll-mt-20">
-    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-      <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p class="eyebrow">Built in class</p>
-          <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">Real dashboards, built <span class="accent-word">with students</span>.</h2>
-        </div>
-        <p class="max-w-xs text-sm text-muted">Portfolio projects from my Power BI class. You get the same files.</p>
+  <!-- 6. THE SOLUTION REVEAL -->
+  <section class="px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="max-w-3xl">
+        <p class="eyebrow">The Solution</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          And That Is Why I Built <span class="accent-word">{COURSE.name}</span>.
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-muted">
+          Most data analytics courses stop at teaching you what formulas mean on clean data. But this program is structured around two indispensable pillars:
+        </p>
       </div>
 
-      <div data-reveal class="af-tabs mt-10 overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-3">
-          <p class="font-display font-semibold">BrightPark sales report <span class="font-sans text-sm font-normal text-muted">· 3 pages</span></p>
-          <div class="flex gap-1.5" role="tablist">
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        <div class="bento-card bento-glow p-6 sm:p-8">
+          <span class="font-mono text-xs uppercase tracking-wider text-accent font-semibold">Pillar One</span>
+          <h3 class="mt-2 text-2xl font-bold">Part 1: Build The System</h3>
+          <p class="mt-3 text-muted leading-relaxed">
+            14 modules of recorded classes cut from real sessions with students working on messy data. You watch the data get cleaned, formulas break, mistakes get fixed, and dashboards take shape. You get every practice workbook to build it yourself.
+          </p>
+        </div>
+
+        <div class="bento-card bento-glow p-6 sm:p-8">
+          <span class="font-mono text-xs uppercase tracking-wider text-accent font-semibold">Pillar Two</span>
+          <h3 class="mt-2 text-2xl font-bold">Part 2: The AnalystFemi Mentorship</h3>
+          <p class="mt-3 text-muted leading-relaxed">
+            You don't learn in isolation. You join the AnalystFemi Data Club on WhatsApp with direct access to Joshua. You get personal dashboard teardowns, feedback on your DAX and layout, and guidance until your portfolio is job-ready.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. PART ONE: CURRICULUM BREAKDOWN -->
+  <section id="curriculum" class="scroll-mt-20 border-t border-line bg-surface px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="eyebrow">Part One · Build The System</p>
+          <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+            The Complete <span class="accent-word">Curriculum</span>.
+          </h2>
+        </div>
+        <p class="max-w-xs text-sm text-muted">
+          {COURSE.modules} modules · {COURSE.hours} hours · Every practice file and dataset included.
+        </p>
+      </div>
+
+      <!-- Curriculum Accordion Cards with Bento Styling -->
+      <div class="mt-10 space-y-3">
+        {PARTS.map((p, idx) => (
+          <details class="bento-card group p-5 sm:p-6 transition-all" open={idx === 0 || idx === 6}>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="rounded-lg bg-accent-soft px-2.5 py-1 font-mono text-xs font-semibold text-accent">{p.phase}</span>
+                <span class="rounded-lg border border-line px-2.5 py-1 font-mono text-xs text-muted">{p.tool}</span>
+                <h3 class="text-lg font-bold sm:text-xl">{p.title}</h3>
+              </div>
+              <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-line font-mono text-sm transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+            </summary>
+            <div class="mt-4 border-t border-line pt-4 text-sm text-muted">
+              <p class="leading-relaxed">{p.desc}</p>
+              <ul class="mt-4 divide-y divide-line rounded-xl border border-line bg-surface/50 px-4">
+                {p.modules.map((m) => (
+                  <li class="flex items-center justify-between py-2.5">
+                    <span class="flex items-center gap-2">
+                      <span class="font-mono text-xs text-muted font-bold">{m.n}</span>
+                      <span class="font-medium text-fg">{m.t}</span>
+                    </span>
+                    <span class="font-mono text-xs text-muted">{typeof m.m === "number" ? hours(m.m) : m.m}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
+        ))}
+      </div>
+
+      <!-- Bonus Modules Box -->
+      <div class="bento-card bento-glow mt-8 p-6 sm:p-8">
+        <p class="font-mono text-xs uppercase tracking-wider text-accent font-semibold">Special Included Bonuses</p>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          <div class="rounded-xl border border-line bg-surface p-4">
+            <h4 class="font-bold">Bonus 1: AI Workflows for Data Analysts</h4>
+            <p class="mt-1.5 text-xs text-muted leading-relaxed">
+              How to prompt ChatGPT & Claude to debug complex DAX expressions, draft business summary narratives, and build custom calculated columns faster.
+            </p>
+          </div>
+          <div class="rounded-xl border border-line bg-surface p-4">
+            <h4 class="font-bold">Bonus 2: Build Your Portfolio Website with AI</h4>
+            <p class="mt-1.5 text-xs text-muted leading-relaxed">
+              Step-by-step walkthrough showing you how to host and display your FinTrust and SwiftTel dashboards on your own live URL to share with employers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. WATCH ME TEACH (SAMPLE LESSON VIDEOS) -->
+  <section class="px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="eyebrow">Sample Lessons</p>
+          <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+            Watch Me <span class="accent-word">Teach</span>.
+          </h2>
+        </div>
+        <p class="max-w-sm text-muted">
+          Two sample lessons straight from the course. No editing tricks — just raw data, real problems, and step-by-step solutions.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-6 lg:grid-cols-2">
+        {[
+          { src: "/media/power-query.mp4", poster: "/media/power-query.webp", title: "Data cleaning with Power Query", meta: "Power BI · 5 min lesson sample", logo: "powerbi" },
+          { src: "/media/vlookup-vs-xlookup.mp4", poster: "/media/vlookup-vs-xlookup.webp", title: "VLOOKUP vs XLOOKUP", meta: "Excel · 3 min lesson sample", logo: "excel" },
+        ].map((v) => (
+          <figure class="bento-card shadow-md">
+            <video src={v.src} poster={v.poster} controls preload="none" playsinline aria-label={`Lesson: ${v.title}`} class="aspect-video w-full bg-black"></video>
+            <figcaption class="flex items-center gap-3 p-4 sm:p-5">
+              <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-line bg-bg p-2"><Logo name={v.logo} class="h-6 w-auto" /></span>
+              <div class="leading-tight">
+                <span class="block font-bold text-base">{v.title}</span>
+                <span class="text-xs text-muted">{v.meta}</span>
+              </div>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. BUILT IN CLASS (PORTFOLIO PROJECTS) -->
+  <section class="border-t border-line bg-surface px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="eyebrow">Capstone Projects</p>
+          <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+            Real Dashboards, Built <span class="accent-word">With Students</span>.
+          </h2>
+        </div>
+        <p class="max-w-xs text-sm text-muted">You receive the same raw practice files to build these for your own CV.</p>
+      </div>
+
+      <!-- BrightPark Tabbed Showcase -->
+      <div class="af-tabs bento-card mt-10 shadow-lg">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
+          <p class="font-semibold">BrightPark Retail Analytics Suite <span class="font-normal text-muted text-sm">· 3-page executive report</span></p>
+          <div class="flex gap-2" role="tablist">
             {showcase.map((s, i) => (
-              <button type="button" role="tab" data-tab={s.id} aria-selected={i === 0 ? "true" : "false"} class="rounded-full border border-line px-3 py-1 text-xs aria-selected:border-accent aria-selected:bg-accent aria-selected:text-accent-fg">
+              <button
+                type="button"
+                role="tab"
+                data-tab={s.id}
+                aria-selected={i === 0 ? "true" : "false"}
+                class="btn-press rounded-full border border-line px-3.5 py-1 text-xs font-medium aria-selected:border-accent aria-selected:bg-accent aria-selected:text-accent-fg transition-colors"
+              >
                 {s.label}
               </button>
             ))}
           </div>
         </div>
-        <div class="bg-surface p-3 sm:p-5">
+        <div class="bg-surface/50 p-4 sm:p-6">
           {showcase.map((s, i) => (
-            <img src={s.image} alt={`BrightPark Power BI report: ${s.label}`} data-panel={s.id} loading="lazy" class:list={["w-full rounded-xl", i !== 0 && "hidden"]} />
+            <img src={s.image} alt={`BrightPark Power BI report: ${s.label}`} data-panel={s.id} loading="lazy" class:list={["w-full rounded-xl shadow-md", i !== 0 && "hidden"]} />
           ))}
         </div>
       </div>
 
-      <div class="mt-4 grid gap-4 md:grid-cols-2">
-        <figure data-reveal class="overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg">
+      <div class="mt-6 grid gap-6 md:grid-cols-2">
+        <figure class="bento-card shadow-sm">
           <img src="/media/weather-dashboard.webp" alt="Weather dashboard for Abuja, Ibadan and Kano built in Power BI" loading="lazy" class="w-full" />
-          <figcaption class="flex items-center justify-between px-4 py-3 text-sm"><span class="font-medium">Weather dashboard</span><span class="text-muted">Live API data · Abuja, Ibadan, Kano</span></figcaption>
+          <figcaption class="flex items-center justify-between p-4 text-sm"><span class="font-bold">Weather API Intelligence</span><span class="text-muted text-xs">Live API data · Abuja, Ibadan, Kano</span></figcaption>
         </figure>
-        <figure data-reveal style="--reveal-delay:100ms" class="overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg">
+        <figure class="bento-card shadow-sm">
           <video data-src="/media/sales-calendar.mp4" poster="/media/sales-calendar.webp" muted loop playsinline preload="none" aria-label="Interactive sales calendar with tooltips" class="w-full"></video>
-          <figcaption class="flex items-center justify-between px-4 py-3 text-sm"><span class="font-medium">Sales performance calendar</span><span class="text-muted">Interactive tooltips</span></figcaption>
+          <figcaption class="flex items-center justify-between p-4 text-sm"><span class="font-bold">Sales Performance Calendar</span><span class="text-muted text-xs">Interactive DAX Tooltips</span></figcaption>
         </figure>
       </div>
     </div>
   </section>
 
-  <!-- Watch me teach -->
-  <section class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <p class="eyebrow">Watch me teach</p>
-        <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">See how I <span class="accent-word">explain</span> it.</h2>
+  <!-- 10. PART TWO: THE MENTORSHIP & DATA CLUB -->
+  <section id="mentorship" class="scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="bento-card bento-glow p-8 sm:p-12 lg:p-16 border-accent/20">
+        <div class="max-w-3xl">
+          <p class="font-mono text-xs uppercase tracking-wider text-accent font-bold">Part Two · The Practicum</p>
+          <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+            The AnalystFemi <span class="accent-word">Data Club & Mentorship</span>.
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-muted">
+            This is where you stop just watching tutorials and start building real capability. You don't get thrown into a quiet folder and forgotten.
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="rounded-2xl border border-line bg-bg p-6 transition-transform hover:-translate-y-1">
+            <span class="font-mono text-xs text-accent font-bold">01 / Practice</span>
+            <h3 class="mt-2 text-lg font-bold">Bi-Weekly Real Data Tasks</h3>
+            <p class="mt-2 text-sm text-muted leading-relaxed">
+              Get hands-on datasets to clean and analyze. Practice is the only difference between someone who watched a video and someone who can do the job.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-line bg-bg p-6 transition-transform hover:-translate-y-1">
+            <span class="font-mono text-xs text-accent font-bold">02 / Feedback</span>
+            <h3 class="mt-2 text-lg font-bold">Dashboard Teardowns</h3>
+            <p class="mt-2 text-sm text-muted leading-relaxed">
+              Submit your dashboards and get direct feedback on your layout, color harmony, DAX measure structure, and presentation clarity.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-line bg-bg p-6 transition-transform hover:-translate-y-1">
+            <span class="font-mono text-xs text-accent font-bold">03 / Guidance</span>
+            <h3 class="mt-2 text-lg font-bold">Direct WhatsApp Mentorship</h3>
+            <p class="mt-2 text-sm text-muted leading-relaxed">
+              Stuck on a nested XLOOKUP or CALCULATE measure? Ask in the Data Club. Joshua is right there in the community to get you unblocked.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-8 rounded-xl border border-accent/30 bg-bg/80 p-5 font-mono text-sm text-accent">
+          ✓ Result: You leave with a verified folder of production-ready Power BI & Excel projects you can proudly present in job interviews.
+        </div>
       </div>
-      <p class="max-w-sm text-muted">Two sample lessons. The course is this hands-on, step by step, with real data.</p>
-    </div>
-    <div class="mt-10 grid gap-5 lg:grid-cols-2">
-      {[
-        { src: "/media/power-query.mp4", poster: "/media/power-query.webp", title: "Data cleaning with Power Query", meta: "Power BI · 5 min", logo: "powerbi" },
-        { src: "/media/vlookup-vs-xlookup.mp4", poster: "/media/vlookup-vs-xlookup.webp", title: "VLOOKUP vs XLOOKUP", meta: "Excel · 3 min", logo: "excel" },
-      ].map((v, i) => (
-        <figure data-reveal style={`--reveal-delay:${i * 100}ms`} class="overflow-hidden rounded-[var(--radius-card)] border border-line bg-bg">
-          <video src={v.src} poster={v.poster} controls preload="none" playsinline aria-label={`Lesson: ${v.title}`} class="aspect-video w-full bg-black"></video>
-          <figcaption class="flex items-center gap-3 px-5 py-4">
-            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-line bg-white p-1.5"><Logo name={v.logo} class="h-5 w-auto" /></span>
-            <span class="leading-tight"><span class="block font-medium">{v.title}</span><span class="text-sm text-muted">{v.meta}</span></span>
-          </figcaption>
-        </figure>
-      ))}
     </div>
   </section>
 
-  <!-- What's included + for/not for -->
-  <section class="border-t border-line bg-surface">
-    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-      <p class="eyebrow">What's included</p>
-      <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Everything to <span class="accent-word">learn it and prove it</span>.</h2>
-      <div class="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {INCLUDED.map((it, i) => (
-          <div data-reveal style={`--reveal-delay:${i * 80}ms`} class="rounded-2xl border border-line bg-bg p-5">
-            <span class="grid h-10 w-10 place-items-center rounded-xl bg-accent-soft text-accent"><Icon name={it.icon} /></span>
-            <p class="mt-3 font-display text-lg font-semibold leading-tight">{it.title}</p>
-            <p class="mt-1 text-sm text-muted">{it.note}</p>
+  <!-- 11. SOCIAL PROOF & WHATSAPP SCREENSHOTS BENTO -->
+  <section id="results" class="scroll-mt-20 border-t border-line bg-surface px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="max-w-3xl">
+        <p class="eyebrow">Track Record & Student Proof</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          By The Way, This Isn't Theory. <span class="accent-word">It Has Worked Before</span>.
+        </h2>
+        <p class="mt-4 text-lg text-muted">
+          Here is what actual students who took this training have to say in their own words, straight from WhatsApp. Click any screenshot to view full-size:
+        </p>
+      </div>
+
+      <!-- Testimonial Screenshots & Quotes Grid -->
+      <div class="mt-12 grid gap-8 lg:grid-cols-2">
+        {TESTIMONIALS.map((t, idx) => (
+          <div class="bento-card p-6 sm:p-8 shadow-sm">
+            <div class="flex items-center justify-between border-b border-line pb-4">
+              <div>
+                <h3 class="text-xl font-bold">{t.name}</h3>
+                <p class="text-xs text-muted">{t.role}</p>
+              </div>
+              <span class="rounded-full bg-accent-soft px-3 py-1 font-mono text-xs text-accent font-semibold">Verified Student</span>
+            </div>
+
+            <!-- WhatsApp Screenshot Embed with Zoom Trigger -->
+            <button
+              type="button"
+              data-zoom-src={t.image}
+              data-zoom-alt={`WhatsApp message from ${t.name}`}
+              class="btn-press group relative mt-6 block w-full overflow-hidden rounded-2xl border border-line bg-black/5 text-left focus:outline-none focus:ring-2 focus:ring-accent"
+              title="Click to view full image"
+            >
+              <img src={t.image} alt={`WhatsApp message from ${t.name}`} loading="lazy" class="w-full object-cover max-h-[460px] object-top transition-transform duration-300 group-hover:scale-105" />
+              <div class="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover:opacity-100">
+                <span class="rounded-full bg-bg/90 px-4 py-2 text-xs font-semibold text-fg shadow-lg backdrop-blur-sm">Click to expand 🔍</span>
+              </div>
+            </button>
+
+            <!-- Takeaway Quote -->
+            <blockquote class="mt-6 rounded-xl border border-line bg-surface p-4 text-sm leading-relaxed text-muted">
+              <p class="font-semibold text-fg">"{t.highlight}"</p>
+            </blockquote>
           </div>
         ))}
       </div>
+    </div>
+  </section>
 
-      <div class="mt-10 grid gap-4 md:grid-cols-2">
-        <div class="rounded-[var(--radius-card)] border border-line bg-bg p-6">
-          <h3 class="font-display text-xl font-semibold">This is for you if</h3>
-          <ul class="mt-4 space-y-2.5">
-            {FOR_YOU.map((t) => (
-              <li class="flex items-start gap-2.5"><Icon name="check" class="mt-1 h-4 w-4 shrink-0 text-accent" /><span>{t}</span></li>
+  <!-- 12. PHILOSOPHY CONTRAST: MOST COURSES VS ZERO TO DATA ANALYST -->
+  <section class="px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="max-w-3xl">
+        <p class="eyebrow">The Difference</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          Why Most Online Courses <span class="accent-word">Fail You</span>.
+        </h2>
+        <p class="mt-4 text-lg text-muted">
+          You've probably watched YouTube tutorials or paid for a course before. You watched a few videos, received a generic certificate, and still couldn't build a dashboard from scratch. Here is why:
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+        <!-- The Others -->
+        <div class="bento-card p-6 sm:p-8">
+          <p class="font-mono text-xs uppercase tracking-wider text-muted font-bold">Most Online Courses</p>
+          <div class="mt-6 space-y-6">
+            {COMPARISON.others.map((item) => (
+              <div>
+                <h3 class="text-lg font-bold line-through opacity-70">{item.title}</h3>
+                <p class="mt-1 text-sm text-muted leading-relaxed">{item.desc}</p>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
-        <div class="rounded-[var(--radius-card)] border border-line bg-bg p-6">
-          <h3 class="font-display text-xl font-semibold">This is not for you if</h3>
-          <ul class="mt-4 space-y-2.5">
-            {NOT_FOR_YOU.map((t) => (
-              <li class="flex items-start gap-2.5"><span class="mt-0.5 w-4 shrink-0 text-center text-muted" aria-hidden="true">–</span><span class="text-muted">{t}</span></li>
+
+        <!-- Zero to Data Analyst -->
+        <div class="bento-card bento-dark bento-glow-dark p-6 sm:p-8 shadow-xl">
+          <p class="font-mono text-xs uppercase tracking-wider text-[#2dd4bf] font-bold">Zero to Data Analyst</p>
+          <div class="mt-6 space-y-6">
+            {COMPARISON.us.map((item) => (
+              <div>
+                <h3 class="text-lg font-bold text-[#2dd4bf]">{item.title}</h3>
+                <p class="mt-1 text-sm text-white/85 leading-relaxed">{item.desc}</p>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Instructor -->
-  <section id="instructor" class="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6 sm:py-24">
-    <article data-reveal class="grid overflow-hidden rounded-[var(--radius-card)] border border-line bg-surface md:grid-cols-[1fr_1.4fr]">
-      <img src="/media/joshua-purple.webp" alt="Joshua Akintayo" width="720" height="720" loading="lazy" class="aspect-[4/3] h-full w-full object-cover object-top md:aspect-auto" />
-      <div class="p-6 sm:p-10">
-        <p class="eyebrow">Your instructor</p>
-        <h2 class="mt-2 text-3xl font-semibold">Joshua Akintayo</h2>
-        <p class="mt-3 text-muted">
-          Data analyst and data engineer. Former data analyst at The ICIR, Microsoft Certified Fabric Analytics Engineer, and the builder of rsch, a research workspace for students. I teach the way I work: open the data, find the problem, fix it, and explain why.
-        </p>
-        <div class="mt-5 flex flex-wrap gap-2 text-sm">
-          <a href={TIKTOK.url} target="_blank" rel="noopener noreferrer" class="rounded-full border border-line px-3 py-1.5 hover:border-accent">TikTok {TIKTOK.handle}</a>
-          <a href={YOUTUBE} target="_blank" rel="noopener noreferrer" class="rounded-full border border-line px-3 py-1.5 hover:border-accent">YouTube</a>
-          <a href={siteUrl("hub")} class="rounded-full border border-line px-3 py-1.5 hover:border-accent">Full story →</a>
+  <!-- 13. INSTRUCTOR CREDIBILITY -->
+  <section id="instructor" class="scroll-mt-20 border-t border-line bg-surface px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+        <div class="bento-card overflow-hidden shadow-lg">
+          <img src="/media/joshua-purple.webp" alt="Joshua Akintayo" width="600" height="600" loading="lazy" class="w-full object-cover aspect-square transition-transform duration-500 hover:scale-105" />
         </div>
-      </div>
-    </article>
-  </section>
-
-  <!-- Research projects: rsch -->
-  <section class="px-4 pb-4 sm:px-6">
-    <div data-reveal class="mx-auto grid max-w-6xl items-center gap-6 rounded-[var(--radius-card)] border border-line bg-bg p-6 sm:p-10 md:grid-cols-[1fr_auto]">
-      <div>
-        <p class="eyebrow">Also for students</p>
-        <h2 class="mt-2 text-2xl font-semibold sm:text-3xl">Writing a research project? Use <span class="accent-word">rsch</span>.</h2>
-        <p class="mt-3 max-w-2xl text-muted">
-          rsch takes you from questionnaire to Chapter 4 in one workspace: build the questionnaire, collect responses on phones, clean the data and get your results written up.
-        </p>
-      </div>
-      <div class="flex flex-wrap gap-3">
-        <a href="https://getrsch.pages.dev" target="_blank" rel="noopener noreferrer" class="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90">Open rsch</a>
-        <a href={siteUrl("automation", "/#builds")} class="rounded-full border border-line bg-bg px-6 py-3 text-sm font-medium transition-colors hover:bg-surface">How it works</a>
+        <div>
+          <p class="eyebrow">Your Instructor</p>
+          <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+            Why Should You Learn This From <span class="accent-word">Joshua Akintayo</span>?
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-muted">
+            Fair question. There are enough people regurgitating basic Excel tutorials online already.
+          </p>
+          <p class="mt-3 text-base leading-relaxed text-muted">
+            I am an active Data Analyst and Data Engineer based in Abuja. Former data analyst at <strong>The ICIR</strong>, a <strong>Microsoft Certified Fabric Analytics Engineer</strong>, and the creator of <strong>rsch</strong>, a research and data automation workspace for researchers and students.
+          </p>
+          <p class="mt-3 text-base leading-relaxed text-muted">
+            I still do the actual work daily: ingesting raw transaction files, writing production DAX, modeling star schemas, and presenting dashboards to executive stakeholders.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3 text-sm">
+            <a href={TIKTOK.url} target="_blank" rel="noopener noreferrer" class="btn-press rounded-full border border-line bg-bg px-4 py-2 font-medium hover:border-accent">TikTok {TIKTOK.handle}</a>
+            <a href={YOUTUBE} target="_blank" rel="noopener noreferrer" class="btn-press rounded-full border border-line bg-bg px-4 py-2 font-medium hover:border-accent">YouTube Channel</a>
+            <a href={siteUrl("hub")} class="btn-press rounded-full border border-line bg-bg px-4 py-2 font-medium hover:border-accent">Full Portfolio & Story →</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Pricing -->
-  <section id="pricing" class="scroll-mt-20 border-t border-line bg-surface">
-    <div class="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-      <p class="eyebrow">Pricing</p>
-      <h2 class="mt-4 max-w-3xl text-4xl font-semibold sm:text-5xl">Start free. <span class="accent-word">Pay once</span> when you’re ready.</h2>
-      <p class="mt-4 max-w-2xl text-muted">One payment, no subscription. Access comes straight after you pay.</p>
-      {LAUNCH.active && (
-        <p class="mt-6 inline-flex rounded-full bg-accent-soft px-4 py-2 text-sm font-medium">{LAUNCH.percent}% off · {offerLine}</p>
-      )}
+  <!-- 14. PRICE ANCHORING & COMPARISONS -->
+  <section class="px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="max-w-3xl">
+        <p class="eyebrow">Investment Context</p>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          How Much Does It Cost to Learn <span class="accent-word">Real Data Analytics</span>?
+        </h2>
+        <p class="mt-4 text-lg text-muted">
+          Serious data analytics training has an established market price:
+        </p>
+      </div>
 
-      <div class="mt-10 grid gap-4 lg:grid-cols-3">
-        {TIERS.map((t, i) => (
-          <article
-            data-reveal
-            style={`--reveal-delay:${i * 100}ms`}
-            class:list={[
-              "relative flex flex-col rounded-[var(--radius-card)] border p-6 sm:p-7",
-              t.highlight ? "border-accent bg-accent text-accent-fg shadow-2xl shadow-black/10" : "border-line bg-bg",
-            ]}
-          >
-            {t.highlight && <span class="absolute -top-3 left-6 rounded-full bg-bg px-3 py-1 font-mono text-xs text-accent ring-1 ring-accent">Most complete</span>}
-            <h3 class="font-display text-2xl font-semibold">{t.name}</h3>
-            <p class:list={["mt-1 text-sm", t.highlight ? "opacity-80" : "text-muted"]}>{t.blurb}</p>
-            <p class="mt-6 flex items-baseline gap-2 font-mono">
-              {t.price === 0 ? (
-                <span class="text-5xl font-medium">Free</span>
-              ) : LAUNCH.active ? (
-                <>
-                  <span class="text-5xl font-medium">{naira(launchPrice(t.price))}</span>
-                  <span class="text-lg line-through opacity-60">{naira(t.price)}</span>
-                </>
-              ) : (
-                <span class="text-5xl font-medium">{naira(t.price)}</span>
-              )}
-            </p>
-            <ul class="mt-6 space-y-3 text-[15px]">
-              {t.features.map((f) => (
-                <li class="flex items-start gap-2.5"><Icon name="check" class="mt-1 h-4 w-4 shrink-0" /><span>{f}</span></li>
-              ))}
-            </ul>
-            <a
-              href={buy(t.id, t.name)}
-              data-pay={t.price === 0 ? undefined : t.id}
-              data-pay-name={t.name}
-              data-pay-price={t.price === 0 ? undefined : naira(LAUNCH.active ? launchPrice(t.price) : t.price)}
-              class:list={[
-                "mt-auto block rounded-full px-6 py-3 text-center text-sm font-medium transition-opacity hover:opacity-90",
-                t.highlight ? "bg-accent-fg text-accent" : t.price === 0 ? "border border-line bg-bg hover:bg-surface" : "bg-accent text-accent-fg",
-              ]}
-              style="margin-top: 2rem"
-            >
-              {t.cta}
-            </a>
-          </article>
+      <!-- Price Comparison Rows -->
+      <div class="bento-card mt-10 overflow-hidden">
+        {PRICE_COMPARISONS.map((pc) => (
+          <div class:list={["grid grid-cols-1 gap-2 p-5 border-b border-line sm:grid-cols-[1fr_auto] sm:items-center sm:p-6", pc.highlight && "bg-accent-soft/40 border-accent/30"]}>
+            <div>
+              <p class="font-bold text-lg">{pc.name}</p>
+              <p class="text-xs text-muted">{pc.note}</p>
+            </div>
+            <div class="sm:text-right">
+              <span class:list={["font-mono text-2xl font-bold", pc.highlight ? "text-accent text-3xl" : "text-muted"]}>{pc.price}</span>
+              <span class="block text-xs text-muted">{pc.sub}</span>
+            </div>
+          </div>
         ))}
       </div>
-      <p class="mt-6 text-sm text-muted">Secure checkout, then instant access to the course folder (and the AnalystFemi Data Club on WhatsApp with the Full Course). Questions? <a href={whatsappLink("Hi Joshua, I have a question about the Excel & Power BI course.")} class="font-medium text-accent underline underline-offset-4">Message me on WhatsApp</a>.</p>
-    </div>
-  </section>
+      <p class="mt-4 text-sm text-muted">
+        I built this program for ambitious people in Nigeria who shouldn't have to shell out hundreds of thousands of Naira before they can learn a high-income, globally valuable skill.
+      </p>
 
-  <!-- FAQ -->
-  <section id="faq" class="mx-auto grid max-w-6xl scroll-mt-20 gap-10 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-[1fr_1.6fr]">
-    <div>
-      <p class="eyebrow">FAQ</p>
-      <h2 class="mt-4 text-3xl font-semibold sm:text-4xl">Before you join.</h2>
-      <p class="mt-5 text-muted">Need data work for your business instead of a course? <a href={siteUrl("hub", "/#services")} class="font-medium text-accent underline underline-offset-4">See my services</a>.</p>
-    </div>
-    <div class="divide-y divide-line border-y border-line">
-      {FAQS.map((f) => (
-        <details class="group py-4">
-          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-medium">
-            {f.q}
-            <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-line transition-transform group-open:rotate-45" aria-hidden="true">+</span>
-          </summary>
-          <p class="mt-2 text-muted">{f.a}</p>
-        </details>
-      ))}
-    </div>
-  </section>
-
-  <!-- Final call -->
-  <section class="px-4 pb-20 sm:px-6">
-    <div data-reveal class="relative mx-auto max-w-6xl overflow-hidden rounded-[32px] bg-accent px-6 py-12 text-center text-accent-fg sm:px-12">
-      <div class="pointer-events-none absolute -right-12 -top-12 h-56 w-56 rounded-full border-[28px] border-accent-fg/10" aria-hidden="true"></div>
-      <h2 class="relative mx-auto max-w-2xl text-3xl font-semibold sm:text-4xl">Your first dashboard is a few lessons away.</h2>
-      <p class="relative mt-3">Try the free pack today. Upgrade when you’re sure.</p>
-      <div class="relative mt-6 flex flex-wrap justify-center gap-3">
-        <a href={freeLink} class="rounded-full bg-accent-fg px-6 py-3 text-sm font-medium text-accent">Get the free pack</a>
-        <a href="#pricing" class="rounded-full border border-accent-fg/40 px-6 py-3 text-sm font-medium">Compare tiers</a>
+      <!-- Price Ladder -->
+      <div class="mt-12">
+        <p class="font-mono text-xs uppercase tracking-wider text-muted font-bold">The Transparent Price Ladder</p>
+        <div class="mt-4 grid gap-4 sm:grid-cols-3">
+          {PRICE_LADDER.map((l) => (
+            <div class:list={["bento-card p-5", l.active ? "bento-glow border-accent shadow-md" : "opacity-80"]}>
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-xs uppercase text-muted font-semibold">{l.stage}</span>
+                {l.active && <span class="rounded bg-accent px-2 py-0.5 font-mono text-[11px] text-accent-fg font-bold">ACTIVE NOW</span>}
+              </div>
+              <p class="mt-2 font-mono text-3xl font-bold">{l.price}</p>
+              <p class="mt-2 text-xs text-muted">{l.note}</p>
+            </div>
+          ))}
+        </div>
+        <p class="mt-4 text-xs text-muted">
+          No fake countdown timers. When the founding cohort fills, the price permanently moves to ₦25,000.
+        </p>
       </div>
     </div>
   </section>
 
-  <a href="#pricing" class="fixed bottom-5 right-5 z-40 inline-flex rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg shadow-lg sm:hidden">
-    See the tiers
-  </a>
+  <!-- 15. THE MASTER OFFER STACK BOX -->
+  <section id="pricing" class="scroll-mt-20 border-t border-line bg-surface px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-4xl">
+      <div class="bento-card bg-bg shadow-2xl shadow-black/10 overflow-hidden">
+        <!-- Top Banner -->
+        <div class="border-b border-line bg-accent p-6 sm:p-8 text-accent-fg">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <span class="font-mono text-xs uppercase tracking-wider font-semibold">Founding Launch Enrollment</span>
+            <span class="rounded-full bg-accent-fg px-3 py-1 font-mono text-xs text-accent font-bold">50% DISCOUNT</span>
+          </div>
+          <h3 class="mt-3 text-3xl font-bold sm:text-4xl">{COURSE.name}</h3>
+          <p class="mt-1 text-sm opacity-90">{COURSE.tagline}</p>
+          <div class="mt-6 flex flex-wrap items-baseline gap-3 font-mono">
+            <span class="text-5xl font-extrabold sm:text-6xl">{naira(fullNow)}</span>
+            <span class="text-2xl line-through opacity-70">{naira(fullTier.price)}</span>
+            <span class="text-xs opacity-80">one-time payment · lifetime access</span>
+          </div>
+        </div>
 
-  <!-- Pay: asks for the Google email that gets Drive access, then goes to the Bachs checkout -->
+        <!-- The Value Stack Checklist -->
+        <div class="p-6 sm:p-8">
+          <p class="font-mono text-xs uppercase tracking-wider text-muted font-bold">Everything Included In Your Enrollment:</p>
+          <ul class="mt-5 grid gap-3 sm:grid-cols-2 text-sm">
+            {INCLUDED_STACK.map((item) => (
+              <li class="flex items-start gap-2.5">
+                <span class="font-mono text-accent font-bold">✓</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="mt-8">
+            <a
+              href={buyFull}
+              data-pay="full"
+              data-pay-name={fullTier.name}
+              data-pay-price={naira(fullNow)}
+              class="btn-press block w-full rounded-2xl bg-accent px-8 py-5 text-center text-lg font-bold text-accent-fg shadow-xl shadow-accent/20 transition-all hover:brightness-105"
+            >
+              Lock Founding Access for {naira(fullNow)} →
+            </a>
+            <p class="mt-3 text-center text-xs text-muted">
+              Secure checkout. Instant Google Drive course access + WhatsApp Data Club link sent immediately after payment.
+            </p>
+          </div>
+
+          <!-- Secondary Free Starter Pack Link -->
+          <div class="mt-8 border-t border-line pt-6 text-center">
+            <p class="text-sm text-muted">Want to test the waters first?</p>
+            <a href={freeLink} class="mt-1 inline-block font-semibold text-accent underline underline-offset-4 hover:opacity-80">
+              Download the Free Starter Pack (4 Lessons + Practice Dataset) →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. WHO THIS IS FOR VS NOT FOR BENTO -->
+  <section class="px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-6xl">
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="bento-card p-6 sm:p-8">
+          <h3 class="text-xl font-bold flex items-center gap-2">
+            <span class="text-accent font-mono">✓</span> This Program Is For You If...
+          </h3>
+          <ul class="mt-5 space-y-3 text-sm text-muted">
+            {FOR_YOU.map((t) => (
+              <li class="flex items-start gap-2.5">
+                <span class="text-accent font-mono font-bold mt-0.5">•</span>
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="bento-card p-6 sm:p-8">
+          <h3 class="text-xl font-bold flex items-center gap-2">
+            <span class="text-muted font-mono">×</span> This Program Is Probably NOT For You If...
+          </h3>
+          <ul class="mt-5 space-y-3 text-sm text-muted">
+            {NOT_FOR_YOU.map((t) => (
+              <li class="flex items-start gap-2.5">
+                <span class="text-muted font-mono mt-0.5">•</span>
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17. 30-DAY RISK-REVERSAL GUARANTEE -->
+  <section class="border-t border-line bg-surface px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-4xl">
+      <div class="bento-card bento-glow grid items-center gap-8 p-6 sm:p-10 md:grid-cols-[auto_1fr]">
+        <div class="flex h-28 w-28 shrink-0 flex-col items-center justify-center rounded-full border-2 border-accent text-center font-mono">
+          <span class="text-3xl font-extrabold text-accent">30</span>
+          <span class="text-[10px] uppercase tracking-wider text-accent font-semibold">DAY REFUND</span>
+        </div>
+        <div>
+          <h3 class="text-2xl font-bold sm:text-3xl">Try Zero to Data Analyst For 30 Days.</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            Enroll today. Open the course folder. Watch the lessons. Rebuild the datasets. If within your first 30 days you decide this program is not for you, simply send a message on WhatsApp or email.
+          </p>
+          <p class="mt-3 font-semibold text-sm text-accent">
+            We will refund 100% of your payment. No long story.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18. FAQ SECTION BENTO -->
+  <section id="faq" class="scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+    <div class="mx-auto max-w-4xl">
+      <div class="text-center">
+        <p class="eyebrow">Frequently Asked Questions</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          Everything You Need to Know Before Joining.
+        </h2>
+      </div>
+
+      <div class="mt-12 space-y-3">
+        {FAQS.map((f) => (
+          <details class="bento-card group p-5 sm:p-6 transition-all">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-base sm:text-lg">
+              <span>{f.q}</span>
+              <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-line font-mono text-sm transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+            </summary>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 19. FINAL CLOSE -->
+  <section class="px-4 pb-24 sm:px-6">
+    <div class="bento-card bento-dark bento-glow-dark relative mx-auto max-w-5xl overflow-hidden p-8 text-center shadow-2xl sm:p-14 lg:p-20">
+      <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full border-[32px] border-accent/20" aria-hidden="true"></div>
+      <h2 class="relative mx-auto max-w-3xl text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+        You Can Keep Watching Other People Build Dashboards. Or Learn to <span class="text-[#2dd4bf]">Become the Analyst Behind Them</span>.
+      </h2>
+      <p class="relative mx-auto mt-4 max-w-xl text-base text-white/85">
+        Companies are already paying for this work every single day. The only question is whether you are ready to learn the system and build the proof.
+      </p>
+      <div class="relative mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <a
+          href={buyFull}
+          data-pay="full"
+          data-pay-name={fullTier.name}
+          data-pay-price={naira(fullNow)}
+          class="btn-press rounded-full bg-accent px-8 py-4 text-base font-bold text-accent-fg shadow-lg shadow-accent/20 transition-all hover:brightness-105"
+        >
+          Join {COURSE.name} for {naira(fullNow)} →
+        </a>
+        <a href={freeLink} class="btn-press rounded-full border border-white/30 bg-white/5 px-6 py-4 text-sm font-medium text-white hover:bg-white/15">
+          Get Free Starter Pack
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20. FLOATING STICKY BOTTOM BAR -->
+  <aside id="sticky-bar" class="fixed bottom-0 left-0 right-0 z-40 translate-y-full border-t border-line bg-bg/95 p-3 backdrop-blur-md transition-transform duration-300 sm:bottom-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:rounded-2xl sm:border sm:shadow-2xl sm:p-3 sm:w-[460px]">
+    <div class="flex items-center justify-between gap-3">
+      <div>
+        <p class="font-bold text-sm leading-tight">{COURSE.name}</p>
+        <p class="font-mono text-xs text-accent font-semibold">{naira(fullNow)} · Founding Launch</p>
+      </div>
+      <a
+        href={buyFull}
+        data-pay="full"
+        data-pay-name={fullTier.name}
+        data-pay-price={naira(fullNow)}
+        class="btn-press rounded-full bg-accent px-5 py-2.5 text-xs font-bold text-accent-fg shadow-md transition-opacity hover:opacity-90"
+      >
+        Enroll Now →
+      </a>
+    </div>
+  </aside>
+
+  <!-- Image Lightbox Dialog for Screenshots -->
+  <dialog id="zoom-dialog" class="m-auto max-h-[92vh] max-w-[92vw] rounded-2xl border border-line bg-bg p-3 shadow-2xl backdrop:bg-black/75">
+    <div class="relative flex flex-col items-center">
+      <button id="zoom-close" type="button" class="btn-press absolute -top-2 -right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-fg text-bg shadow-md">✕</button>
+      <img id="zoom-img" src="" alt="" class="max-h-[85vh] w-auto rounded-xl object-contain" />
+    </div>
+  </dialog>
+
+  <!-- Checkout / Lead capture Dialog -->
   <dialog id="pay-dialog" class="m-auto w-[min(92vw,26rem)] rounded-2xl border border-line bg-bg p-6 text-fg shadow-2xl backdrop:bg-black/50">
     <form id="pay-form" class="space-y-4">
       <div>
-        <h2 id="pay-title" class="font-display text-2xl font-semibold">Get the course</h2>
+        <h2 id="pay-title" class="font-display text-2xl font-semibold">Enroll in {COURSE.name}</h2>
         <p id="pay-price" class="mt-1 font-mono text-sm text-accent"></p>
       </div>
       <label class="block text-sm font-medium">
         Google account email
         <input id="pay-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@gmail.com" class="mt-1.5 block w-full rounded-xl border border-line bg-surface px-4 py-3 text-base font-normal" />
-        <span class="mt-1 block text-xs font-normal text-muted">This email gets access to the course folder in Google Drive, so use the one you open Drive with.</span>
+        <span class="mt-1 block text-xs font-normal text-muted">This email gets instant access to the course folder in Google Drive.</span>
       </label>
       <label class="block text-sm font-medium">
         Your name <span class="font-normal text-muted">(optional)</span>
@@ -433,15 +1000,15 @@ const showcase = [
       </label>
       <p id="pay-error" class="hidden text-sm text-red-500" role="alert"></p>
       <div class="flex gap-3">
-        <button id="pay-submit" type="submit" class="flex-1 rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90 disabled:opacity-60">Continue to payment</button>
-        <button id="pay-cancel" type="button" class="rounded-full border border-line px-5 py-3 text-sm font-medium">Cancel</button>
+        <button id="pay-submit" type="submit" class="btn-press flex-1 rounded-full bg-accent px-5 py-3 text-sm font-medium text-accent-fg transition-opacity hover:opacity-90 disabled:opacity-60">Continue to payment</button>
+        <button id="pay-cancel" type="button" class="btn-press rounded-full border border-line px-5 py-3 text-sm font-medium">Cancel</button>
       </div>
     </form>
   </dialog>
 </Layout>
 
 <script>
-  // Paid tiers: ask for the Google email, create the checkout on the server, then redirect to Bachs.
+  // Paid tier checkout trigger
   const dialog = document.getElementById("pay-dialog") as HTMLDialogElement | null;
   if (dialog) {
     const form = document.getElementById("pay-form") as HTMLFormElement;
@@ -461,9 +1028,9 @@ const showcase = [
     document.querySelectorAll<HTMLAnchorElement>("[data-pay]").forEach((a) => {
       a.addEventListener("click", (e) => {
         e.preventDefault();
-        tier = a.dataset.pay ?? "";
-        title.textContent = a.dataset.payName ?? "Get the course";
-        price.textContent = a.dataset.payPrice ? `${a.dataset.payPrice} · one payment` : "";
+        tier = a.dataset.pay ?? "full";
+        title.textContent = a.dataset.payName ?? "Enroll in Zero to Data Analyst";
+        price.textContent = a.dataset.payPrice ? `${a.dataset.payPrice} · one-time payment` : "";
         showError("");
         dialog.showModal();
         email.focus();
@@ -496,6 +1063,7 @@ const showcase = [
     });
   }
 
+  // Tabs for BrightPark Showcase
   document.querySelectorAll<HTMLElement>(".af-tabs").forEach((root) => {
     root.querySelectorAll<HTMLButtonElement>("[data-tab]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -504,4 +1072,35 @@ const showcase = [
       });
     });
   });
+
+  // Sticky Join Bar scroll reveal
+  const stickyBar = document.getElementById("sticky-bar");
+  if (stickyBar) {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 600) {
+        stickyBar.classList.remove("translate-y-full");
+      } else {
+        stickyBar.classList.add("translate-y-full");
+      }
+    });
+  }
+
+  // Screenshot Lightbox Modal
+  const zoomDialog = document.getElementById("zoom-dialog") as HTMLDialogElement | null;
+  const zoomImg = document.getElementById("zoom-img") as HTMLImageElement | null;
+  const zoomClose = document.getElementById("zoom-close");
+
+  if (zoomDialog && zoomImg) {
+    document.querySelectorAll<HTMLButtonElement>("[data-zoom-src]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        zoomImg.src = btn.dataset.zoomSrc ?? "";
+        zoomImg.alt = btn.dataset.zoomAlt ?? "";
+        zoomDialog.showModal();
+      });
+    });
+    zoomClose?.addEventListener("click", () => zoomDialog.close());
+    zoomDialog.addEventListener("click", (e) => {
+      if (e.target === zoomDialog) zoomDialog.close();
+    });
+  }
 </script>

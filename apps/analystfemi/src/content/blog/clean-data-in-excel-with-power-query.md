@@ -6,10 +6,10 @@ tags: ["Excel", "Power Query", "Data cleaning"]
 cover: "/media/power-query.webp"
 coverAlt: "Joshua explaining Power Query in Power BI Desktop, with captions"
 cta:
-  title: "Want to learn this live, with real data?"
-  body: "Power Query is Module 6 of the Zero to Data Analyst mentorship. We clean a 1,500-row Nigerian fintech dataset together, then build a dashboard on it."
-  label: "Reserve a seat on WhatsApp"
-  message: "Hi Joshua, I read your Power Query guide. I'd like to join the Zero to Data Analyst mentorship."
+  title: "Want to learn this step by step, with real data?"
+  body: "Power Query is covered in the Excel & Power BI course, with real class lessons and the practice files to rebuild each one."
+  label: "See the course"
+  message: "Hi Joshua, I read your Power Query guide. I'd like the Excel & Power BI course."
 ---
 
 Most of a data analyst's time isn't spent on charts. It's spent **cleaning data**: removing duplicates, fixing blanks, standardising text and combining tables.
