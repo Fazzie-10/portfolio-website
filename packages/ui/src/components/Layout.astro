@@ -1,6 +1,7 @@
 ---
 import type { SiteId } from "../sites";
 import BaseHead from "./BaseHead.astro";
+import FacebookPixel from "./FacebookPixel.astro";
 import SiteNav from "./SiteNav.astro";
 import SiteFooter from "./SiteFooter.astro";
 
@@ -34,6 +35,7 @@ const favicon =
 <html lang="en" data-site={site} data-default-theme={defaultTheme}>
   <head>
     <BaseHead title={title} description={description} image={image} type={ogType} favicon={favicon} />
+    {site === "analystfemi" && <FacebookPixel />}
     <slot name="head" />
   </head>
   <body class="min-h-screen">
