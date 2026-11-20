@@ -9,7 +9,11 @@ const help = whatsappLink("Hi Joshua, I just paid for the Excel & Power BI cours
 <Layout site="analystfemi" title="Payment received · AnalystFemi" description="Thanks for joining the AnalystFemi course. Here is how to get into your course folder.">
   <meta name="robots" content="noindex" slot="head" />
   <script is:inline slot="head">
-    fbq('track', 'Purchase');
+    fbq('track', 'Purchase', {
+      content_name: 'Zero to Data Analyst',
+      value: 12500,
+      currency: 'NGN'
+    });
   </script>
   <section class="relative overflow-hidden">
     <div class="graph-paper pointer-events-none absolute inset-0" aria-hidden="true"></div>
